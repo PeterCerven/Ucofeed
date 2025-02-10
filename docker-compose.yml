@@ -1,0 +1,46 @@
+services:
+  frontend_app:
+    image: frontend
+    build:
+      dockerfile: frontend.Dockerfile
+      context: frontend/
+    ports:
+      - "80:80"
+    depends_on:
+      backend_app:
+        condition: service_healthy
+    volumes:
+      - ./frontend/src:/usr/share/nginx/html
+      - ./server/my-nginx.conf:/etc/nginx/nginx.conf
+  backend_app:
+    image: backend
+    build:
+      dockerfile: backend.Dockerfile
+      context: backend/
+    ports:
+      - "8080:8080"
+    depends_on:
+      backend_database:
+        condition: service_started
+    healthcheck:
+      test: curl -f http://localhost:8080/health || exit 1
+      interval: 5s
+      timeout: 2s
+      retries: 5
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://backend_database:5432/my_db
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+  backend_database:
+    image: database
+    build:
+      dockerfile: database.Dockerfile
+      context: database/
+    environment:
+      POSTGRES_DB: my_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - '5432:5432'
+
+

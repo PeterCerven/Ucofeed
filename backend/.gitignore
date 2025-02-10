@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Keys ###
+.p12
+/src/main/resources/local_key.p12
