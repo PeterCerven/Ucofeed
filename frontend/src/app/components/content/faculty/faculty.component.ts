@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-faculty',
   imports: [],
   templateUrl: './faculty.component.html',
-  styleUrl: './faculty.component.scss'
+  styleUrl: './faculty.component.css'
 })
 export class FacultyComponent {
 

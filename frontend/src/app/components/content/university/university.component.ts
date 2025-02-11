@@ -4,7 +4,7 @@ import {Component, Input} from '@angular/core';
   selector: 'app-university',
   imports: [],
   templateUrl: './university.component.html',
-  styleUrl: './university.component.scss'
+  styleUrl: './university.component.css'
 })
 export class UniversityComponent {
   @Input() university!: any;

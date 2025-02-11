@@ -8,7 +8,7 @@ import {University} from '../../models/university.model';
   selector: 'app-content',
   imports: [UniversityComponent],
   templateUrl: './content.component.html',
-  styleUrl: './content.component.scss'
+  styleUrl: './content.component.css'
 })
 export class ContentComponent implements OnInit {
   universities!: University[];

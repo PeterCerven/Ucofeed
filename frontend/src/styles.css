@@ -1,5 +1,5 @@
-@use "tailwindcss";
-// noinspection CssInvalidAtRule
+@import "tailwindcss";
+/*noinspection CssInvalidAtRule*/
 @plugin "daisyui";
 
 @font-face {
