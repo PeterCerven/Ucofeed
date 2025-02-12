@@ -1,45 +1,8 @@
-<div class="drawer drawer-mobile">
-  <!-- Hidden checkbox controls the drawer state.
-       Two-way binding keeps the state in sync. -->
-  <input
-    id="sidebar-drawer"
-    type="checkbox"
-    class="drawer-toggle"
-    [(ngModel)]="isSidebarOpen"
-  />
-
-  <!-- Main content area -->
-  <div class="drawer-content">
-    <div class="p-4">
-      <!-- Toggle button for smaller screens -->
-      <button class="btn btn-primary mb-4" (click)="toggleSidebar()">
-        Toggle Sidebar
-      </button>
-      <h1 class="text-2xl font-bold">Main Content</h1>
-      <p>
-        This is where your main page content goes. When the sidebar is open,
-        it will appear on the side.
-      </p>
-    </div>
-  </div>
-
-  <!-- Sidebar area -->
-  <div class="drawer-side">
-    <!--
-      Clicking the overlay (which is a label associated with the checkbox)
-      will close the sidebar.
-    -->
-    <label for="sidebar-drawer" class="drawer-overlay"></label>
-    <aside class="menu p-4 w-80 bg-base-200">
-      <div class="mb-4">
-        <h2 class="text-xl font-bold">Sidebar</h2>
-      </div>
-      <ul>
-        <li><a>Dashboard</a></li>
-        <li><a>Settings</a></li>
-        <li><a>Profile</a></li>
-        <li><a>Logout</a></li>
-      </ul>
-    </aside>
-  </div>
+<div
+  [ngClass]="{'w-72': isSidebarOpen, 'w-8': !isSidebarOpen}"
+  class="h-screen p-6 pt-8 relative bg-teal-400 transition-all duration-300">
+  <fa-icon [icon]="isSidebarOpen ? faChevronLeft : faChevronRight"
+           (click)="toggleSidebar()"
+           class="btn bg-white text-3xl absolute -right-3 top-9 border-2 cursor-pointer">
+  </fa-icon>
 </div>
