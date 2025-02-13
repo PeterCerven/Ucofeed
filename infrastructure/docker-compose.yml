@@ -1,0 +1,44 @@
+services:
+  angular_app:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80"
+    depends_on:
+      spring_boot_app:
+        condition: service_healthy
+    volumes:
+      - ../frontend/src:/usr/share/nginx/html
+  spring_boot_app:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgresql_db:
+        condition: service_started
+    healthcheck:
+      test: curl -f http://localhost:8080/health || exit 1
+      interval: 5s
+      timeout: 2s
+      retries: 5
+    environment:
+      FRONTEND_URL: http://angular_app:4200
+      DB_URL: jdbc:postgresql://postgresql_db:5432/ucf
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql_db:5432/ucf
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+      DEFAULT_USERNAME: user
+      DEFAULT_PASSWORD: password
+  postgresql_db:
+    image: postgres:alpine
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: ucf
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+
+

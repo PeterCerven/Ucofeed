@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: backend
+  profiles:
+    active: dev
+info:
+  application:
+    name: backend
+    description: Backend service
+    author: Peter Červeň
+    version: 1.0.0

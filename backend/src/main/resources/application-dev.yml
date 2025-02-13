@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DEFAULT_USERNAME}
+    password: ${DEFAULT_PASSWORD}
+  sql:
+    init:
+      mode: always
+server:
+  port: 8080
+  ssl:
+    enabled: false
+    key-store: classpath:local_key.p12
+    key-store-password: ${DEFAULT_PASSWORD}
+    key-password: ${DEFAULT_PASSWORD}
+    key-store-type: PKCS12
+    key-alias: local_ssl_key
+frontend:
+  url: ${FRONTEND_URL}
