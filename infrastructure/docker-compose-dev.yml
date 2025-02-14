@@ -2,7 +2,7 @@ services:
   angular_app:
     build:
       context: ../frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-dev
     ports:
       - "4200:80"
     depends_on:
@@ -20,14 +20,13 @@ services:
       interval: 5s
       timeout: 2s
       retries: 5
-    environment:
-      FRONTEND_URL: http://angular_app:4200
-      DB_URL: jdbc:postgresql://postgresql_db:5432/ucf
-      DEFAULT_USERNAME: ${POSTGRES_ADMIN_USER}
-      DEFAULT_PASSWORD: ${POSTGRES_ADMIN_PASSWORD}
+    ports:
+        - "8080:8080"
+    env_file:
+      - ../backend/.env
   postgresql_db:
     image: postgres:alpine
-    environment:
-      POSTGRES_DB: ucf
-      POSTGRES_USER: ${POSTGRES_ADMIN_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_ADMIN_PASSWORD}
+    ports:
+      - "5432:5432"
+    env_file:
+      - ../database/.env

@@ -35,3 +35,4 @@ build/
 ### Keys ###
 .p12
 /src/main/resources/local_key.p12
+/.env
