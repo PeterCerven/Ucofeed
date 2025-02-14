@@ -8,8 +8,6 @@ services:
     depends_on:
       spring_boot_app:
         condition: service_healthy
-    volumes:
-      - ../frontend/src:/usr/share/nginx/html
   spring_boot_app:
     build:
       context: ../backend
@@ -27,9 +25,6 @@ services:
     environment:
       FRONTEND_URL: http://angular_app:4200
       DB_URL: jdbc:postgresql://postgresql_db:5432/ucf
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql_db:5432/ucf
-      SPRING_DATASOURCE_USERNAME: user
-      SPRING_DATASOURCE_PASSWORD: password
       DEFAULT_USERNAME: user
       DEFAULT_PASSWORD: password
   postgresql_db:
