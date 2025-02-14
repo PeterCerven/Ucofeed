@@ -12,8 +12,6 @@ services:
     build:
       context: ../backend
       dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
     depends_on:
       postgresql_db:
         condition: service_started
@@ -25,15 +23,11 @@ services:
     environment:
       FRONTEND_URL: http://angular_app:4200
       DB_URL: jdbc:postgresql://postgresql_db:5432/ucf
-      DEFAULT_USERNAME: user
-      DEFAULT_PASSWORD: password
+      DEFAULT_USERNAME: ${POSTGRES_ADMIN_USER}
+      DEFAULT_PASSWORD: ${POSTGRES_ADMIN_PASSWORD}
   postgresql_db:
     image: postgres:alpine
-    ports:
-      - '5432:5432'
     environment:
       POSTGRES_DB: ucf
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-
-
+      POSTGRES_USER: ${POSTGRES_ADMIN_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_ADMIN_PASSWORD}
