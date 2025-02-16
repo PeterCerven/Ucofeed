@@ -10,14 +10,6 @@ import {University} from '../../models/university.model';
   templateUrl: './content.component.html',
   styleUrl: './content.component.css'
 })
-export class ContentComponent implements OnInit {
-  universities!: University[];
+export class ContentComponent {
 
-  constructor(private universityService: UniversityService) {
-  }
-
-  ngOnInit() {
-    const obsUnis = this.universityService.getUniversities();
-    obsUnis.subscribe((data: University[]) => this.universities = data);
-  }
 }
