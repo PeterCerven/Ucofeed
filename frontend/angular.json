@@ -73,7 +73,7 @@
           },
           "defaultConfiguration": "development",
           "options": {
-            "ssl": true,
+            "ssl": false,
             "sslCert": "certificates/localhost.crt",
             "sslKey": "certificates/localhost.key"
           }
