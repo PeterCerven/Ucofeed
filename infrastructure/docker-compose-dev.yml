@@ -1,7 +1,7 @@
 services:
   angular_app:
     build:
-      context: ../frontend
+      context: ../public
       dockerfile: Dockerfile-dev
     ports:
       - "4200:80"
