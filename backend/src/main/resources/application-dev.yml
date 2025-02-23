@@ -16,4 +16,7 @@ server:
     key-store-type: PKCS12
     key-alias: local_ssl_key
 frontend:
-  url: ${FRONTEND_URL}
+  public:
+    url: ${FRONTEND_PUBLIC_URL}
+  private:
+    url: ${FRONTEND_PRIVATE_URL}

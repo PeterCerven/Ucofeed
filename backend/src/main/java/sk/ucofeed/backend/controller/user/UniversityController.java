@@ -1,4 +1,4 @@
-package sk.ucofeed.backend.controller;
+package sk.ucofeed.backend.controller.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +11,7 @@ import sk.ucofeed.backend.persistence.model.University;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/public")
 public class UniversityController {
 
     private static final Logger LOG = LoggerFactory.getLogger(UniversityController.class);

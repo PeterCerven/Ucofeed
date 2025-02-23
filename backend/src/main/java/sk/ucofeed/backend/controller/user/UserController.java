@@ -1,4 +1,4 @@
-package sk.ucofeed.backend.controller;
+package sk.ucofeed.backend.controller.user;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/user/public")
 public class UserController {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
