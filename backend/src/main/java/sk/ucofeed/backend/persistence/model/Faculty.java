@@ -2,16 +2,15 @@ package sk.ucofeed.backend.persistence.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Data
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "university")
-public class University {
+public class Faculty {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -19,16 +18,9 @@ public class University {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "university", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Faculty> faculties;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private University university;
 
-    public University(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-
-
-
-
+    @OneToMany(mappedBy = "faculty", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<StudyProgram> studyPrograms;
 }
