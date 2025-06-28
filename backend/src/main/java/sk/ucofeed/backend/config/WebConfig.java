@@ -8,10 +8,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Value("${public.frontend.url}")
+    @Value("${frontend.public.url}")
     private String publicFrontendUrl;
 
-    @Value("${private.frontend.url}")
+    @Value("${frontend.private.url}")
     private String privateFrontendUrl;
 
     @Override
