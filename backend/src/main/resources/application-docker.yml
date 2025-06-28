@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: ${DB_DOCKER_URL}
+    username: ${DB_DOCKER_USERNAME}
+    password: ${DB_DOCKER_PASSWORD}
+  sql:
+    init:
+      mode: always
