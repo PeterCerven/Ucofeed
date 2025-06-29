@@ -10,7 +10,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
   imports: [RouterOutlet, MatToolbar, MatIcon, MatIconModule, MatButtonModule,
     MatSidenavModule],
   templateUrl: './app.html',
-  styleUrl: './app.css',
+  styleUrl: './app.scss',
 })
 export class App {
   protected title = 'private-frontend';
