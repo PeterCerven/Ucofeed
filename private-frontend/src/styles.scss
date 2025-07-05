@@ -31,4 +31,17 @@ html {
   @include mat.all-component-themes($theme);
 }
 
+// https://github.com/angular/components/issues/26094 workaround for mat-toolbar elevation
+.mat-toolbar.mat-elevation-z5 {
+  @include mat.elevation(5);
+}
+
+.mat-sidenav-container.mat-elevation-z3 {
+  @include mat.elevation(3);
+}
+
+.mat-sidenav.mat-elevation-z2 {
+  @include mat.elevation(2);
+}
+
 

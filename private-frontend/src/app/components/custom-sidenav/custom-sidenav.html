@@ -1,1 +1,15 @@
-<p>custom-sidenav works!</p>
+<div class="sidenav-header">
+  <img src="/dog.jpg" alt="Logo" class="logo" [height]="profilePicSize()" [width]="profilePicSize()">
+  <div class="header-text" [class.hide-header-text]="sideNavCollapsed()">
+    <h2>Your Channel</h2>
+    <p>Peter Cerven</p>
+  </div>
+</div>
+<mat-nav-list>
+  @for (item of menuItems(); track item.route) {
+    <a mat-list-item>
+      <mat-icon matListItemIcon>{{item.icon}}</mat-icon>
+      @if (!sideNavCollapsed()) { <span matListItemTitle>{{item.label}}</span>}
+    </a>
+  }
+</mat-nav-list>
