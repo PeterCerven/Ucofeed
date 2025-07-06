@@ -7,7 +7,12 @@
 </div>
 <mat-nav-list>
   @for (item of menuItems(); track item.route) {
-    <a mat-list-item>
+    <a #rla="routerLinkActive"
+       mat-list-item
+       [routerLink]="item.route"
+       routerLinkActive
+       [activated]="rla.isActive"
+    >
       <mat-icon matListItemIcon>{{item.icon}}</mat-icon>
       @if (!sideNavCollapsed()) { <span matListItemTitle>{{item.label}}</span>}
     </a>
