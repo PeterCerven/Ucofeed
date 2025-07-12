@@ -1,1 +1,65 @@
-<p>tables works!</p>
+<div class="mat-elevation-z8">
+  <mat-form-field class="filter-input">
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyFilter($event)">
+  </mat-form-field>
+  <mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)">
+    <ng-container matColumnDef="programName">
+      <mat-header-cell
+        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Program name
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.programName }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="university">
+      <mat-header-cell
+        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> University
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.university }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="faculty">
+      <mat-header-cell
+        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Faculty
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.faculty }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="educationLevel">
+      <mat-header-cell
+        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Education Level
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.educationLevel }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="studyType">
+      <mat-header-cell
+        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Study Type
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.studyType }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="studyForm">
+      <mat-header-cell
+        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Study Form
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.studyForm }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="studyGroupSubjects">
+      <mat-header-cell
+        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Study Group Subjects
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.studyGroupSubjects }}</mat-cell>
+    </ng-container>
+
+    <!-- Header and Row Declarations -->
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+  <mat-paginator [pageSizeOptions]="[3, 5, 10]"
+                 showFirstLastButtons
+                 aria-label="Select page of periodic elements">
+  </mat-paginator>
+</div>
