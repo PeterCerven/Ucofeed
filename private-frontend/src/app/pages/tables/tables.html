@@ -3,7 +3,7 @@
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applyFilter($event)">
   </mat-form-field>
-  <mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)">
+  <mat-table [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="programName">
       <mat-header-cell
         *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Program name

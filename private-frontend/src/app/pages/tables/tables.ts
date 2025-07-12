@@ -9,7 +9,7 @@ import {
   MatTableDataSource,
 } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, MatSortHeader, MatSortModule, Sort } from '@angular/material/sort';
+import { MatSort, MatSortHeader, MatSortModule } from '@angular/material/sort';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 
 export interface UniversityExcelData {
@@ -88,11 +88,6 @@ export class Tables {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-  }
-
-  // Add any additional logic or methods needed for the tables page
-  announceSortChange(sortState: Sort) {
-
   }
 
   applyFilter(event: Event) {
