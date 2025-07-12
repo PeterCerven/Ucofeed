@@ -1,47 +1,14 @@
-/* You can add global styles to this file, and also import other style files */
-
 @use "@angular/material" as mat;
-
 @include mat.core();
-
-html, body {
-  height: 100%;
-}
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
 
 body {
+  height: 100%;
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 html {
-  --primary-color: #cc0000;
+  height: 100%;
 }
-
-$theme: mat.define-theme(
-    (
-      color: (
-        theme-type: light,
-        primary: mat.$azure-palette,
-      ),
-    )
-);
-
-html {
-  @include mat.core-theme($theme);
-  @include mat.all-component-themes($theme);
-}
-
-// https://github.com/angular/components/issues/26094 workaround for mat-toolbar elevation
-.mat-toolbar.mat-elevation-z5 {
-  @include mat.elevation(5);
-}
-
-.mat-sidenav-container.mat-elevation-z3 {
-  @include mat.elevation(3);
-}
-
-.mat-sidenav.mat-elevation-z2 {
-  @include mat.elevation(2);
-}
-
 

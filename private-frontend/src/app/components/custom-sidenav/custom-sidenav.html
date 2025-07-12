@@ -1,6 +1,6 @@
 <div class="sidenav-header">
   <img src="/dog.jpg" alt="Logo" class="logo" [height]="profilePicSize()" [width]="profilePicSize()">
-  <div class="header-text" [class.hide-header-text]="sideNavCollapsed()">
+  <div class="header-text" [class.hide-header-text]="collapsed()">
     <h2>Your Channel</h2>
     <p>Peter Cerven</p>
   </div>
@@ -10,11 +10,11 @@
     <a #rla="routerLinkActive"
        mat-list-item
        [routerLink]="item.route"
-       routerLinkActive
+       routerLinkActive="selected-menu-item"
        [activated]="rla.isActive"
     >
-      <mat-icon matListItemIcon>{{item.icon}}</mat-icon>
-      @if (!sideNavCollapsed()) { <span matListItemTitle>{{item.label}}</span>}
+      <mat-icon [fontSet]="rla.isActive ? 'material-icons' : 'material-icons-outlined'" matListItemIcon>{{item.icon}}</mat-icon>
+      @if (!collapsed()) { <span matListItemTitle>{{item.label}}</span>}
     </a>
   }
 </mat-nav-list>

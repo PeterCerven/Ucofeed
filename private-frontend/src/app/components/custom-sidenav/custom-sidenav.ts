@@ -1,5 +1,4 @@
-import { Component, computed, input, Input, signal } from '@angular/core';
-import { NgIf, NgOptimizedImage } from '@angular/common';
+import { Component, computed, input, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
@@ -14,18 +13,14 @@ export type MenuItem = {
 @Component({
   selector: 'custom-sidenav',
   imports: [
-    NgOptimizedImage, MatListModule, MatIconModule, RouterModule
+    MatListModule, MatIconModule, RouterModule
   ],
   templateUrl: './custom-sidenav.html',
   styleUrl: './custom-sidenav.scss'
 })
 export class CustomSidenav {
 
-  sideNavCollapsed = signal(false);
-  @Input() set collapsed(value: boolean) {
-    this.sideNavCollapsed.set(value);
-  }
-
+  collapsed = input<boolean>(false);
 
   menuItems = signal<MenuItem[]>([
     {
@@ -34,11 +29,16 @@ export class CustomSidenav {
       route: 'dashboard'
     },
     {
+      icon: 'table_chart',
+      label: 'Tables',
+      route: 'tables'
+    },
+    {
       icon: 'settings',
       label: 'Settings',
       route: 'settings'
     },
     ]);
 
-  profilePicSize = computed(() => this.sideNavCollapsed() ? '32' : '100');
+  profilePicSize = computed(() => this.collapsed() ? '32' : '100');
 }

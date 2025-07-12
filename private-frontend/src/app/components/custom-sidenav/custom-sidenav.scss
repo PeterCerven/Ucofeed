@@ -9,6 +9,7 @@
   }
 
   .header-text {
+    height: 3rem;
     > h2 {
       margin: 0;
       font-size: 1rem;
@@ -25,4 +26,8 @@
 
 .hide-header-text {
   display: none;
+}
+
+:host * {
+  transition: all 500ms ease-in-out;
 }
