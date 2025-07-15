@@ -1,8 +1,26 @@
+<div class="button-container">
+  <button matFab extended>
+    <mat-icon>storage</mat-icon>
+    Show Data
+  </button>
+
+  <button matFab extended>
+    <mat-icon>file_upload</mat-icon>
+    Upload Data
+  </button>
+</div>
+
 <div class="mat-elevation-z8">
   <mat-form-field class="filter-input">
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applyFilter($event)">
   </mat-form-field>
+
+  <button matFab extended>
+    <mat-icon>save_alt</mat-icon>
+    Save Data
+  </button>
+
   <mat-table [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="programName">
       <mat-header-cell

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import {
   MatCell,
   MatCellDef, MatColumnDef,
@@ -11,66 +11,21 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader, MatSortModule } from '@angular/material/sort';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
-
-export interface UniversityExcelData {
-  programName: string;
-  university: string;
-  faculty: string;
-  educationLevel: string;
-  studyType: string;
-  studyForm: string;
-  studyGroupSubjects: string;
-}
-
-const ELEMENT_DATA: UniversityExcelData[] = [
-  {
-    programName: 'Bachelor of Science in Computer Science',
-    university: 'University of Technology',
-    faculty: 'Faculty of Engineering',
-    educationLevel: 'Bachelor',
-    studyType: 'Full-time',
-    studyForm: 'On-campus',
-    studyGroupSubjects: 'Programming, Data Structures, Algorithms'
-  },
-  {
-    programName: 'Master of Arts in History',
-    university: 'College of Humanities',
-    faculty: 'Faculty of Arts',
-    educationLevel: 'Master',
-    studyType: 'Part-time',
-    studyForm: 'Online',
-    studyGroupSubjects: 'World History, Cultural Studies'
-  },
-  {
-    programName: 'Doctor of Philosophy in Physics',
-    university: 'Institute of Advanced Studies',
-    faculty: 'Faculty of Science',
-    educationLevel: 'PhD',
-    studyType: 'Full-time',
-    studyForm: 'On-campus',
-    studyGroupSubjects: 'Quantum Mechanics, Relativity'
-  },
-  {
-    programName: 'Bachelor of Arts in Psychology',
-    university: 'University of Social Sciences',
-    faculty: 'Faculty of Social Sciences',
-    educationLevel: 'Bachelor',
-    studyType: 'Full-time',
-    studyForm: 'Hybrid',
-    studyGroupSubjects: 'Cognitive Psychology, Behavioral Studies'
-  }
-];
+import { MatFabButton } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { UniversityExcelData } from '../../models/csv-uni-data.model';
 
 @Component({
   selector: 'app-tables',
   imports: [
     MatTable, MatPaginator, MatCell, MatHeaderCell, MatHeaderRow, MatRow, MatCellDef,
-    MatHeaderCellDef, MatHeaderRowDef, MatRowDef, MatColumnDef, MatSortHeader, MatSortModule, MatFormField, MatLabel, MatInput, MatLabel, MatFormField,
+    MatHeaderCellDef, MatHeaderRowDef, MatRowDef, MatColumnDef, MatSortHeader, MatSortModule,
+    MatFormField, MatLabel, MatInput, MatLabel, MatFormField, MatFabButton, MatIconModule
   ],
   templateUrl: './tables.html',
   styleUrl: './tables.scss'
 })
-export class Tables {
+export class Tables implements AfterViewInit {
   displayedColumns: string[] = [
     'programName',
     'university',
@@ -80,7 +35,7 @@ export class Tables {
     'studyForm',
     'studyGroupSubjects'
   ];
-  dataSource = new MatTableDataSource(ELEMENT_DATA);
+  dataSource = new MatTableDataSource<UniversityExcelData>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -91,8 +46,7 @@ export class Tables {
   }
 
   applyFilter(event: Event) {
-    let filterValue = (event.target as HTMLInputElement).value;
-    filterValue = filterValue.trim().toLowerCase();
-    this.dataSource.filter = filterValue;
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }
