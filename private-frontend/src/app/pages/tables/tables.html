@@ -4,10 +4,11 @@
     Show Data
   </button>
 
-  <button matFab extended>
+  <button matFab extended (click)="fileInput.click()">
     <mat-icon>file_upload</mat-icon>
     Upload Data
   </button>
+  <input hidden (change)="onFileSelected($event)" #fileInput type="file" accept=".csv, .xls, .xlsx">
 </div>
 
 <div class="mat-elevation-z8">
