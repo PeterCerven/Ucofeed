@@ -2,8 +2,8 @@ package sk.ucofeed.backend.controller.admin;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import sk.ucofeed.backend.service.FileCSVService;
+import sk.ucofeed.backend.persistence.dto.UniversityFileData;
+import sk.ucofeed.backend.service.FileService;
 
 import java.util.List;
 
@@ -11,19 +11,19 @@ import java.util.List;
 @RequestMapping("/api/private")
 public class FileDataFetchController {
 
-    private final FileCSVService fileCSVService;
+    private final FileService fileService;
 
-    public FileDataFetchController(FileCSVService fileCSVService) {
-        this.fileCSVService = fileCSVService;
+    public FileDataFetchController(FileService fileService) {
+        this.fileService = fileService;
     }
 
-    @PostMapping("/upload-csv")
-    public ResponseEntity<String> uploadCSV(@RequestParam("file") MultipartFile file) {
+    @PostMapping("/upload-data")
+    public ResponseEntity<String> uploadFileData(@RequestBody List<UniversityFileData> data) {
         try {
-            fileCSVService.saveStudyProgramDataFromCSV(file);
-            return ResponseEntity.ok("CSV file uploaded successfully.");
+            fileService.saveStudyProgramFromFile(data);
+            return ResponseEntity.ok("File data uploaded successfully.");
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error uploading CSV file: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error uploading file data: " + e.getMessage());
         }
     }
 }

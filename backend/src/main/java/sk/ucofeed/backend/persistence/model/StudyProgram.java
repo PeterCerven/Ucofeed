@@ -2,12 +2,12 @@ package sk.ucofeed.backend.persistence.model;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
+@Getter
 public class StudyProgram {
 
     @Id
@@ -19,6 +19,11 @@ public class StudyProgram {
 
     @ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
     private Faculty faculty;
+
+    public StudyProgram(String name, Faculty faculty) {
+        this.name = name;
+        this.faculty = faculty;
+    }
 
 
 

@@ -20,8 +20,8 @@ public class UniversityController {
     public ResponseEntity<List<University>> getUniversities() {
         LOG.info("Fetching University Data");
         List<University> data = List.of(
-                new University(1L, "STU"),
-                new University(2L, "EUBA")
+                new University("STU"),
+                new University("EUBA")
         );
         return ResponseEntity.ok(data);
     }
