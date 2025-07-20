@@ -35,11 +35,10 @@ public class FileServiceImpl implements FileService {
             Faculty faculty = facultyRepository.findByNameAndUniversity(data.faculty(), university)
                     .orElseGet(() -> facultyRepository.save(new Faculty(data.faculty(), university)));
 
-            // Create and save the study program
-            StudyProgram studyProgram = new StudyProgram(data.programName(), faculty);
-            studyProgramRepository.save(studyProgram);
+            // Check if the study program already exists, if not, create it
+            StudyProgram studyProgram = studyProgramRepository.findByNameAndFaculty(data.programName(), faculty)
+                    .orElseGet(() -> studyProgramRepository.save(new StudyProgram(data.programName(), faculty)));
         }
-
     }
 
 }
