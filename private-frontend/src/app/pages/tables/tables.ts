@@ -19,6 +19,7 @@ import { MatFabButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { UniversityExcelData } from '../../models/csv-uni-data.model';
 import { FileParseService } from '../../services/parse.service';
+import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-tables',
@@ -31,7 +32,10 @@ import { FileParseService } from '../../services/parse.service';
   styleUrl: './tables.scss',
 })
 export class Tables implements AfterViewInit {
-  constructor(private fileParseService: FileParseService) {
+  constructor(
+    private fileParseService: FileParseService,
+    private dataService: DataService,
+  ) {
   }
 
   displayedColumns: string[] = [
@@ -58,7 +62,7 @@ export class Tables implements AfterViewInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  async onFileSelected(event: Event) {
+  async importData(event: Event) {
     const files = (event.target as HTMLInputElement).files;
     if (!files || files.length === 0) {
       console.error('No file selected');
@@ -68,7 +72,6 @@ export class Tables implements AfterViewInit {
     const file = files[0];
     try {
       this.dataSource.data = await this.fileParseService.parseFile(file);
-      console.log(this.dataSource.data);
 
       if (this.dataSource.paginator) {
         this.dataSource.paginator.firstPage();
@@ -78,9 +81,14 @@ export class Tables implements AfterViewInit {
     } catch (error) {
       console.error('Error while parsing the Excel file:', error);
     }
-
-
   }
 
 
+  saveData() {
+    this.dataService.saveData(this.dataSource.data);
+  }
+
+  showData() {
+    this.dataService.showData();
+  }
 }
