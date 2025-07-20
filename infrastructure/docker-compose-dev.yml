@@ -1,13 +1,25 @@
 services:
-  angular_app:
+  nginx_proxy:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf # Mount the config file
+    depends_on:
+      - public_frontend
+      - private_frontend
+      - spring_boot_app
+
+  public_frontend:
     build:
       context: ../public-frontend
       dockerfile: Dockerfile-dev
-    ports:
-      - "4200:80"
-    depends_on:
-      spring_boot_app:
-        condition: service_healthy
+
+  private_frontend:
+    build:
+      context: ../private-frontend
+      dockerfile: Dockerfile-dev
+
   spring_boot_app:
     build:
       context: ../backend
@@ -15,18 +27,12 @@ services:
     depends_on:
       postgresql_db:
         condition: service_started
-    healthcheck:
-      test: curl -f http://localhost:8080/health || exit 1
-      interval: 5s
-      timeout: 2s
-      retries: 5
-    ports:
-        - "8080:8080"
     env_file:
       - ../backend/.env
+
   postgresql_db:
     image: postgres:alpine
     ports:
       - "5432:5432"
     env_file:
-      - ../database/.env
+      - ./database/.env
