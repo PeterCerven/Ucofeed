@@ -14,11 +14,15 @@ services:
     build:
       context: ../public-frontend
       dockerfile: Dockerfile-dev
+    ports:
+      - "4200:4200"
 
   private_frontend:
     build:
       context: ../private-frontend
       dockerfile: Dockerfile-dev
+    ports:
+      - "4201:4201"
 
   spring_boot_app:
     build:
