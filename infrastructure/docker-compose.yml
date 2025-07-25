@@ -1,0 +1,45 @@
+services:
+
+  proxy:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/default.conf
+    depends_on:
+      - backend
+      - private_frontend
+      - public_frontend
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    depends_on:
+      postgresql_db:
+        condition: service_started
+    env_file:
+      - ../backend/.env
+    ports:
+      - "8080:8080"
+
+  private_frontend:
+    build:
+      context: ../private-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4201:4201"
+
+  public_frontend:
+    build:
+      context: ../public-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+
+  postgresql_db:
+    image: postgres:alpine
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./database/.env
