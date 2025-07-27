@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --open",
-    "dev": "ng serve --host 0.0.0.0 --configuration development",
+    "dev": "ng serve --host 0.0.0.0 --poll 2000 --configuration development",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -44,4 +44,5 @@
     "tailwindcss": "^4.0.6",
     "typescript": "~5.7.2"
   }
+
 }
