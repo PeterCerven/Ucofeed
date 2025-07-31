@@ -1,8 +1,7 @@
 @use '@angular/material' as mat;
 @include mat.core();
 @use './tailwind.css';
-/*noinspection CssInvalidAtRule*/
-//@plugin "daisyui";
+@plugin "daisyui";
 
 // Include theming for Angular Material with `mat.theme()`.
 // This Sass mixin will define CSS variables that are used for styling Angular Material
