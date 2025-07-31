@@ -9,7 +9,7 @@ import {SidebarComponent} from './components/sidebar/sidebar.component';
   selector: 'app-root',
   imports: [HeaderComponent, ContentComponent, FooterComponent, SidebarComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title = 'frontend';

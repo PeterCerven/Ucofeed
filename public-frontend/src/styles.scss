@@ -1,4 +1,5 @@
-@import "tailwindcss";
+@use '@angular/material' as mat;
+@use './tailwind.css';
 /*noinspection CssInvalidAtRule*/
 @plugin "daisyui";
 
@@ -7,7 +8,7 @@
 // components according to the Material 3 design spec.
 // Learn more about theming and how to use it for your application's
 // custom components at https://material.angular.dev/guide/theming
-@use '@angular/material' as mat;
+
 
 html {
   @include mat.theme((

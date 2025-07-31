@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-review',
   imports: [],
   templateUrl: './review.component.html',
-  styleUrl: './review.component.css'
+  styleUrl: './review.component.scss'
 })
 export class ReviewComponent {
 

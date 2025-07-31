@@ -9,7 +9,7 @@ import {UniversityCardComponent} from './university-card/university-card.compone
     UniversityCardComponent
   ],
   templateUrl: './university.component.html',
-  styleUrl: './university.component.css'
+  styleUrl: './university.component.scss'
 })
 export class UniversityComponent implements OnInit {
   universities!: University[];
