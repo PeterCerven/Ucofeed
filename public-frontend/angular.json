@@ -27,8 +27,7 @@
               }
             ],
             "styles": [
-              "src/custom-theme.scss",
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "scripts": []
           },
@@ -98,7 +97,7 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "scripts": []
           }
@@ -108,7 +107,7 @@
   },
   "schematics": {
     "@schematics/angular:component": {
-      "style": "css",
+      "style": "scss",
       "type": "component"
     },
     "@schematics/angular:directive": {
