@@ -2,6 +2,7 @@ package sk.ucofeed.backend.controller.admin;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import sk.ucofeed.backend.persistence.dto.UniversityFileData;
 import sk.ucofeed.backend.service.FileService;
 
@@ -15,6 +16,16 @@ public class FileDataFetchController {
 
     public FileDataFetchController(FileService fileService) {
         this.fileService = fileService;
+    }
+
+    @PostMapping("/parse-file")
+    public ResponseEntity<List<UniversityFileData>> parseFile(@RequestParam("file") MultipartFile file) {
+        try {
+            List<UniversityFileData> parsedData = fileService.parseFile(file);
+            return ResponseEntity.ok(parsedData);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
+        }
     }
 
     @PostMapping("/upload-data")
