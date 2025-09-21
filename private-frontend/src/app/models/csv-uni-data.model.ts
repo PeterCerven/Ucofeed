@@ -1,4 +1,4 @@
-export interface UniversityExcelData {
+export interface UniversityData {
   programName: string;
   university: string;
   faculty: string;

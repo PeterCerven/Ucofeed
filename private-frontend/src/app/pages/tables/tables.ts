@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { Component, DestroyRef, effect, inject, viewChild } from '@angular/core';
 import {
   MatCell,
   MatCellDef,
@@ -17,9 +17,9 @@ import { MatSort, MatSortHeader, MatSortModule } from '@angular/material/sort';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { MatFabButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { UniversityExcelData } from '../../models/csv-uni-data.model';
-import { FileParseService } from '../../services/parse.service';
-import { DataService } from '../../services/data.service';
+import { UniversityData } from '@models/csv-uni-data.model';
+import { DataService } from '@services/data.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-tables',
@@ -31,12 +31,12 @@ import { DataService } from '../../services/data.service';
   templateUrl: './tables.html',
   styleUrl: './tables.scss',
 })
-export class Tables implements AfterViewInit {
-  constructor(
-    private fileParseService: FileParseService,
-    private dataService: DataService,
-  ) {
-  }
+export class Tables {
+  private dataService = inject(DataService);
+  private destroyRef = inject(DestroyRef);
+
+  paginator = viewChild<MatPaginator>(MatPaginator);
+  sort = viewChild<MatSort>(MatSort);
 
   displayedColumns: string[] = [
     'programName',
@@ -47,14 +47,21 @@ export class Tables implements AfterViewInit {
     'studyForm',
     'studyGroupSubjects',
   ];
-  dataSource = new MatTableDataSource<UniversityExcelData>();
+  dataSource = new MatTableDataSource<UniversityData>();
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  constructor() {
+    effect(() => {
+      const paginatorInstance = this.paginator();
+      const sortInstance = this.sort();
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+      if (paginatorInstance) {
+        this.dataSource.paginator = paginatorInstance;
+      }
+
+      if (sortInstance) {
+        this.dataSource.sort = sortInstance;
+      }
+    });
   }
 
   applyFilter(event: Event) {
@@ -62,7 +69,7 @@ export class Tables implements AfterViewInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  async importData(event: Event) {
+  parseData(event: Event) {
     const files = (event.target as HTMLInputElement).files;
     if (!files || files.length === 0) {
       console.error('No file selected');
@@ -70,25 +77,54 @@ export class Tables implements AfterViewInit {
     }
 
     const file = files[0];
-    try {
-      this.dataSource.data = await this.fileParseService.parseFile(file);
-
-      if (this.dataSource.paginator) {
-        this.dataSource.paginator.firstPage();
-      }
-      console.log('Excel file parsed and data loaded successfully.');
-
-    } catch (error) {
-      console.error('Error while parsing the Excel file:', error);
-    }
+    this.dataService.parseFile(file)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+          next: (data) => {
+            this.dataSource.data = data;
+            if (this.dataSource.paginator) {
+              this.dataSource.paginator.firstPage();
+            }
+            console.log('Data parsed successfully.');
+          },
+          error: (error) => {
+            console.error('Error while parsing the data:', error);
+          }
+        }
+      )
   }
 
-
   saveData() {
-    this.dataService.saveData(this.dataSource.data);
+    this.dataService.saveData(this.dataSource.data)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          console.log('Data saved successfully:', data);
+        },
+        error: (error) => {
+          console.error('Error saving data:', error);
+        }
+      });
   }
 
   showData() {
-    this.dataService.showData();
+    this.dataService.showData()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.dataSource.data = data;
+          if (this.dataSource.paginator) {
+            this.dataSource.paginator.firstPage();
+          }
+          console.log('Data fetched successfully:', data);
+        },
+        error: (error) => {
+          console.error('Error fetching data:', error);
+        }
+      })
+  }
+
+  onRowClicked(row: UniversityData) {
+    console.log('Row clicked: ', row);
   }
 }
