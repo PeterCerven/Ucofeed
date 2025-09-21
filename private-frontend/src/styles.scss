@@ -2,7 +2,7 @@
 @use './tailwind.css';
 @plugin "daisyui";
 @include mat.core();
-@import "@angular/material/prebuilt-themes/indigo-pink.css";
+//@import "@angular/material/prebuilt-themes/indigo-pink.css";
 
 body {
   height: 100%;
