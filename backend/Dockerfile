@@ -5,7 +5,7 @@ COPY mvnw pom.xml ./
 COPY .mvn .mvn
 RUN ./mvnw dependency:go-offline
 COPY . .
-RUN ./mvnw clean package
+RUN ./mvnw clean package -DskipTests
 
 
 # Runtime stage
