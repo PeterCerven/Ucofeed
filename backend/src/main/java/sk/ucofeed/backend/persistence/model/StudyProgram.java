@@ -11,10 +11,9 @@ import lombok.NoArgsConstructor;
 public class StudyProgram {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
     private String name;
 
     @ManyToOne(fetch = jakarta.persistence.FetchType.LAZY)
