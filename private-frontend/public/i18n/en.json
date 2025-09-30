@@ -1,0 +1,10 @@
+{
+  "components" :
+  {
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "settings": "Settings",
+      "tables": "Tables"
+    }
+  }
+}

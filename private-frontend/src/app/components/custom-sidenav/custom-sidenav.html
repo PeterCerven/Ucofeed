@@ -1,20 +1,23 @@
-<div class="sidenav-header">
-  <img src="/favicon.ico" alt="Logo" class="logo" [height]="profilePicSize()" [width]="profilePicSize()">
-  <div class="header-text" [class.hide-header-text]="collapsed()">
-    <h2>UCOFEED</h2>
-    <p>Admin Dashboard</p>
+<div *transloco="let t; prefix 'components.sidebar'">
+  <div class="sidenav-header">
+    <div class="header-text" [class.hide-header-text]="collapsed()">
+    </div>
   </div>
+  <mat-nav-list>
+    @for (item of menuItems(); track item.route) {
+      <a #rla="routerLinkActive"
+         mat-list-item
+         [routerLink]="item.route"
+         routerLinkActive="selected-menu-item"
+         [activated]="rla.isActive"
+      >
+        <mat-icon [fontSet]="rla.isActive ? 'material-icons' : 'material-icons-outlined'"
+                  matListItemIcon>{{ item.icon }}
+        </mat-icon>
+        @if (!collapsed()) {
+          <span matListItemTitle>{{ t(item.label) }}</span>
+        }
+      </a>
+    }
+  </mat-nav-list>
 </div>
-<mat-nav-list>
-  @for (item of menuItems(); track item.route) {
-    <a #rla="routerLinkActive"
-       mat-list-item
-       [routerLink]="item.route"
-       routerLinkActive="selected-menu-item"
-       [activated]="rla.isActive"
-    >
-      <mat-icon [fontSet]="rla.isActive ? 'material-icons' : 'material-icons-outlined'" matListItemIcon>{{item.icon}}</mat-icon>
-      @if (!collapsed()) { <span matListItemTitle>{{item.label}}</span>}
-    </a>
-  }
-</mat-nav-list>

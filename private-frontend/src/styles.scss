@@ -1,16 +1,56 @@
 @use "@angular/material" as mat;
 @use './tailwind.css';
+
 @plugin "daisyui";
 @include mat.core();
-//@import "@angular/material/prebuilt-themes/indigo-pink.css";
 
 body {
   height: 100%;
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  padding: 0;
 }
 
+// noinspection SassScssUnresolvedMixin
 html {
-  height: 100%;
+  color-scheme: light;
+  @include mat.theme((
+    color: mat.$azure-palette,
+    typography: Roboto,
+    density: 0
+  ));
+}
+
+body.dark-mode {
+  color-scheme: dark;
+}
+
+.elevation-level1 {
+  box-shadow: var(--mat-sys-level1);
+}
+
+.elevation-level2 {
+  box-shadow: var(--mat-sys-level2);
+}
+
+.elevation-level3 {
+  box-shadow: var(--mat-sys-level3);
+}
+
+.elevation-level4 {
+  box-shadow: var(--mat-sys-level4);
+}
+
+.elevation-level5 {
+  box-shadow: var(--mat-sys-level5);
+}
+
+:root {
+  @include mat.list-overrides((
+    active-indicator-shape: 5px,
+  ));
+
+  @include mat.sidenav-overrides((
+    container-shape: 5px,
+  ));
 }
 

@@ -1,10 +1,22 @@
-<mat-toolbar class="mat-elevation-z5">
+<mat-toolbar>
   <button mat-icon-button (click)="collapsed.set(!collapsed())">
     <mat-icon>menu</mat-icon>
   </button>
+  <span class="toolbar-spacer"></span>
+  <button
+    mat-icon-button
+    class="language-toggle"
+    (click)="switchLanguage()"
+  >
+    <mat-icon class="globe-icon">language</mat-icon>
+    <span class="language-text">{{ currentLanguage() }}</span>
+  </button>
+  <button mat-icon-button (click)="toggleDarkMode()">
+    <mat-icon>{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+  </button>
 </mat-toolbar>
 <mat-sidenav-container>
-  <mat-sidenav class="mat-elevation-z2" opened mode="side" [style.width]="sideNavWidth()">
+  <mat-sidenav opened mode="side" [style.width]="sideNavWidth()">
     <custom-sidenav [collapsed]="collapsed()"/>
   </mat-sidenav>
   <mat-sidenav-content class="content" [style.margin-left]="sideNavWidth()">
