@@ -1,8 +1,0 @@
-<div
-  [ngClass]="{'w-72': isSidebarOpen, 'w-8': !isSidebarOpen}"
-  class="h-screen p-6 pt-8 relative bg-teal-400 transition-all duration-300">
-  <fa-icon [icon]="isSidebarOpen ? faChevronLeft : faChevronRight"
-           (click)="toggleSidebar()"
-           class="btn bg-white text-3xl absolute -right-3 top-9 border-2 cursor-pointer">
-  </fa-icon>
-</div>

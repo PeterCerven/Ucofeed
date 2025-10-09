@@ -1,6 +1,5 @@
 @use "@angular/material" as mat;
 @use './tailwind.css';
-
 @plugin "daisyui";
 @include mat.core();
 
@@ -10,7 +9,6 @@ body {
   padding: 0;
 }
 
-// noinspection SassScssUnresolvedMixin
 html {
   color-scheme: light;
   @include mat.theme((

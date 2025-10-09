@@ -1,12 +1,12 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {University} from '../models/university.model';
-import {environment} from '../../environments/environment';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { University } from '@models/university.model';
+import { environmentProduction } from '@env/environment.production';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class UniversityService {
-  private baseUrl = environment.apiUrl;
+  private baseUrl = environmentProduction.apiUrl;
 
   constructor(private http: HttpClient) {
   }
