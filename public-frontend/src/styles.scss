@@ -12,12 +12,12 @@ html {
   ));
 }
 
+html.dark-mode {
+  color-scheme: dark;
+}
+
 body {
   height: 100%;
   margin: 0;
   padding: 0;
-}
-
-body.dark-mode {
-  color-scheme: dark;
 }
