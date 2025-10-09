@@ -18,7 +18,7 @@ export class App {
   collapsed = signal(false);
   sideNavWidth = computed(() => this.collapsed() ? '60px' : '250px');
   isDarkMode = signal(false);
-  currentLanguage = signal('SK')
+  currentLanguage = signal('SK');
 
   toggleDarkMode() {
     this.isDarkMode.update(v => !v);
