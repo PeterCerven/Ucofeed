@@ -1,4 +1,4 @@
-import { Component, computed, signal, inject } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
@@ -15,10 +15,8 @@ import { TranslocoService } from '@jsverse/transloco';
 })
 export class App {
   private translocoService = inject(TranslocoService);
-  collapsed = signal(false);
-  sideNavWidth = computed(() => this.collapsed() ? '60px' : '250px');
   isDarkMode = signal(false);
-  currentLanguage = signal('SK');
+  currentLanguage = signal('sk');
 
   toggleDarkMode() {
     this.isDarkMode.update(v => !v);
@@ -31,7 +29,7 @@ export class App {
   }
 
   switchLanguage() {
-    this.translocoService.setActiveLang(this.currentLanguage() === 'SK' ? 'en' : 'sk');
-    this.currentLanguage.set(this.currentLanguage() === 'SK' ? 'EN' : 'SK');
+    this.currentLanguage.set(this.currentLanguage() === 'sk' ? 'en' : 'sk');
+    this.translocoService.setActiveLang(this.currentLanguage());
   }
 }
