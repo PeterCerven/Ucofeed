@@ -1,4 +1,4 @@
-import { Component, computed, signal, effect, inject } from '@angular/core';
+import { Component, computed, signal, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';

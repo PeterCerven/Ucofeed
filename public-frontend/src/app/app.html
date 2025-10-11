@@ -1,0 +1,14 @@
+<mat-toolbar>
+  <span class="toolbar-spacer"></span>
+  <button
+    mat-icon-button
+    class="language-toggle"
+    (click)="switchLanguage()"
+  >
+    <mat-icon class="globe-icon">language</mat-icon>
+    <span class="language-text">{{ currentLanguage() }}</span>
+  </button>
+  <button mat-icon-button (click)="toggleDarkMode()">
+    <mat-icon>{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+  </button>
+</mat-toolbar>
