@@ -1,0 +1,17 @@
+<div class="faculties-container">
+  <h1>Faculties of {{ universityName }}</h1>
+
+  <div class="cards-grid">
+    <entity-card
+      [id]="1"
+      name="Faculty of Informatics"
+      image=""
+      entityType="faculty"
+      [review]="8"
+      description="Leading faculty in computer science..."
+      (cardClick)="onFacultyClick($event)"
+    ></entity-card>
+
+    <!-- More faculty cards -->
+  </div>
+</div>

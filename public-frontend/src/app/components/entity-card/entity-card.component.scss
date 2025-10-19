@@ -1,0 +1,148 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.entity-card {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  margin: 16px;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  height: 100%;
+  cursor: pointer; // Add cursor pointer
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  .card-header {
+    padding: 0;
+    margin: 0;
+    height: 240px;
+  }
+
+  .card-image {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 4px 4px 0 0;
+    display: block;
+  }
+
+  // Placeholder icon (when no image)
+  .placeholder-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 240px;
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    border-radius: 4px 4px 0 0;
+
+    .placeholder-icon {
+      font-size: 80px;
+      width: 80px;
+      height: 80px;
+      color: rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  mat-card-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 16px;
+  }
+
+  .card-name {
+    margin: 0 0 12px 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.87);
+  }
+
+  .card-description {
+    margin: 0 0 16px 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(0, 0, 0, 0.6);
+    min-height: 40px;
+    flex-grow: 1;
+  }
+
+  .rating-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+
+    @media (min-width: 400px) {
+      flex-direction: row;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .stars {
+      display: flex;
+      gap: 2px;
+      flex-wrap: wrap;
+
+      .star-icon {
+        width: 20px;
+        height: 20px;
+        font-size: 20px;
+        color: #e0e0e0;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+
+        &.filled {
+          color: #ffd700;
+        }
+
+        &:hover {
+          transform: scale(1.1);
+        }
+      }
+    }
+
+    .rating-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(0, 0, 0, 0.87);
+      white-space: nowrap;
+    }
+  }
+}
+
+// Dark theme support
+:host-context(.dark-mode) .entity-card {
+  .card-name {
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .card-description {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .placeholder-container {
+    background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+  }
+
+  .placeholder-icon {
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  .rating-container {
+    border-top-color: rgba(255, 255, 255, 0.12);
+
+    .rating-text {
+      color: rgba(255, 255, 255, 0.87);
+    }
+  }
+}

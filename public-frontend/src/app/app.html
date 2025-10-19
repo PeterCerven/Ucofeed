@@ -1,5 +1,8 @@
 <mat-toolbar>
+  <span class="toolbar-title">University Course Feedback</span>
+
   <span class="toolbar-spacer"></span>
+
   <button
     mat-icon-button
     class="language-toggle"
@@ -12,3 +15,5 @@
     <mat-icon>{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
   </button>
 </mat-toolbar>
+
+<router-outlet></router-outlet>
