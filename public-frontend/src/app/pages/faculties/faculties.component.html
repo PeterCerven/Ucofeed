@@ -1,7 +1,22 @@
 <div class="faculties-container">
-  <h1>Faculties of {{ universityName }}</h1>
+  <h1>Faculties of {{ universityName() }}</h1>
 
   <div class="cards-grid">
+    @for (faculty of faculties(); track faculty.id) {
+      <entity-card
+        [id]="faculty.id"
+        [name]="faculty.name"
+        [image]="faculty.image"
+        [entityType]="'faculty'"
+        [review]="faculty.review"
+        [description]="faculty.description"
+        (cardClick)="onFacultyClick($event)"
+      ></entity-card>
+    } @empty {
+      <p>No faculties found.</p>
+    }
+
+<!--  DUMMY DATA -->
     <entity-card
       [id]="1"
       name="Faculty of Informatics"
@@ -12,6 +27,6 @@
       (cardClick)="onFacultyClick($event)"
     ></entity-card>
 
-    <!-- More faculty cards -->
   </div>
+
 </div>

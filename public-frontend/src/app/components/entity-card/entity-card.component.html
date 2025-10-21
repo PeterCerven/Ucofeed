@@ -1,39 +1,43 @@
 <mat-card class="entity-card" (click)="onCardClick()">
   <!-- Image or Placeholder Section (hidden for programs) -->
-  <mat-card-header class="card-header" *ngIf="entityType !== 'program'">
-    <!-- Main Image (for university/faculty with images) -->
-    <img
-      *ngIf="getImageUrl()"
-      mat-card-image
-      [src]="getImageUrl()"
-      [alt]="name"
-      class="card-image"
-    />
-
-    <!-- Placeholder Icon (when no image) -->
-    <div *ngIf="!getImageUrl()" class="placeholder-container">
-      <mat-icon class="placeholder-icon">{{ getPlaceholderIcon() }}</mat-icon>
-    </div>
-  </mat-card-header>
+  @if (entityType() !== 'program') {
+    <mat-card-header class="card-header">
+      <!-- Main Image (for university/faculty with images) -->
+      @if (getImageUrl()) {
+        <img
+          mat-card-image
+          [src]="getImageUrl()"
+          [alt]="name()"
+          class="card-image"
+        />
+      }
+      @else {
+        <!-- Placeholder Icon (when no image) -->
+        <div class="placeholder-container">
+          <mat-icon class="placeholder-icon">{{ getPlaceholderIcon() }}</mat-icon>
+        </div>
+      }
+    </mat-card-header>
+  }
 
   <!-- Card Content -->
   <mat-card-content>
     <!-- Name -->
-    <h2 class="card-name">{{ name }}</h2>
+    <h2 class="card-name">{{ name() }}</h2>
 
     <!-- Description -->
-    <p class="card-description">{{ description }}</p>
+    <p class="card-description">{{ description() }}</p>
 
     <!-- Rating Stars -->
     <div class="rating-container">
       <div class="stars">
-        @for (star of starsArray; track star; let i = $index) {
-          <mat-icon class="star-icon" [class.filled]="isFilled(i)">
-            {{ isFilled(i) ? 'star' : 'star_border' }}
+        @for (star of starsArray; track star) {
+          <mat-icon class="star-icon" [class.filled]="isFilled(star)">
+            {{ isFilled(star) ? 'star' : 'star_border' }}
           </mat-icon>
         }
       </div>
-      <span class="rating-text">{{ review }}/10</span>
+      <span class="rating-text">{{ review() }}/10</span>
     </div>
   </mat-card-content>
 </mat-card>

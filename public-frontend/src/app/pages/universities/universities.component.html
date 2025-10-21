@@ -2,85 +2,20 @@
   <h1>Universities</h1>
 
   <div class="cards-grid">
-    <entity-card
-      [id]="1"
-      name="STU"
-      image=""
-      entityType="university"
-      [review]="9"
-      description="Slovak University of Technology in Bratislava"
-      (cardClick)="onUniversityClick($event)"
-    ></entity-card>
 
-    <entity-card
-      [id]="2"
-      name="STU"
-      image="images/stu-logo.png"
-      entityType="university"
-      [review]="9"
-      description="Slovak University of Technology in Bratislava"
-      (cardClick)="onUniversityClick($event)"
-    ></entity-card>
-
-    <entity-card
-      [id]="3"
-      name="STU"
-      image="images/stu-logo.png"
-      entityType="university"
-      [review]="9"
-      description="Slovak University of Technology in Bratislava"
-      (cardClick)="onUniversityClick($event)"
-    ></entity-card>
-
-    <entity-card
-      [id]="4"
-      name="STU"
-      image="images/university-default.png"
-      entityType="university"
-      [review]="6"
-      description="Slovak University of Technology in Bratislava"
-      (cardClick)="onUniversityClick($event)"
-    ></entity-card>
-
-    <entity-card
-      [id]="5"
-      name="STU"
-      image="images/stu-logo.png"
-      entityType="university"
-      [review]="9"
-      description="Slovak University of Technology in Bratislava"
-      (cardClick)="onUniversityClick($event)"
-    ></entity-card>
-
-    <entity-card
-      [id]="6"
-      name="STU"
-      image="images/stu-logo.png"
-      entityType="university"
-      [review]="5"
-      description="Slovak University of Technology in Bratislava"
-      (cardClick)="onUniversityClick($event)"
-    ></entity-card>
-
-    <entity-card
-      [id]="7"
-      name="STU"
-      image="images/stu-logo.png"
-      entityType="university"
-      [review]="9"
-      description="Slovak University of Technology in Bratislava"
-      (cardClick)="onUniversityClick($event)"
-    ></entity-card>
-
-    <entity-card
-      [id]="8"
-      name="STU"
-      image="images/stu-logo.png"
-      entityType="university"
-      [review]="2"
-      description="Slovak University of Technology in Bratislava"
-      (cardClick)="onUniversityClick($event)"
-    ></entity-card>
+    @for (university of universities(); track university.id) {
+      <entity-card
+        [id]="university.id"
+        [name]="university.name"
+        [image]="university.image"
+        [entityType]="'university'"
+        [review]="university.review"
+        [description]="university.description"
+        (cardClick)="onUniversityClick($event)"
+      ></entity-card>
+    } @empty {
+      <p>No universities found.</p>
+    }
 
   </div>
 </div>
