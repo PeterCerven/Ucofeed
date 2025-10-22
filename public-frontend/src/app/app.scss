@@ -1,23 +1,96 @@
-.mat-toolbar {
-  position: relative;
+// Toolbar Container
+.app-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
   display: flex;
   justify-content: space-between;
-  box-shadow: var(--mat-sys-level2);
   align-items: center;
+  padding: 0 24px;
+  min-height: 64px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+}
+
+// Brand Section
+.toolbar-brand {
+  display: flex;
+  align-items: center;
+
+  .app-title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, var(--mat-sys-primary) 0%, var(--mat-sys-tertiary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 }
 
 .toolbar-spacer {
   flex: 1;
 }
 
+// Actions Container
 .toolbar-actions {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 12px;
 }
 
+// Authentication Buttons
+.auth-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-size: 14px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.login-button {
+  border: 2px solid currentColor;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+}
+
+.register-button {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  }
+}
+
+// Language Toggle
 .language-toggle {
   position: relative;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 
   .globe-icon {
     position: absolute;
@@ -39,5 +112,46 @@
     text-align: center;
     line-height: 1;
     letter-spacing: 0.5px;
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .app-toolbar {
+    padding: 0 16px;
+  }
+
+  .toolbar-brand .app-title {
+    font-size: 20px;
+  }
+
+  .auth-button {
+    padding: 6px 16px;
+    font-size: 13px;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  .toolbar-actions {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-button span {
+    display: none;
+  }
+
+  .auth-button {
+    padding: 8px;
+    min-width: 40px;
+
+    mat-icon {
+      margin: 0;
+    }
   }
 }
