@@ -1,9 +1,19 @@
 .mat-toolbar {
   position: relative;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   box-shadow: var(--mat-sys-level2);
   align-items: center;
+  padding: 0 16px;
+}
+
+.toolbar-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 20px;
+  font-weight: 500;
+  pointer-events: none; // Allow clicks to pass through to buttons below if overlapping
 }
 
 .toolbar-spacer {

@@ -1,4 +1,8 @@
-export interface University {
+export interface UniversityModel {
   id: number;
   name: string;
+  image: string;
+  entityType: 'university';
+  review: number;     // 0-10
+  description: string;
 }
