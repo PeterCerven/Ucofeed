@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-public class StudyField {
+public class Language {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,7 +15,7 @@ public class StudyField {
     @Column(unique = true, nullable = false)
     private String name;
 
-    public StudyField(String name) {
+    public Language(String name) {
         this.name = name;
     }
 }

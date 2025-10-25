@@ -28,6 +28,8 @@ public class StudyProgram {
     @Column(nullable=false)
     private String code;
 
+    private String note;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "faculty_id", nullable = false)
     private Faculty faculty;
@@ -40,9 +42,22 @@ public class StudyProgram {
     )
     private List<StudyField> studyFields = new ArrayList<>();
 
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "study_program_study_program_variant",
+        joinColumns = @JoinColumn(name = "study_program_id"),
+        inverseJoinColumns = @JoinColumn(name = "study_program_variant_id")
+    )
+    private List<StudyProgramVariant> studyProgramVariants = new ArrayList<>();
+
     public StudyProgram(String name, String code, Faculty faculty) {
+        this(name, code, faculty, "");
+    }
+
+    public StudyProgram(String name, String code, Faculty faculty, String note) {
         this.name = name;
         this.code = code;
         this.faculty = faculty;
+        this.note = note;
     }
 }
