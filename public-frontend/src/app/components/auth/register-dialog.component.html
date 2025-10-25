@@ -28,9 +28,11 @@
           autocomplete="email"
         />
         <mat-hint>For student domain emails only</mat-hint>
-        <mat-error *ngIf="registerForm.get('universityEmail')?.touched">
-          {{ getErrorMessage('universityEmail') }}
-        </mat-error>
+        @if (registerForm.get('universityEmail')?.touched) {
+          <mat-error>
+            {{ getErrorMessage('universityEmail') }}
+          </mat-error>
+        }
       </mat-form-field>
 
       <!-- Personal Email Field -->
@@ -45,9 +47,11 @@
           autocomplete="email"
         />
         <mat-hint>For account recovery and notifications</mat-hint>
-        <mat-error *ngIf="registerForm.get('personalEmail')?.touched">
-          {{ getErrorMessage('personalEmail') }}
-        </mat-error>
+        @if (registerForm.get('personalEmail')?.touched) {
+          <mat-error>
+            {{ getErrorMessage('personalEmail') }}
+          </mat-error>
+        }
       </mat-form-field>
 
       <!-- Password Field -->
@@ -71,9 +75,11 @@
           <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
         <mat-hint>Min 8 characters, with upper, lower, number & special char</mat-hint>
-        <mat-error *ngIf="registerForm.get('password')?.touched">
-          {{ getErrorMessage('password') }}
-        </mat-error>
+        @if (registerForm.get('password')?.touched) {
+          <mat-error>
+            {{ getErrorMessage('password') }}
+          </mat-error>
+        }
       </mat-form-field>
 
       <!-- Confirm Password Field -->
@@ -96,9 +102,11 @@
         >
           <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
-        <mat-error *ngIf="registerForm.get('confirmPassword')?.touched || registerForm.hasError('passwordMismatch')">
-          {{ getErrorMessage('confirmPassword') }}
-        </mat-error>
+        @if (registerForm.get('confirmPassword')?.touched || registerForm.hasError('passwordMismatch')) {
+          <mat-error>
+            {{ getErrorMessage('confirmPassword') }}
+          </mat-error>
+        }
       </mat-form-field>
     </form>
   </mat-dialog-content>

@@ -27,9 +27,11 @@
           placeholder="your.email@example.com"
           autocomplete="email"
         />
-        <mat-error *ngIf="loginForm.get('email')?.touched">
-          {{ getErrorMessage('email') }}
-        </mat-error>
+        @if (loginForm.get('email')?.touched) {
+          <mat-error>
+            {{ getErrorMessage('email') }}
+          </mat-error>
+        }
       </mat-form-field>
 
       <!-- Password Field -->
@@ -52,9 +54,11 @@
         >
           <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
-        <mat-error *ngIf="loginForm.get('password')?.touched">
-          {{ getErrorMessage('password') }}
-        </mat-error>
+        @if (loginForm.get('password')?.touched) {
+          <mat-error>
+            {{ getErrorMessage('password') }}
+          </mat-error>
+        }
       </mat-form-field>
 
       <!-- Forgot Password Link -->
