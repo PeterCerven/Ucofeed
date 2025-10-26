@@ -1,12 +1,10 @@
 package sk.ucofeed.backend.persistence.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @Entity
 @Table(
@@ -16,6 +14,24 @@ import lombok.NoArgsConstructor;
     }
 )
 public class StudyProgramVariant {
+    public enum Title {
+        BACHELOR("Bc"),
+        MASTER("Mgr"),
+        ENGINEER("Ing"),
+        DOCTOR_MEDIC("MUDr"),
+        DOCTOR("PhD");
+
+        private final String abbreviation;
+
+        Title(String abbreviation) {
+            this.abbreviation = abbreviation;
+        }
+
+        public String getAbbreviation() {
+            return abbreviation;
+        }
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,10 +49,17 @@ public class StudyProgramVariant {
     @Column(name = "study_duration", nullable = false)
     private int studyDuration;
 
-    private String title;
+    @Enumerated(EnumType.STRING)
+    private Title title;
 
     public StudyProgramVariant(LanguageGroup languageGroup, String studyFormat,
-        int studyDegree, int studyDuration, String title) {
+        int studyDegree, int studyDuration) {
+
+        this(languageGroup, studyFormat, studyDegree, studyDuration, null);
+    }
+
+    public StudyProgramVariant(LanguageGroup languageGroup, String studyFormat,
+        int studyDegree, int studyDuration, Title title) {
 
         this.languageGroup = languageGroup;
         this.studyFormat = studyFormat;

@@ -50,6 +50,12 @@ public class StudyProgram {
     )
     private List<StudyProgramVariant> studyProgramVariants = new ArrayList<>();
 
+    @OneToMany(mappedBy = "studyProgram",
+               cascade = CascadeType.ALL,
+               fetch = FetchType.LAZY,
+               orphanRemoval = true)
+    private List<Review> reviews = new ArrayList<>();
+
     public StudyProgram(String name, String code, Faculty faculty) {
         this(name, code, faculty, "");
     }
