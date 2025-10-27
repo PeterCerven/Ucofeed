@@ -1,0 +1,50 @@
+<div class="comments-section">
+  <h4 class="comments-header">
+    <mat-icon>comment</mat-icon>
+    <span>Comments</span>
+  </h4>
+
+  @if (isLoading()) {
+    <div class="loading">
+      <p>Loading comments...</p>
+    </div>
+  } @else {
+    @if (comments().length === 0) {
+      <div class="no-comments">
+        <mat-icon>chat_bubble_outline</mat-icon>
+        <p>No comments yet. Be the first to comment!</p>
+      </div>
+    } @else {
+      <div class="comments-list">
+        @for (comment of comments(); track comment.id) {
+          <div class="comment">
+            <div class="comment-header">
+              <div class="avatar">
+                <mat-icon>person</mat-icon>
+              </div>
+              <div class="comment-meta">
+                <span class="user-name">{{ comment.userName }}</span>
+                <span class="comment-date">{{ formatDate(comment.createdAt) }}</span>
+                @if (comment.isEdited) {
+                  <mat-chip class="edited-badge">
+                    <mat-icon>edit</mat-icon>
+                    Edited
+                  </mat-chip>
+                }
+              </div>
+            </div>
+            <div class="comment-text">
+              <p>{{ comment.commentText }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Add comment section (disabled for now - requires auth) -->
+    <div class="add-comment">
+      <mat-icon>info</mat-icon>
+      <p>Login required to add comments</p>
+    </div>
+  }
+</div>

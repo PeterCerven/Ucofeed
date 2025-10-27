@@ -1,5 +1,5 @@
 import { Component, effect, inject, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EntityCardComponent } from '@components/entity-card/entity-card.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {ProgramModel} from '@models/program.model';
@@ -13,6 +13,7 @@ import {ProgramModel} from '@models/program.model';
 })
 export class ProgramsComponent {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   private paramMap = toSignal(this.route.paramMap);
 
@@ -39,5 +40,9 @@ export class ProgramsComponent {
   private loadPrograms(id: number) {
     // Your service call here
     // this.programs.set(result);
+  }
+
+  onProgramClick(programId: number) {
+    this.router.navigate(['/programs', programId, 'reviews']);
   }
 }

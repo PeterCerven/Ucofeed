@@ -1,0 +1,72 @@
+<div class="program-header">
+  <!-- Breadcrumb navigation -->
+  <nav class="breadcrumb">
+    <span>{{ programDetails().universityName }}</span>
+    <mat-icon>chevron_right</mat-icon>
+    <span>{{ programDetails().facultyName }}</span>
+    <mat-icon>chevron_right</mat-icon>
+    <span class="current">{{ programDetails().name }}</span>
+  </nav>
+
+  <!-- Main header content -->
+  <div class="header-content">
+    <div class="program-info">
+      <h1 class="program-name">{{ programDetails().name }}</h1>
+      <p class="program-description">{{ programDetails().description }}</p>
+
+      <!-- Tags -->
+      <div class="tags">
+        @if (programDetails().tags.degreeLevel) {
+          <mat-chip class="tag">
+            <mat-icon>school</mat-icon>
+            {{ programDetails().tags.degreeLevel }}
+          </mat-chip>
+        }
+        @if (programDetails().tags.studyForm) {
+          <mat-chip class="tag">
+            <mat-icon>schedule</mat-icon>
+            {{ programDetails().tags.studyForm }}
+          </mat-chip>
+        }
+        @if (programDetails().tags.studyType) {
+          <mat-chip class="tag">
+            <mat-icon>category</mat-icon>
+            {{ programDetails().tags.studyType }}
+          </mat-chip>
+        }
+      </div>
+    </div>
+
+    <div class="rating-summary">
+      <!-- Average rating -->
+      <div class="average-rating">
+        <div class="rating-number">{{ programDetails().averageRating.toFixed(1) }}</div>
+        <div class="stars">
+          @for (star of starsArray; track star) {
+            <mat-icon [class.filled]="isStarFilled(star)">
+              {{ isStarFilled(star) ? 'star' : 'star_border' }}
+            </mat-icon>
+          }
+        </div>
+        <div class="review-count">{{ programDetails().totalReviews }} reviews</div>
+      </div>
+
+      <!-- Rating distribution -->
+      <div class="rating-distribution">
+        <h3>Rating Distribution</h3>
+        @for (rating of ratingKeys; track rating) {
+          <div class="distribution-row">
+            <span class="rating-label">{{ rating }} stars</span>
+            <div class="bar-container">
+              <div
+                class="bar"
+                [style.width.%]="getRatingPercentage(rating)"
+              ></div>
+            </div>
+            <span class="count">{{ programDetails().ratingDistribution[rating] }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
