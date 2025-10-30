@@ -8,8 +8,8 @@
         [name]="program.name"
         [entityType]="'program'"
         [review]="program.review"
-        [description]="program.description">
-<!--        (cardClick)="onProgramClick($event)"-->
+        [description]="program.description"
+        (cardClick)="onProgramClick($event)">
       </entity-card>
     } @empty {
       <p>No programs found.</p>

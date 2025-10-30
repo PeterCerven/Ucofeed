@@ -1,0 +1,96 @@
+.filter-container {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  .filter-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+
+    mat-icon {
+      color: #667eea;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #333;
+    }
+  }
+
+  .filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+
+    .filter-field {
+      width: 100%;
+
+      ::ng-deep {
+        .mat-mdc-form-field-icon-prefix {
+          padding-right: 0.75rem;
+          color: #667eea;
+        }
+
+        // Add padding to move select text to the right
+        .mat-mdc-select {
+          padding-left: 0.5rem;
+        }
+
+        // Hide the notch line by making it invisible
+        .mdc-notched-outline__notch {
+          border-right: none !important;
+          border-left: none !important;
+        }
+
+        // Make the outline continuous
+        .mdc-notched-outline__leading {
+          border-right: none !important;
+        }
+
+        .mdc-notched-outline__trailing {
+          border-left: none !important;
+        }
+      }
+    }
+  }
+}
+
+// Dark mode support - only change text colors, keep backgrounds
+:host-context(.dark-mode) .filter-container {
+  background: #1e1e1e;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+
+  .filter-header h3 {
+    color: #e0e0e0;
+  }
+
+  .filter-field {
+    ::ng-deep {
+      .mat-mdc-text-field-wrapper {
+        background-color: #2a2a2a;
+      }
+
+      .mat-mdc-form-field-label,
+      .mat-mdc-select-value,
+      .mat-mdc-select-arrow {
+        color: #e0e0e0 !important;
+      }
+
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__notch,
+      .mdc-notched-outline__trailing {
+        border-color: #555 !important;
+      }
+    }
+  }
+}

@@ -1,0 +1,114 @@
+<mat-card class="review-card">
+  <mat-card-header>
+    <div class="header-content">
+      <div class="user-info">
+        <div class="avatar">
+          <mat-icon>person</mat-icon>
+        </div>
+        <div class="user-details">
+          <h3 class="user-name">{{ review().userName }}</h3>
+          <div class="meta-info">
+            <span class="academic-year">{{ review().academicYear }}</span>
+            <span class="separator">•</span>
+            <span class="semester">{{ getSemesterText(review().semester) }}</span>
+            @if (review().isEdited) {
+              <mat-chip class="edited-badge">
+                <mat-icon>edit</mat-icon>
+                Edited
+              </mat-chip>
+            }
+          </div>
+        </div>
+      </div>
+      <div class="overall-rating" [style.color]="getRatingColor(review().overallRating)">
+        <div class="rating-value">{{ review().overallRating.toFixed(1) }}</div>
+        <div class="rating-label">Overall</div>
+      </div>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content>
+    <!-- Criteria ratings -->
+    <div class="criteria-ratings">
+      <div class="criterion">
+        <div class="criterion-label">
+          <mat-icon>school</mat-icon>
+          <span>Teaching Quality</span>
+        </div>
+        <div class="stars">
+          @for (filled of getStarsArray(review().teachingQualityRating); track $index) {
+            <mat-icon [class.filled]="filled">{{ filled ? 'star' : 'star_border' }}</mat-icon>
+          }
+        </div>
+        <span class="rating-number">{{ review().teachingQualityRating }}/10</span>
+      </div>
+
+      <div class="criterion">
+        <div class="criterion-label">
+          <mat-icon>trending_up</mat-icon>
+          <span>Difficulty</span>
+        </div>
+        <div class="stars">
+          @for (filled of getStarsArray(review().difficultyRating); track $index) {
+            <mat-icon [class.filled]="filled">{{ filled ? 'star' : 'star_border' }}</mat-icon>
+          }
+        </div>
+        <span class="rating-number">{{ review().difficultyRating }}/10</span>
+      </div>
+
+      <div class="criterion">
+        <div class="criterion-label">
+          <mat-icon>library_books</mat-icon>
+          <span>Resources</span>
+        </div>
+        <div class="stars">
+          @for (filled of getStarsArray(review().resourcesRating); track $index) {
+            <mat-icon [class.filled]="filled">{{ filled ? 'star' : 'star_border' }}</mat-icon>
+          }
+        </div>
+        <span class="rating-number">{{ review().resourcesRating }}/10</span>
+      </div>
+
+      <div class="criterion">
+        <div class="criterion-label">
+          <mat-icon>work</mat-icon>
+          <span>Career Prospects</span>
+        </div>
+        <div class="stars">
+          @for (filled of getStarsArray(review().careerProspectsRating); track $index) {
+            <mat-icon [class.filled]="filled">{{ filled ? 'star' : 'star_border' }}</mat-icon>
+          }
+        </div>
+        <span class="rating-number">{{ review().careerProspectsRating }}/10</span>
+      </div>
+    </div>
+
+    <!-- Review text -->
+    <div class="review-text">
+      <p>{{ review().reviewText }}</p>
+    </div>
+
+    <!-- Footer -->
+    <div class="review-footer">
+      <div class="date-info">
+        <mat-icon>schedule</mat-icon>
+        <span>Posted {{ formatDate(review().createdAt) }}</span>
+        @if (review().isEdited) {
+          <span class="edited-date">(Updated {{ formatDate(review().updatedAt) }})</span>
+        }
+      </div>
+      <button mat-button (click)="toggleComments()" class="comments-toggle">
+        <mat-icon>comment</mat-icon>
+        <span>{{ review().commentsCount }} {{ review().commentsCount === 1 ? 'Comment' : 'Comments' }}</span>
+        <mat-icon class="expand-icon" [class.expanded]="isExpanded()">expand_more</mat-icon>
+      </button>
+    </div>
+  </mat-card-content>
+
+  <!-- Comments section (expandable) -->
+  @if (isExpanded()) {
+    <div class="comments-container">
+      <app-comments-section [reviewId]="review().id" />
+    </div>
+  }
+</mat-card>
