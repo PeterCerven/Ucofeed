@@ -64,7 +64,7 @@ public class FileServiceImpl implements FileService {
 
             List<UniversityFileData> result = new ArrayList<>();
             for (CSVRecord record : parser) {
-                if (record.size() >= 7) {
+                if (record.size() >= 12) {
                     UniversityFileData data = new UniversityFileData(
                             record.get(0),  // Kôd programu
                             record.get(1),  // Názov programu
@@ -100,7 +100,7 @@ public class FileServiceImpl implements FileService {
             // Skip header row
             for (int i = 1; i <= sheet.getLastRowNum(); i++) {
                 Row row = sheet.getRow(i);
-                if (row != null && row.getLastCellNum() >= 7) {
+                if (row != null && row.getLastCellNum() >= 12) {
                     UniversityFileData data = new UniversityFileData(
                             getCellValueAsString(row.getCell(0)), // Kôd programu
                             getCellValueAsString(row.getCell(1)), // Názov programu
