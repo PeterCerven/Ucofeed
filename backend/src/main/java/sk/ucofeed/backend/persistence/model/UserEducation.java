@@ -22,6 +22,10 @@ public class UserEducation {
         DROPPED_OUT
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -37,7 +41,7 @@ public class UserEducation {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    UserEducation(User user, StudyProgram studyProgram, StudyProgramVariant studyProgramVariant, Status status) {
+    public UserEducation(User user, StudyProgram studyProgram, StudyProgramVariant studyProgramVariant, Status status) {
         this.user = user;
         this.studyProgram = studyProgram;
         this.studyProgramVariant = studyProgramVariant;

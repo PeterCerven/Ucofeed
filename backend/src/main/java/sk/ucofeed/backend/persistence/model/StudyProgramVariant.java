@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(
     uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"study_format", "study_degree", "study_duration,
-            language_group_id"})
+        @UniqueConstraint(columnNames = {"study_format", "study_degree", "study_duration",
+            "language_group_id"})
     }
 )
 public class StudyProgramVariant {

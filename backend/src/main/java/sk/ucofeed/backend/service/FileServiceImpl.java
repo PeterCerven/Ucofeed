@@ -51,7 +51,7 @@ public class FileServiceImpl implements FileService {
 
             // Check if the study program already exists, if not, create it
             StudyProgram studyProgram = studyProgramRepository.findByNameAndFaculty(data.programName(), faculty)
-                    .orElseGet(() -> studyProgramRepository.save(new StudyProgram(data.programName(), faculty)));
+                    .orElseGet(() -> studyProgramRepository.save(new StudyProgram(data.programName(), "A Plug", faculty)));
         }
     }
 

@@ -14,6 +14,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity
+@Table(name = "app_user")
 public class User {
     public enum Role {
         ADMIN,
@@ -47,7 +48,7 @@ public class User {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "last_login", nullable = false)
+    @Column(name = "last_login")
     private LocalDateTime lastLogin;
 
     @OneToMany(mappedBy = "user",
@@ -56,11 +57,11 @@ public class User {
                orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 
-    User(String email, String password, Role role) {
-        this(email, "", password, role)
+    public User(String email, String password, Role role) {
+        this(email, "", password, role);
     }
 
-    User(String email, String fullName, String password, Role role) {
+    public User(String email, String fullName, String password, Role role) {
         this.email = email;
         this.fullName = fullName;
         this.password = password;

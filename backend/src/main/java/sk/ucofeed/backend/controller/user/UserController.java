@@ -28,8 +28,6 @@ public class UserController {
         this.userService = userService;
     }
 
-
-
     @PostMapping("")
     public ResponseEntity<SuccessResponseDto> submitUserDetails(@Valid @RequestBody @NotNull CreateUserDto userData) {
         LOG.info("Received User Data {}", userData);
@@ -42,15 +40,9 @@ public class UserController {
                 HttpStatus.CREATED);
     }
 
-
     @GetMapping("")
     public ResponseEntity<List<UserResponseDto>> getAllUsers() {
         List<UserResponseDto> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
-
-
-
-
-
 }
