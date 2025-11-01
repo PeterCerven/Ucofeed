@@ -23,39 +23,25 @@
   </button>
 
   <mat-table [dataSource]="dataSource" matSort>
-    <ng-container matColumnDef="programName">
+    <ng-container matColumnDef="programmeCode">
       <mat-header-cell
-        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Program name
+        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Programme Code
       </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{ row.programName }}</mat-cell>
+      <mat-cell *matCellDef="let row"> {{ row.programmeCode }}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="university">
+    <ng-container matColumnDef="programmeName">
       <mat-header-cell
-        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> University
+        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Programme Name
       </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{ row.university }}</mat-cell>
+      <mat-cell *matCellDef="let row"> {{ row.programmeName }}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="faculty">
+    <ng-container matColumnDef="academyTitle">
       <mat-header-cell
-        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Faculty
+        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Academy Title
       </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{ row.faculty }}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="educationLevel">
-      <mat-header-cell
-        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Education Level
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{ row.educationLevel }}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="studyType">
-      <mat-header-cell
-        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Study Type
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{ row.studyType }}</mat-cell>
+      <mat-cell *matCellDef="let row"> {{ row.academyTitle }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="studyForm">
@@ -65,11 +51,32 @@
       <mat-cell *matCellDef="let row"> {{ row.studyForm }}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="studyGroupSubjects">
+    <ng-container matColumnDef="universityName">
       <mat-header-cell
-        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Study Group Subjects
+        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> University Name
       </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{ row.studyGroupSubjects }}</mat-cell>
+      <mat-cell *matCellDef="let row"> {{ row.universityName }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="facultyName">
+      <mat-header-cell
+        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Faculty Name
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.facultyName }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="studyField">
+      <mat-header-cell
+        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Study Field
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.studyField }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="language">
+      <mat-header-cell
+        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Language
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.language }}</mat-cell>
     </ng-container>
 
     <!-- Header and Row Declarations -->

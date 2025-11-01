@@ -39,13 +39,14 @@ export class Tables {
   sort = viewChild<MatSort>(MatSort);
 
   displayedColumns: string[] = [
-    'programName',
-    'university',
-    'faculty',
-    'educationLevel',
-    'studyType',
+    'programmeCode',
+    'programmeName',
+    'academyTitle',
     'studyForm',
-    'studyGroupSubjects',
+    'universityName',
+    'facultyName',
+    'studyField',
+    'language'
   ];
   dataSource = new MatTableDataSource<UniversityData>();
 
