@@ -1,9 +1,10 @@
 export interface UniversityData {
-  programName: string;
-  university: string;
-  faculty: string;
-  educationLevel: string;
-  studyType: string;
+  programmeCode: string;
+  programmeName: string;
+  academyTitle: string;
   studyForm: string;
-  studyGroupSubjects: string;
+  universityName: string;
+  facultyName: string;
+  studyField: string;
+  language: string;
 }
