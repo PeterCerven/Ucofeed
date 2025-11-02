@@ -43,6 +43,17 @@ public class FileServiceImpl implements FileService {
     @Override
     public void saveStudyProgramFromFile(List<UniversityFileData> fileData) {
         for (UniversityFileData data : fileData) {
+            // Check if the university exists, if not, create it
+            University university = universityRepository.findByName(data.university())
+                    .orElseGet(() -> universityRepository.save(new University(data.university())));
+
+            // Check if the faculty exists, if not, create it
+            Faculty faculty = facultyRepository.findByNameAndUniversity(data.faculty(), university)
+                    .orElseGet(() -> facultyRepository.save(new Faculty(data.faculty(), university)));
+
+            // Check if the study program already exists, if not, create it
+            StudyProgram studyProgram = studyProgramRepository.findByNameAndFaculty(data.programName(), faculty)
+                    .orElseGet(() -> studyProgramRepository.save(new StudyProgram(data.programName(), "A Plug", faculty)));
             // TODO when orm is ready save the data
         }
     }

@@ -23,21 +23,14 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
-
     @Override
     public User createUser(CreateUserDto userData) {
         if (userRepository.findByEmail(userData.getEmail()) != null) {
             throw userAlreadyExistsException("A user with this email already exists");
         }
-        if (userRepository.findByPhoneNumber(userData.getPhoneNumber()) != null) {
-            throw userAlreadyExistsException("A user with this phone number already exists");
-        }
 
-        User user = User.builder()
-                .fullName(userData.getFullName())
-                .phoneNumber(userData.getPhoneNumber())
-                .email(userData.getEmail())
-                .build();
+        User user = new User(userData.getEmail(), userData.getFullName(),
+                            userData.getPassword(), userData.getRole());
         user = userRepository.save(user);
         LOG.info("Data Saved Successfully : {}", user);
         return user;

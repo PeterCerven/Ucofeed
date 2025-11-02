@@ -1,5 +1,7 @@
 package sk.ucofeed.backend.persistence.dto;
 
+import sk.ucofeed.backend.persistence.model.User;
+
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.validation.constraints.Email;
@@ -10,14 +12,14 @@ import lombok.Data;
 @Data
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class CreateUserDto {
-
-    @NotEmpty(message = "Name cannot be empty")
     String fullName;
 
     @NotEmpty(message = "Email cannot be empty") @Email(message = "Malformed Email")
     String email;
 
-    @NotEmpty(message = "Phone Number cannot be empty") @Pattern(regexp= "\\d{10}", message = "Phone number must be 10 digits")
-    String phoneNumber;
+    @NotEmpty(message = "Password cannot be empty")
+    String password;
 
+    @NotEmpty(message = "Role cannot be empty")
+    User.Role role;
 }
