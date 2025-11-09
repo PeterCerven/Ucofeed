@@ -1,0 +1,92 @@
+<div class="dialog-container">
+  <div class="dialog-header">
+    <h2 mat-dialog-title class="dialog-title">
+      <mat-icon class="title-icon">login</mat-icon>
+      <span>Login to UcoFeed</span>
+    </h2>
+    <button
+      mat-icon-button
+      class="close-button"
+      (click)="onCancel()"
+      aria-label="Close dialog"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content class="dialog-content">
+    <form [formGroup]="loginForm" class="login-form">
+      <!-- Email Field -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Personal Email</mat-label>
+        <mat-icon matPrefix>email</mat-icon>
+        <input
+          matInput
+          type="email"
+          formControlName="email"
+          placeholder="your.email@example.com"
+          autocomplete="email"
+        />
+        @if (loginForm.get('email')?.touched) {
+          <mat-error>
+            {{ getErrorMessage('email') }}
+          </mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Password Field -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <mat-icon matPrefix>lock</mat-icon>
+        <input
+          matInput
+          [type]="hidePassword ? 'password' : 'text'"
+          formControlName="password"
+          placeholder="Enter your password"
+          autocomplete="current-password"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="togglePasswordVisibility()"
+          [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
+        >
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (loginForm.get('password')?.touched) {
+          <mat-error>
+            {{ getErrorMessage('password') }}
+          </mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Forgot Password Link -->
+      <div class="form-footer">
+        <a href="#" class="forgot-password-link">Forgot password?</a>
+      </div>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="dialog-actions">
+    <button
+      mat-stroked-button
+      type="button"
+      (click)="onCancel()"
+      class="cancel-button"
+    >
+      Cancel
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      type="submit"
+      (click)="onSubmit()"
+      class="submit-button"
+      [disabled]="loginForm.invalid"
+    >
+      <mat-icon>login</mat-icon>
+      <span>Login</span>
+    </button>
+  </mat-dialog-actions>
+</div>

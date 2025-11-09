@@ -1,19 +1,48 @@
-<mat-toolbar>
-  <span class="toolbar-title">University Course Feedback</span>
+<mat-toolbar class="app-toolbar">
+  <div class="toolbar-brand">
+    <h1 class="app-title">UcoFeed</h1>
+  </div>
 
   <span class="toolbar-spacer"></span>
 
-  <button
-    mat-icon-button
-    class="language-toggle"
-    (click)="switchLanguage()"
-  >
-    <mat-icon class="globe-icon">language</mat-icon>
-    <span class="language-text">{{ currentLanguage() }}</span>
-  </button>
-  <button mat-icon-button (click)="toggleDarkMode()">
-    <mat-icon>{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
-  </button>
+  <div class="toolbar-actions">
+    <button
+      mat-stroked-button
+      class="auth-button login-button"
+      (click)="onLogin()"
+    >
+      <mat-icon>login</mat-icon>
+      <span>Login</span>
+    </button>
+
+    <button
+      mat-flat-button
+      color="primary"
+      class="auth-button register-button"
+      (click)="onRegister()"
+    >
+      <mat-icon>person_add</mat-icon>
+      <span>Register</span>
+    </button>
+
+    <button
+      mat-icon-button
+      class="language-toggle"
+      (click)="switchLanguage()"
+      [matTooltip]="'Switch language'"
+    >
+      <mat-icon class="globe-icon">language</mat-icon>
+      <span class="language-text">{{ currentLanguage() }}</span>
+    </button>
+
+    <button
+      mat-icon-button
+      (click)="toggleDarkMode()"
+      [matTooltip]="isDarkMode() ? 'Light mode' : 'Dark mode'"
+    >
+      <mat-icon>{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
+  </div>
 </mat-toolbar>
 
 <router-outlet></router-outlet>
