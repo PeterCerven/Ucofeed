@@ -2,13 +2,14 @@ package sk.ucofeed.backend.persistence.dto;
 
 
 public record UniversityFileData(
-    String programName,
-    String university,
-    String faculty,
-    String educationLevel,
-    String studyType,
+    String programmeCode,
+    String programmeName,
+    String academyTitle,
     String studyForm,
-    String studyGroupSubjects
+    String universityName,
+    String facultyName,
+    String studyField,
+    String language
 ) {
 
 }

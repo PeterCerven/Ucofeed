@@ -8,6 +8,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface StudyProgramRepository extends JpaRepository<StudyProgram, UUID> {
-
     Optional<StudyProgram> findByNameAndFaculty(String s, Faculty faculty);
 }

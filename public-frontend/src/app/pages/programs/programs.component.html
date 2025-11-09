@@ -1,0 +1,20 @@
+<div class="programs-container">
+  <h1>Study Programs of {{ facultyName() }}</h1>
+
+  <div class="cards-grid">
+    @for (program of programs(); track program.id) {
+      <entity-card
+        [id]="program.id"
+        [name]="program.name"
+        [entityType]="'program'"
+        [review]="program.review"
+        [description]="program.description"
+        (cardClick)="onProgramClick($event)">
+      </entity-card>
+    } @empty {
+      <p>No programs found.</p>
+    }
+
+    <!-- More program cards -->
+  </div>
+</div>

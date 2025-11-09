@@ -1,4 +1,5 @@
 import { Component, signal, inject } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
@@ -10,7 +11,6 @@ import { TranslocoService } from '@jsverse/transloco';
 import { LoginDialogComponent, LoginData } from './components/auth/login-dialog.component';
 import { RegisterDialogComponent, RegisterData } from './components/auth/register-dialog.component';
 
-
 @Component({
   selector: 'app-root',
   imports: [
@@ -20,6 +20,7 @@ import { RegisterDialogComponent, RegisterData } from './components/auth/registe
     MatButtonModule,
     MatSidenavModule,
     MatTooltipModule
+    RouterOutlet  // Add RouterOutlet
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',

@@ -24,6 +24,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class FileServiceImpl implements FileService {
@@ -42,16 +44,17 @@ public class FileServiceImpl implements FileService {
     public void saveStudyProgramFromFile(List<UniversityFileData> fileData) {
         for (UniversityFileData data : fileData) {
             // Check if the university exists, if not, create it
-            University university = universityRepository.findByName(data.university())
-                    .orElseGet(() -> universityRepository.save(new University(data.university())));
+            University university = universityRepository.findByName(data.universityName())
+                    .orElseGet(() -> universityRepository.save(new University(data.universityName())));
 
             // Check if the faculty exists, if not, create it
-            Faculty faculty = facultyRepository.findByNameAndUniversity(data.faculty(), university)
-                    .orElseGet(() -> facultyRepository.save(new Faculty(data.faculty(), university)));
+            Faculty faculty = facultyRepository.findByNameAndUniversity(data.facultyName(), university)
+                    .orElseGet(() -> facultyRepository.save(new Faculty(data.facultyName(), university)));
 
             // Check if the study program already exists, if not, create it
-            StudyProgram studyProgram = studyProgramRepository.findByNameAndFaculty(data.programName(), faculty)
-                    .orElseGet(() -> studyProgramRepository.save(new StudyProgram(data.programName(), faculty)));
+            StudyProgram studyProgram = studyProgramRepository.findByNameAndFaculty(data.programmeName(), faculty)
+                    .orElseGet(() -> studyProgramRepository.save(new StudyProgram(data.programmeName(), "A Plug", faculty)));
+            // TODO when orm is ready save the data
         }
     }
 
@@ -72,19 +75,25 @@ public class FileServiceImpl implements FileService {
 
             List<UniversityFileData> result = new ArrayList<>();
             for (CSVRecord record : parser) {
-                if (record.size() >= 7) {
-                    result.add(new UniversityFileData(
-                            record.get(0), // programName
-                            record.get(1), // university
-                            record.get(2), // faculty
-                            record.get(3), // educationLevel
-                            record.get(4), // studyType
-                            record.get(5), // studyForm
-                            record.get(6)  // studyGroupSubjects
-                    ));
+                if (record.size() >= 12) {
+                    UniversityFileData data = new UniversityFileData(
+                            record.get(0),  // Kôd programu
+                            record.get(1),  // Názov programu
+//                          record.get(2),  // Stupeň štúdia
+                            record.get(3),  // Udelený akademický titul
+                            record.get(4),  // Forma štúdia
+//                          record.get(5),  // Štandardná dĺžka štúdia
+                            record.get(6),  // Vysoká škola
+                            record.get(7),  // Fakulta
+//                          record.get(8),  // Miesto štúdia
+                            record.get(9),  // Študijný odbor
+//                          record.get(10), // Študijný odbor (2)
+                            record.get(11)  // Jazyk poskytovania
+                    );
+                    result.add(data);
                 }
             }
-            return result;
+            return transformData(result);
         } catch (Exception e) {
             throw new RuntimeException("Failed to parse CSV file", e);
         }
@@ -102,22 +111,27 @@ public class FileServiceImpl implements FileService {
             // Skip header row
             for (int i = 1; i <= sheet.getLastRowNum(); i++) {
                 Row row = sheet.getRow(i);
-                if (row != null && row.getLastCellNum() >= 7) {
-                    result.add(new UniversityFileData(
-                            getCellValueAsString(row.getCell(0)), // programName
-                            getCellValueAsString(row.getCell(1)), // university
-                            getCellValueAsString(row.getCell(2)), // faculty
-                            getCellValueAsString(row.getCell(3)), // educationLevel
-                            getCellValueAsString(row.getCell(4)), // studyType
-                            getCellValueAsString(row.getCell(5)), // studyForm
-                            getCellValueAsString(row.getCell(6))  // studyGroupSubjects
-                    ));
+                if (row != null && row.getLastCellNum() >= 12) {
+                    UniversityFileData data = new UniversityFileData(
+                            getCellValueAsString(row.getCell(0)), // Kôd programu
+                            getCellValueAsString(row.getCell(1)), // Názov programu
+//                          getCellValueAsString(row.getCell(2)),    // Stupeň štúdia
+                            getCellValueAsString(row.getCell(3)), // Udelený akademický titul
+                            getCellValueAsString(row.getCell(4)), // Forma štúdia
+//                          getCellValueAsString(row.getCell(5)),    // Štandardná dĺžka štúdia
+                            getCellValueAsString(row.getCell(6)), // Vysoká škola
+                            getCellValueAsString(row.getCell(7)), // Fakulta
+//                          getCellValueAsString(row.getCell(8)),    // Miesto štúdia
+                            getCellValueAsString(row.getCell(9)), // Študijný odbor
+//                          getCellValueAsString(row.getCell(10)),   // Študijný odbor (2)
+                            getCellValueAsString(row.getCell(11)) // Jazyk poskytovania
+                    );
+                    result.add(data);
                 }
             }
-            return result;
+            return transformData(result);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to parse Excel file",
-                    e);
+            throw new RuntimeException("Failed to parse Excel file", e);
         }
     }
 
@@ -130,6 +144,71 @@ public class FileServiceImpl implements FileService {
             case BOOLEAN -> String.valueOf(cell.getBooleanCellValue());
             default -> "";
         };
+    }
+
+    private List<UniversityFileData> transformData(List<UniversityFileData> data) {
+        Map<String, List<UniversityFileData>> groupedByProgramme = data.stream()
+                .collect(Collectors.groupingBy(UniversityFileData::programmeName));
+
+        return groupedByProgramme.entrySet().stream()
+                .map(entry -> {
+                    List<UniversityFileData> programmeGroup = entry.getValue();
+
+                    String combinedProgrammeCodes = programmeGroup.stream()
+                            .map(UniversityFileData::programmeCode)
+                            .distinct()
+                            .collect(Collectors.joining(", "));
+
+                    String combinedAcademyTitles = programmeGroup.stream()
+                            .map(UniversityFileData::academyTitle)
+                            .map(this::extractAcademicTitleAbbreviation)
+                            .distinct()
+                            .collect(Collectors.joining(", "));
+
+                    String combinedStudyForms = programmeGroup.stream()
+                            .map(UniversityFileData::studyForm)
+                            .distinct()
+                            .collect(Collectors.joining(", "));
+
+                    String combinedUniversityNames = programmeGroup.stream()
+                            .map(UniversityFileData::universityName)
+                            .distinct()
+                            .collect(Collectors.joining(", "));
+
+                    String combinedFacultyNames = programmeGroup.stream()
+                            .map(UniversityFileData::facultyName)
+                            .distinct()
+                            .collect(Collectors.joining(", "));
+
+                    String combinedStudyFields = programmeGroup.stream()
+                            .map(UniversityFileData::studyField)
+                            .distinct()
+                            .collect(Collectors.joining(", "));
+
+                    String combinedLanguages = programmeGroup.stream()
+                            .map(UniversityFileData::language)
+                            .distinct()
+                            .collect(Collectors.joining(", "));
+
+                    return new UniversityFileData(
+                            combinedProgrammeCodes,
+                            entry.getKey(), // programmeName
+                            combinedAcademyTitles,
+                            combinedStudyForms,
+                            combinedUniversityNames,
+                            combinedFacultyNames,
+                            combinedStudyFields,
+                            combinedLanguages
+                    );
+                })
+                .collect(Collectors.toList());
+    }
+
+    private String extractAcademicTitleAbbreviation(String fullTitle) {
+        if (fullTitle == null || fullTitle.isEmpty()) {
+            return fullTitle;
+        }
+        return fullTitle.replaceAll(".+,\\s*(.+)", "$1");
     }
 
 
