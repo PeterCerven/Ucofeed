@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
 import { UniversityService } from '@services/university.service';
-import { University } from '@models/university.model';
+import { UniversityModel } from '@models/university.model';
 
 export interface RegisterData {
   universityEmail: string;
@@ -76,12 +76,12 @@ export class CustomValidators {
         'euba.sk': /^[a-z][a-z]+\d+$/
       };
 
-      // Check if domain is valid
+      // Check if the domain is valid
       if (!universityPatterns[domain]) {
         return { invalidUniversityDomain: { allowedDomains } };
       }
 
-      // Check if student specification matches the university's pattern
+      // Check if the student specification matches the university's pattern
       if (!universityPatterns[domain].test(localPart)) {
         return { invalidEmailFormat: { domain } };
       }
@@ -113,7 +113,7 @@ export class RegisterDialogComponent implements OnInit {
   private readonly universityService = inject(UniversityService);
 
   readonly registerForm: FormGroup;
-  readonly universities = signal<University[]>([]);
+  readonly universities = signal<UniversityModel[]>([]);
   readonly allowedDomains: string[] = [
     'uniba.sk',
     'stuba.sk',

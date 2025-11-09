@@ -19,8 +19,8 @@ import { RegisterDialogComponent, RegisterData } from './components/auth/registe
     MatIconModule,
     MatButtonModule,
     MatSidenavModule,
-    MatTooltipModule
-    RouterOutlet  // Add RouterOutlet
+    MatTooltipModule,
+    RouterOutlet
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
