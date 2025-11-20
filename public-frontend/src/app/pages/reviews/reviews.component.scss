@@ -9,6 +9,31 @@
     padding: 0 1.5rem;
   }
 
+  .action-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.5rem;
+
+    .write-review-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+    }
+  }
+
+  // Dark mode fix for action bar
+  :host-context(.dark-mode) .action-bar {
+    .write-review-btn {
+      background-color: #1976d2;
+      color: white;
+
+      mat-icon {
+        color: white;
+      }
+    }
+  }
+
   .loading-header,
   .loading-reviews {
     text-align: center;

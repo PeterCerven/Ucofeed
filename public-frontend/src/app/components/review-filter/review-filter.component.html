@@ -1,39 +1,10 @@
 <div class="filter-container">
   <div class="filter-header">
-    <mat-icon>filter_list</mat-icon>
-    <h3>Filter & Sort Reviews</h3>
+    <mat-icon>sort</mat-icon>
+    <h3>Sort Reviews</h3>
   </div>
 
   <div class="filters">
-    <!-- Academic Year Filter -->
-    <mat-form-field appearance="outline" class="filter-field">
-      <mat-label>Academic Year</mat-label>
-      <mat-icon matIconPrefix>calendar_today</mat-icon>
-      <mat-select
-        [(value)]="selectedYear"
-        (selectionChange)="onYearChange($event.value)"
-      >
-        <mat-option value="">All Years</mat-option>
-        @for (year of academicYears; track year) {
-          <mat-option [value]="year">{{ year }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-
-    <!-- Semester Filter -->
-    <mat-form-field appearance="outline" class="filter-field">
-      <mat-label>Semester</mat-label>
-      <mat-icon matIconPrefix>event</mat-icon>
-      <mat-select
-        [(value)]="selectedSemester"
-        (selectionChange)="onSemesterChange($event.value)"
-      >
-        @for (semester of semesters; track semester.value) {
-          <mat-option [value]="semester.value">{{ semester.label }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-
     <!-- Sort By -->
     <mat-form-field appearance="outline" class="filter-field">
       <mat-label>Sort By</mat-label>

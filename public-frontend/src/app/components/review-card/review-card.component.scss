@@ -96,6 +96,38 @@
   mat-card-content {
     padding: 1.5rem;
 
+    .rating-stars-display {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: #f5f5f5;
+      border-radius: 8px;
+
+      .stars {
+        display: flex;
+        gap: 0.25rem;
+
+        mat-icon {
+          font-size: 1.5rem;
+          width: 1.5rem;
+          height: 1.5rem;
+          color: #ddd;
+
+          &.filled {
+            color: #ffd700;
+          }
+        }
+      }
+
+      .rating-number {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #333;
+      }
+    }
+
     .criteria-ratings {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -233,9 +265,34 @@
       .separator {
         color: #666 !important;
       }
+
+      .edited-badge {
+        background-color: #3d2f00 !important;
+        color: #ffb74d !important;
+
+        mat-icon {
+          color: #ffb74d !important;
+        }
+      }
     }
 
     mat-card-content {
+      .rating-stars-display {
+        background: #2a2a2a;
+
+        .rating-number {
+          color: #e0e0e0;
+        }
+
+        .stars mat-icon {
+          color: #555;
+
+          &.filled {
+            color: #ffd700;
+          }
+        }
+      }
+
       .criteria-ratings {
         .criterion {
           background: #2a2a2a;

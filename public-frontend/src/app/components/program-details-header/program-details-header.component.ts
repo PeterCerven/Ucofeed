@@ -37,4 +37,18 @@ export class ProgramDetailsHeaderComponent {
   isStarFilled(index: number): boolean {
     return index < Math.round(this.programDetails().averageRating);
   }
+
+  /** Get degree label from degree number */
+  getDegreeLabel(degree: number): string {
+    switch (degree) {
+      case 1:
+        return '1st degree (Bachelor)';
+      case 2:
+        return '2nd degree (Master)';
+      case 3:
+        return '3rd degree (Doctoral)';
+      default:
+        return `${degree}° degree`;
+    }
+  }
 }
