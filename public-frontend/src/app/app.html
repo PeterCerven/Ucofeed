@@ -27,6 +27,14 @@
 
     <button
       mat-icon-button
+      (click)="onProfile()"
+      [matTooltip]="'My Profile'"
+    >
+      <mat-icon>account_circle</mat-icon>
+    </button>
+
+    <button
+      mat-icon-button
       class="language-toggle"
       (click)="switchLanguage()"
       [matTooltip]="'Switch language'"

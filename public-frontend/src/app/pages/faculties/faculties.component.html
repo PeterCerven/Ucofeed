@@ -6,10 +6,10 @@
       <entity-card
         [id]="faculty.id"
         [name]="faculty.name"
-        [image]="faculty.image"
+        [image]="faculty.image ?? ''"
         [entityType]="'faculty'"
-        [review]="faculty.review"
-        [description]="faculty.description"
+        [review]="faculty.review ?? 0"
+        [description]="faculty.description ?? ''"
         (cardClick)="onFacultyClick($event)"
       ></entity-card>
     } @empty {

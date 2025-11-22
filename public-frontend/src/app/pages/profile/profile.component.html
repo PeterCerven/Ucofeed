@@ -1,0 +1,146 @@
+<div class="profile-container">
+  <mat-card class="profile-card">
+    <mat-card-header class="profile-header">
+      <mat-icon class="profile-icon">account_circle</mat-icon>
+      <mat-card-title>My Profile</mat-card-title>
+      <mat-card-subtitle>Manage your academic information</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content class="profile-content">
+      <form [formGroup]="profileForm" class="profile-form">
+
+        <!-- University Selection -->
+        <mat-form-field class="full-width">
+          <mat-label>University</mat-label>
+          <mat-icon matPrefix>school</mat-icon>
+          <mat-select formControlName="universityId" placeholder="Select your university">
+            @for (university of universities(); track university.id) {
+              <mat-option [value]="university.id">{{ university.name }}</mat-option>
+            }
+          </mat-select>
+          <mat-hint>Select your university</mat-hint>
+        </mat-form-field>
+
+        <!-- Faculty Selection -->
+        <mat-form-field class="full-width">
+          <mat-label>Faculty</mat-label>
+          <mat-icon matPrefix>domain</mat-icon>
+          <mat-select
+            formControlName="facultyId"
+            placeholder="Select your faculty"
+            [disabled]="!profileForm.get('universityId')?.value"
+          >
+            @for (faculty of faculties(); track faculty.id) {
+              <mat-option [value]="faculty.id">{{ faculty.name }}</mat-option>
+            }
+          </mat-select>
+          <mat-hint>Select your faculty (choose university first)</mat-hint>
+        </mat-form-field>
+
+        <!-- Study Programme Selection -->
+        <mat-form-field class="full-width">
+          <mat-label>Study Programme</mat-label>
+          <mat-icon matPrefix>menu_book</mat-icon>
+          <mat-select
+            formControlName="studyProgramId"
+            placeholder="Select your study programme"
+            [disabled]="!profileForm.get('facultyId')?.value"
+          >
+            @for (program of programs(); track program.id) {
+              <mat-option [value]="program.id">{{ program.name }}</mat-option>
+            }
+          </mat-select>
+          <mat-hint>Select your study programme (choose faculty first)</mat-hint>
+        </mat-form-field>
+
+        <!-- Language -->
+        <mat-form-field class="full-width">
+          <mat-label>Study language</mat-label>
+          <mat-icon matPrefix>language</mat-icon>
+          <mat-select formControlName="language" placeholder="Select language">
+            @for (language of languages; track language.value) {
+              <mat-option [value]="language.value">{{ language.label }}</mat-option>
+            }
+          </mat-select>
+          @if (profileForm.get('language')?.touched) {
+            <mat-error>
+              {{ getErrorMessage('language') }}
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Degree Level -->
+        <mat-form-field class="full-width">
+          <mat-label>Degree Level</mat-label>
+          <mat-icon matPrefix>school</mat-icon>
+          <mat-select formControlName="degreeLevel" placeholder="Select degree level">
+            @for (level of degreeLevels; track level.value) {
+              <mat-option [value]="level.value">{{ level.label }}</mat-option>
+            }
+          </mat-select>
+          @if (profileForm.get('degreeLevel')?.touched) {
+            <mat-error>
+              {{ getErrorMessage('degreeLevel') }}
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Status -->
+        <mat-form-field class="full-width">
+          <mat-label>Status</mat-label>
+          <mat-icon matPrefix>assignment_ind</mat-icon>
+          <mat-select formControlName="status" placeholder="Select your status">
+            @for (status of statuses; track status.value) {
+              <mat-option [value]="status.value">{{ status.label }}</mat-option>
+            }
+          </mat-select>
+          @if (profileForm.get('status')?.touched) {
+            <mat-error>
+              {{ getErrorMessage('status') }}
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Study Format -->
+        <mat-form-field class="full-width">
+          <mat-label>Study Format</mat-label>
+          <mat-icon matPrefix>location_on</mat-icon>
+          <mat-select formControlName="studyFormat" placeholder="Select study format">
+            @for (format of studyFormats; track format.value) {
+              <mat-option [value]="format.value">{{ format.label }}</mat-option>
+            }
+          </mat-select>
+          @if (profileForm.get('studyFormat')?.touched) {
+            <mat-error>
+              {{ getErrorMessage('studyFormat') }}
+            </mat-error>
+          }
+        </mat-form-field>
+
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions class="profile-actions">
+      <button
+        mat-stroked-button
+        type="button"
+        (click)="onReset()"
+        class="reset-button"
+      >
+        <mat-icon>refresh</mat-icon>
+        <span>Reset</span>
+      </button>
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        (click)="onSave()"
+        class="save-button"
+        [disabled]="profileForm.invalid"
+      >
+        <mat-icon>save</mat-icon>
+        <span>Save Profile</span>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

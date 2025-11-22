@@ -1,13 +1,15 @@
 package sk.ucofeed.backend.service;
+import sk.ucofeed.backend.persistence.dto.UpdateUserDTO;
+import sk.ucofeed.backend.persistence.dto.UserResponseDTO;
 
-import sk.ucofeed.backend.persistence.dto.CreateUserDto;
-import sk.ucofeed.backend.persistence.dto.UserResponseDto;
-import sk.ucofeed.backend.persistence.model.User;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface UserService {
-    User createUser(CreateUserDto userData);
+    List<UserResponseDTO> getAllUsers();
 
-    List<UserResponseDto> getAllUsers();
+    UserResponseDTO getUserById(String id);
+
+    UserResponseDTO updateUser(UUID userId, UpdateUserDTO updateUserDto);
 }

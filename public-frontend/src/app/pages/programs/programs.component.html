@@ -7,8 +7,8 @@
         [id]="program.id"
         [name]="program.name"
         [entityType]="'program'"
-        [review]="program.review"
-        [description]="program.description"
+        [review]="program.review ?? 0"
+        [description]="program.description ?? ''"
         (cardClick)="onProgramClick($event)">
       </entity-card>
     } @empty {

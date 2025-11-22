@@ -1,5 +1,5 @@
 import { Component, signal, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
@@ -8,8 +8,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslocoService } from '@jsverse/transloco';
-import { LoginDialogComponent, LoginData } from './components/auth/login-dialog.component';
-import { RegisterDialogComponent, RegisterData } from './components/auth/register-dialog.component';
+import { LoginDialogComponent, LoginData } from '@components/auth/login-dialog.component';
+import { RegisterDialogComponent, RegisterData } from '@components/auth/register-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -29,6 +29,7 @@ export class App {
   private readonly translocoService = inject(TranslocoService);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly router = inject(Router);
 
   readonly isDarkMode = signal(false);
   readonly currentLanguage = signal('sk');
@@ -90,5 +91,9 @@ export class App {
         // TODO: Call user registration service
       }
     });
+  }
+
+  onProfile(): void {
+    this.router.navigate(['/profile']);
   }
 }

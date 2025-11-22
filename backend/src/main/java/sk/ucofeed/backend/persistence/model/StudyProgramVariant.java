@@ -2,6 +2,7 @@ package sk.ucofeed.backend.persistence.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Data
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
     }
 )
 public class StudyProgramVariant {
+    @Getter
     public enum Title {
         BACHELOR("Bc"),
         MASTER("Mgr"),
@@ -27,9 +29,6 @@ public class StudyProgramVariant {
             this.abbreviation = abbreviation;
         }
 
-        public String getAbbreviation() {
-            return abbreviation;
-        }
     }
 
     @Id
@@ -51,12 +50,6 @@ public class StudyProgramVariant {
 
     @Enumerated(EnumType.STRING)
     private Title title;
-
-    public StudyProgramVariant(LanguageGroup languageGroup, String studyFormat,
-        int studyDegree, int studyDuration) {
-
-        this(languageGroup, studyFormat, studyDegree, studyDuration, null);
-    }
 
     public StudyProgramVariant(LanguageGroup languageGroup, String studyFormat,
         int studyDegree, int studyDuration, Title title) {
