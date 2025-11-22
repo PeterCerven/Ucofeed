@@ -2,21 +2,19 @@ package sk.ucofeed.backend.controller.user;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import sk.ucofeed.backend.persistence.dto.CreateUserDto;
-import sk.ucofeed.backend.persistence.dto.SuccessResponseDto;
-import sk.ucofeed.backend.persistence.dto.UserResponseDto;
-import sk.ucofeed.backend.persistence.model.User;
+import sk.ucofeed.backend.persistence.dto.UpdateUserDTO;
+import sk.ucofeed.backend.persistence.dto.UserResponseDTO;
 import sk.ucofeed.backend.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/user/public")
+@RequestMapping("/user/public/user")
 public class UserController {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
@@ -28,21 +26,25 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("")
-    public ResponseEntity<SuccessResponseDto> submitUserDetails(@Valid @RequestBody @NotNull CreateUserDto userData) {
-        LOG.info("Received User Data {}", userData);
-        User user = userService.createUser(userData);
-        return new ResponseEntity<>(
-                SuccessResponseDto.builder()
-                .message("Success. User ID : " + user.getId())
-                .operation(SuccessResponseDto.Operation.CREATE_USER)
-                .build(),
-                HttpStatus.CREATED);
+    @GetMapping("")
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
+        List<UserResponseDTO> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
     }
 
-    @GetMapping("")
-    public ResponseEntity<List<UserResponseDto>> getAllUsers() {
-        List<UserResponseDto> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable String id) {
+        LOG.info("Fetching User ID {}", id);
+        UserResponseDTO user = userService.getUserById(id);
+        return ResponseEntity.ok(user);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> updateUser(
+            @PathVariable String id,
+            @Valid @RequestBody @NotNull UpdateUserDTO updateUserDto) {
+        LOG.info("Updating User ID {} with data {}", id, updateUserDto);
+        UserResponseDTO updatedUser = userService.updateUser(UUID.fromString(id), updateUserDto);
+        return ResponseEntity.ok(updatedUser);
     }
 }

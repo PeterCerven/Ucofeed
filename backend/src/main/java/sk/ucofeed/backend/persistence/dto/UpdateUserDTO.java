@@ -2,21 +2,17 @@ package sk.ucofeed.backend.persistence.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import lombok.Builder;
-import lombok.ToString;
-import lombok.Value;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
-@Value
-@Builder
+@Data
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class SuccessResponseDto {
+public class UpdateUserDTO {
+    private String fullName;
 
-    Operation operation;
-    String message;
+    private Long studyProgramId;
 
-    @ToString
-    public enum Operation {
-        CREATE_USER
-    }
+    private Long studyProgramVariantId;
 
+    private String status;
 }

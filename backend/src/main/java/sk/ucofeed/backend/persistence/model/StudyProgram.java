@@ -12,11 +12,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"faculty_id", "code"})
-    }
-)
+@Table
 public class StudyProgram {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,11 +20,6 @@ public class StudyProgram {
 
     @Column(nullable=false)
     private String name;
-
-    @Column(nullable=false)
-    private String code;
-
-    private String note;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "faculty_id", nullable = false)
@@ -56,14 +47,8 @@ public class StudyProgram {
                orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 
-    public StudyProgram(String name, String code, Faculty faculty) {
-        this(name, code, faculty, "");
-    }
-
-    public StudyProgram(String name, String code, Faculty faculty, String note) {
+    public StudyProgram(String name, Faculty faculty) {
         this.name = name;
-        this.code = code;
         this.faculty = faculty;
-        this.note = note;
     }
 }

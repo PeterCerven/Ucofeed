@@ -8,9 +8,11 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import sk.ucofeed.backend.persistence.dto.UniversityFileData;
+import sk.ucofeed.backend.persistence.dto.UniversityFileDataDTO;
 import sk.ucofeed.backend.persistence.model.Faculty;
 import sk.ucofeed.backend.persistence.model.StudyProgram;
 import sk.ucofeed.backend.persistence.model.University;
@@ -30,6 +32,8 @@ import java.util.stream.Collectors;
 @Service
 public class FileServiceImpl implements FileService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(FileServiceImpl.class);
+
     private final FacultyRepository facultyRepository;
     private final UniversityRepository universityRepository;
     private final StudyProgramRepository studyProgramRepository;
@@ -41,25 +45,34 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public void saveStudyProgramFromFile(List<UniversityFileData> fileData) {
-        for (UniversityFileData data : fileData) {
+    public void saveStudyProgramFromFile(List<UniversityFileDataDTO> fileData) {
+        for (UniversityFileDataDTO data : fileData) {
+            LOG.info("Will process: Programme: {}, University: {}, Faculty: {}",
+                    data.programmeName(), data.universityName(), data.facultyName());
             // Check if the university exists, if not, create it
             University university = universityRepository.findByName(data.universityName())
                     .orElseGet(() -> universityRepository.save(new University(data.universityName())));
+
+            LOG.info("University processed: {}", university.getName());
 
             // Check if the faculty exists, if not, create it
             Faculty faculty = facultyRepository.findByNameAndUniversity(data.facultyName(), university)
                     .orElseGet(() -> facultyRepository.save(new Faculty(data.facultyName(), university)));
 
+            LOG.info("Faculty processed: {} under University: {}", faculty.getName(), university.getName());
+
+
+            LOG.info("IMPORTANT Checking Study Program: {} under Faculty: {}", data.programmeName(), faculty.getName());
             // Check if the study program already exists, if not, create it
             StudyProgram studyProgram = studyProgramRepository.findByNameAndFaculty(data.programmeName(), faculty)
-                    .orElseGet(() -> studyProgramRepository.save(new StudyProgram(data.programmeName(), "A Plug", faculty)));
-            // TODO when orm is ready save the data
+                    .orElseGet(() -> studyProgramRepository.save(new StudyProgram(data.programmeName(), faculty)));
+
+            LOG.info("Study Program processed: {} under Faculty: {}", studyProgram.getName(), faculty.getName());
         }
     }
 
     @Override
-    public List<UniversityFileData> parseFile(MultipartFile file) {
+    public List<UniversityFileDataDTO> parseFile(MultipartFile file) {
         String fileExtension = FilenameUtils.getExtension(file.getOriginalFilename());
         return switch (fileExtension) {
             case "csv" -> parseCSVFile(file);
@@ -68,15 +81,15 @@ public class FileServiceImpl implements FileService {
         };
     }
 
-    private List<UniversityFileData> parseCSVFile(MultipartFile file) {
+    private List<UniversityFileDataDTO> parseCSVFile(MultipartFile file) {
         try (InputStreamReader reader = new InputStreamReader(file.getInputStream())) {
             CSVFormat format = CSVFormat.DEFAULT.builder().setHeader().setSkipHeaderRecord(true).build();
             CSVParser parser = format.parse(reader);
 
-            List<UniversityFileData> result = new ArrayList<>();
+            List<UniversityFileDataDTO> result = new ArrayList<>();
             for (CSVRecord record : parser) {
                 if (record.size() >= 12) {
-                    UniversityFileData data = new UniversityFileData(
+                    UniversityFileDataDTO data = new UniversityFileDataDTO(
                             record.get(0),  // Kôd programu
                             record.get(1),  // Názov programu
 //                          record.get(2),  // Stupeň štúdia
@@ -100,19 +113,19 @@ public class FileServiceImpl implements FileService {
     }
 
 
-    private List<UniversityFileData> parseExcelFile(MultipartFile
+    private List<UniversityFileDataDTO> parseExcelFile(MultipartFile
                                                             file) {
         try (InputStream inputStream = file.getInputStream();
              Workbook workbook = new XSSFWorkbook(inputStream)) {
 
             Sheet sheet = workbook.getSheetAt(0);
-            List<UniversityFileData> result = new ArrayList<>();
+            List<UniversityFileDataDTO> result = new ArrayList<>();
 
             // Skip header row
             for (int i = 1; i <= sheet.getLastRowNum(); i++) {
                 Row row = sheet.getRow(i);
                 if (row != null && row.getLastCellNum() >= 12) {
-                    UniversityFileData data = new UniversityFileData(
+                    UniversityFileDataDTO data = new UniversityFileDataDTO(
                             getCellValueAsString(row.getCell(0)), // Kôd programu
                             getCellValueAsString(row.getCell(1)), // Názov programu
 //                          getCellValueAsString(row.getCell(2)),    // Stupeň štúdia
@@ -146,60 +159,63 @@ public class FileServiceImpl implements FileService {
         };
     }
 
-    private List<UniversityFileData> transformData(List<UniversityFileData> data) {
-        Map<String, List<UniversityFileData>> groupedByProgramme = data.stream()
-                .collect(Collectors.groupingBy(UniversityFileData::programmeName));
+    private List<UniversityFileDataDTO> transformData(List<UniversityFileDataDTO> data) {
+        Map<String, List<UniversityFileDataDTO>> groupedByProgramme = data.stream()
+                .collect(Collectors.groupingBy(UniversityFileDataDTO::programmeName));
 
         return groupedByProgramme.entrySet().stream()
-                .map(entry -> {
-                    List<UniversityFileData> programmeGroup = entry.getValue();
+                .flatMap(entry -> {
+                    List<UniversityFileDataDTO> programmeGroup = entry.getValue();
 
                     String combinedProgrammeCodes = programmeGroup.stream()
-                            .map(UniversityFileData::programmeCode)
+                            .map(UniversityFileDataDTO::programmeCode)
                             .distinct()
                             .collect(Collectors.joining(", "));
 
                     String combinedAcademyTitles = programmeGroup.stream()
-                            .map(UniversityFileData::academyTitle)
+                            .map(UniversityFileDataDTO::academyTitle)
                             .map(this::extractAcademicTitleAbbreviation)
                             .distinct()
                             .collect(Collectors.joining(", "));
 
                     String combinedStudyForms = programmeGroup.stream()
-                            .map(UniversityFileData::studyForm)
-                            .distinct()
-                            .collect(Collectors.joining(", "));
-
-                    String combinedUniversityNames = programmeGroup.stream()
-                            .map(UniversityFileData::universityName)
-                            .distinct()
-                            .collect(Collectors.joining(", "));
-
-                    String combinedFacultyNames = programmeGroup.stream()
-                            .map(UniversityFileData::facultyName)
+                            .map(UniversityFileDataDTO::studyForm)
                             .distinct()
                             .collect(Collectors.joining(", "));
 
                     String combinedStudyFields = programmeGroup.stream()
-                            .map(UniversityFileData::studyField)
+                            .map(UniversityFileDataDTO::studyField)
                             .distinct()
                             .collect(Collectors.joining(", "));
 
                     String combinedLanguages = programmeGroup.stream()
-                            .map(UniversityFileData::language)
+                            .map(UniversityFileDataDTO::language)
                             .distinct()
                             .collect(Collectors.joining(", "));
 
-                    return new UniversityFileData(
-                            combinedProgrammeCodes,
-                            entry.getKey(), // programmeName
-                            combinedAcademyTitles,
-                            combinedStudyForms,
-                            combinedUniversityNames,
-                            combinedFacultyNames,
-                            combinedStudyFields,
-                            combinedLanguages
-                    );
+                    // Get unique university-faculty pairs
+                    List<UniversityFileDataDTO> uniquePairs = programmeGroup.stream()
+                            .collect(Collectors.toMap(
+                                    dto -> dto.universityName() + "|||" + dto.facultyName(),
+                                    dto -> dto,
+                                    (existing, replacement) -> existing
+                            ))
+                            .values()
+                            .stream()
+                            .toList();
+
+                    // Create a row for each university-faculty combination
+                    return uniquePairs.stream()
+                            .map(dto -> new UniversityFileDataDTO(
+                                    combinedProgrammeCodes,
+                                    entry.getKey(), // programmeName
+                                    combinedAcademyTitles,
+                                    combinedStudyForms,
+                                    dto.universityName(),
+                                    dto.facultyName(),
+                                    combinedStudyFields,
+                                    combinedLanguages
+                            ));
                 })
                 .collect(Collectors.toList());
     }
