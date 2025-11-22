@@ -3,7 +3,7 @@ export interface ProfileData {
   facultyId?: number;
   studyProgramId?: number;
   language: string;
-  educationLevel: string;
+  degreeLevel: string;
   status: string;
   studyFormat: string;
 }
@@ -25,10 +25,10 @@ export const DEGREE_LEVELS: SelectOption[] = [
 ];
 
 export const STATUSES: SelectOption[] = [
-  { value: 'enrolled', label: 'Enrolled' },
-  { value: 'onhold', label: 'On Hold' },
-  { value: 'completed', label: 'Completed' },
-  { value: 'droppedout', label: 'Dropped Out' }
+  { value: 'ENROLLED', label: 'Enrolled' },
+  { value: 'ON_HOLD', label: 'On Hold' },
+  { value: 'COMPLETED', label: 'Completed' },
+  { value: 'DROPPED_OUT', label: 'Dropped Out' }
 ];
 
 export const STUDY_FORMATS: SelectOption[] = [

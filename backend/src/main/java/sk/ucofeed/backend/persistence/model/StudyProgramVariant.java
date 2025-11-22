@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
     }
 )
 public class StudyProgramVariant {
-    @Getter
     public enum Title {
         BACHELOR("Bc"),
         MASTER("Mgr"),

@@ -13,7 +13,6 @@ public class UserEducationResponseDTO {
     private Long id;
     private Long studyProgramId;
     private String studyProgramName;
-    private String studyProgramCode;
     private Long facultyId;
     private String facultyName;
     private Long universityId;

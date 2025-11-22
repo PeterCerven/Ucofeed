@@ -10,12 +10,9 @@ import lombok.Data;
 public class UpdateUserDTO {
     private String fullName;
 
-    @NotNull(message = "Study program ID cannot be null")
     private Long studyProgramId;
 
-    @NotNull(message = "Study program variant ID cannot be null")
     private Long studyProgramVariantId;
 
-    @NotNull(message = "Status cannot be null")
     private String status;
 }
