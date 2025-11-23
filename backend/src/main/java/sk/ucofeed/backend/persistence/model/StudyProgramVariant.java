@@ -29,7 +29,7 @@ public class StudyProgramVariant {
 
     public StudyProgramVariant(String language, StudyForm studyForm, String title) {
         this.language = language;
-        this.studyForm = studyForm;
+        this.studyForm = studyForm == null ? null : StudyForm.FULL_TIME;
         this.title = title;
     }
 }

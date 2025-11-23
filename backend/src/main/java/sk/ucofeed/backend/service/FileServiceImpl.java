@@ -43,7 +43,8 @@ public class FileServiceImpl implements FileService {
     private final StudyProgramRepository studyProgramRepository;
     private final StudyProgramVariantRepository studyProgramVariantRepository;
 
-    public FileServiceImpl(FacultyRepository facultyRepository, UniversityRepository universityRepository, StudyProgramRepository studyProgramRepository, StudyProgramVariantRepository studyProgramVariantRepository) {
+    public FileServiceImpl(FacultyRepository facultyRepository, UniversityRepository universityRepository,
+                           StudyProgramRepository studyProgramRepository, StudyProgramVariantRepository studyProgramVariantRepository) {
         this.facultyRepository = facultyRepository;
         this.universityRepository = universityRepository;
         this.studyProgramRepository = studyProgramRepository;
@@ -54,7 +55,9 @@ public class FileServiceImpl implements FileService {
     public void saveStudyProgramFromFile(List<UniversityFileDataDTO> fileData) {
         for (UniversityFileDataDTO data : fileData) {
             // Check if the university exists, if not, create it
-            University university = universityRepository.findByName(data.universityName()).orElseGet(() -> universityRepository.save(new University(data.universityName())));
+            University university = universityRepository
+                    .findByName(data.universityName())
+                    .orElseGet(() -> universityRepository.save(new University(data.universityName())));
 
             if (data.facultyName().trim().isEmpty()) {
                 LOG.warn("Skipping entry with empty faculty name for university: {}", data.universityName());
@@ -62,7 +65,9 @@ public class FileServiceImpl implements FileService {
             }
 
             // Check if the faculty exists, if not, create it
-            Faculty faculty = facultyRepository.findByNameAndUniversity(data.facultyName(), university).orElseGet(() -> facultyRepository.save(new Faculty(data.facultyName(), university)));
+            Faculty faculty = facultyRepository
+                    .findByNameAndUniversity(data.facultyName(), university)
+                    .orElseGet(() -> facultyRepository.save(new Faculty(data.facultyName(), university)));
 
 
             // Get or create the variant (reuse existing variants to prevent duplicates)
@@ -70,7 +75,9 @@ public class FileServiceImpl implements FileService {
             StudyForm studyForm = StudyForm.fromDisplayName(data.studyForm());
             String title = data.academyTitle();
 
-            StudyProgramVariant variant = studyProgramVariantRepository.findByLanguageAndStudyFormAndTitle(language, studyForm, title).orElseGet(() -> studyProgramVariantRepository.save(new StudyProgramVariant(language, studyForm, title)));
+            StudyProgramVariant variant = studyProgramVariantRepository
+                    .findByLanguageAndStudyFormAndTitle(language, studyForm, title)
+                    .orElseGet(() -> studyProgramVariantRepository.save(new StudyProgramVariant(language, studyForm, title)));
 
             // Check if the study program already exists, if not, create it
             Optional<StudyProgram> studyProgram = studyProgramRepository.findByNameAndFaculty(data.programmeName(), faculty);
@@ -81,7 +88,8 @@ public class FileServiceImpl implements FileService {
             } else {
                 StudyProgram existingProgram = studyProgram.get();
                 // Check if the variant is already linked to this study program
-                boolean variantLinked = existingProgram.getStudyProgramVariants().stream().anyMatch(v -> v.getId().equals(variant.getId()));
+                boolean variantLinked = existingProgram.getStudyProgramVariants().stream()
+                        .anyMatch(v -> v.getId().equals(variant.getId()));
                 if (!variantLinked) {
                     existingProgram.getStudyProgramVariants().add(variant);
                     studyProgramRepository.save(existingProgram);
@@ -110,7 +118,15 @@ public class FileServiceImpl implements FileService {
             for (Faculty faculty : university.getFaculties()) {
                 for (StudyProgram studyProgram : faculty.getStudyPrograms()) {
                     for (StudyProgramVariant variant : studyProgram.getStudyProgramVariants()) {
-                        UniversityFileDataDTO data = new UniversityFileDataDTO(studyProgram.getName(), variant.getTitle(), variant.getStudyForm().getDisplayName(), university.getName(), faculty.getName(), studyProgram.getStudyField(), variant.getLanguage());
+                        UniversityFileDataDTO data = new UniversityFileDataDTO(
+                                studyProgram.getName(),
+                                variant.getTitle(),
+                                variant.getStudyForm().getDisplayName(),
+                                university.getName(),
+                                faculty.getName(),
+                                studyProgram.getStudyField(),
+                                variant.getLanguage()
+                        );
                         result.add(data);
                     }
                 }
@@ -195,11 +211,29 @@ public class FileServiceImpl implements FileService {
     }
 
     private List<UniversityFileDataDTO> transformData(List<UniversityFileDataDTO> data) {
-        return data.stream().map(d -> new UniversityFileDataDTO(d.programmeName(), extractAcademicTitleAbbreviation(d.academyTitle()), d.studyForm(), d.universityName(), d.facultyName(), d.studyField(), d.language())).toList();
+        return data.stream().map(d -> new UniversityFileDataDTO(
+                        d.programmeName(),
+                        extractAcademicTitleAbbreviation(d.academyTitle()),
+                        d.studyForm(),
+                        d.universityName(),
+                        d.facultyName(),
+                        d.studyField(),
+                        d.language()
+                )
+        ).toList();
     }
 
     private List<UniversityFileDataDTO> filterUniversities(List<UniversityFileDataDTO> data) {
-        return data.stream().filter(u -> u.universityName().trim().equals(UK.getFullName()) || u.universityName().trim().equals(STU.getFullName()) || u.universityName().trim().equals(UNIZA.getFullName()) || u.universityName().trim().equals(EUBA.getFullName()) || u.universityName().trim().equals(TUKE.getFullName()) || u.universityName().trim().equals(UPJS.getFullName())).toList();
+        return data.stream()
+                .filter(u ->
+                        u.universityName().trim().equals(UK.getFullName()) ||
+                        u.universityName().trim().equals(STU.getFullName()) ||
+                        u.universityName().trim().equals(UNIZA.getFullName()) ||
+                        u.universityName().trim().equals(EUBA.getFullName()) ||
+                        u.universityName().trim().equals(TUKE.getFullName()) ||
+                        u.universityName().trim().equals(UPJS.getFullName())
+                )
+                .toList();
     }
 
     private String extractAcademicTitleAbbreviation(String fullTitle) {
