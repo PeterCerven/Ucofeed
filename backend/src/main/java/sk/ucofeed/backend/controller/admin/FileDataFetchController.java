@@ -18,6 +18,16 @@ public class FileDataFetchController {
         this.fileService = fileService;
     }
 
+    @GetMapping("/data")
+    public ResponseEntity<List<UniversityFileDataDTO>> getAllUniversityData() {
+        try {
+            List<UniversityFileDataDTO> data = fileService.getAllUniversityData();
+            return ResponseEntity.ok(data);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
+        }
+    }
+
     @PostMapping("/parse-file")
     public ResponseEntity<List<UniversityFileDataDTO>> parseFile(@RequestParam("file") MultipartFile file) {
         try {

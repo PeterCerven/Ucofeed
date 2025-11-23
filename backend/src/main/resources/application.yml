@@ -16,7 +16,7 @@ spring:
     show-sql: true
   sql:
     init:
-      mode: never
+      mode: always
 info:
   application:
     name: backend
