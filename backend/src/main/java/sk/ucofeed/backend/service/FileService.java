@@ -9,4 +9,7 @@ public interface FileService {
     void saveStudyProgramFromFile(List<UniversityFileDataDTO> data);
 
     List<UniversityFileDataDTO> parseFile(MultipartFile file);
+
+
+    List<UniversityFileDataDTO> getAllUniversityData();
 }

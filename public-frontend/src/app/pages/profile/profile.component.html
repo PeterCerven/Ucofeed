@@ -53,34 +53,25 @@
           <mat-hint>Select your study programme (choose faculty first)</mat-hint>
         </mat-form-field>
 
-        <!-- Language -->
+        <!-- Study Programme Variant -->
         <mat-form-field class="full-width">
-          <mat-label>Study language</mat-label>
-          <mat-icon matPrefix>language</mat-icon>
-          <mat-select formControlName="language" placeholder="Select language">
-            @for (language of languages; track language.value) {
-              <mat-option [value]="language.value">{{ language.label }}</mat-option>
+          <mat-label>Study Variant</mat-label>
+          <mat-icon matPrefix>tune</mat-icon>
+          <mat-select
+            formControlName="studyProgramVariantId"
+            placeholder="Select study variant"
+            [disabled]="!profileForm.get('studyProgramId')?.value"
+          >
+            @for (variant of variants(); track variant.id) {
+              <mat-option [value]="variant.id">
+                {{ variant.language }} - {{ variant.study_form }} - {{ variant.title }}
+              </mat-option>
             }
           </mat-select>
-          @if (profileForm.get('language')?.touched) {
+          <mat-hint>Select your study variant (choose programme first)</mat-hint>
+          @if (profileForm.get('studyProgramVariantId')?.touched) {
             <mat-error>
-              {{ getErrorMessage('language') }}
-            </mat-error>
-          }
-        </mat-form-field>
-
-        <!-- Degree Level -->
-        <mat-form-field class="full-width">
-          <mat-label>Degree Level</mat-label>
-          <mat-icon matPrefix>school</mat-icon>
-          <mat-select formControlName="degreeLevel" placeholder="Select degree level">
-            @for (level of degreeLevels; track level.value) {
-              <mat-option [value]="level.value">{{ level.label }}</mat-option>
-            }
-          </mat-select>
-          @if (profileForm.get('degreeLevel')?.touched) {
-            <mat-error>
-              {{ getErrorMessage('degreeLevel') }}
+              {{ getErrorMessage('studyProgramVariantId') }}
             </mat-error>
           }
         </mat-form-field>
@@ -97,22 +88,6 @@
           @if (profileForm.get('status')?.touched) {
             <mat-error>
               {{ getErrorMessage('status') }}
-            </mat-error>
-          }
-        </mat-form-field>
-
-        <!-- Study Format -->
-        <mat-form-field class="full-width">
-          <mat-label>Study Format</mat-label>
-          <mat-icon matPrefix>location_on</mat-icon>
-          <mat-select formControlName="studyFormat" placeholder="Select study format">
-            @for (format of studyFormats; track format.value) {
-              <mat-option [value]="format.value">{{ format.label }}</mat-option>
-            }
-          </mat-select>
-          @if (profileForm.get('studyFormat')?.touched) {
-            <mat-error>
-              {{ getErrorMessage('studyFormat') }}
             </mat-error>
           }
         </mat-form-field>

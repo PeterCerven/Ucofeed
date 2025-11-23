@@ -2,61 +2,34 @@ package sk.ucofeed.backend.persistence.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
+import sk.ucofeed.backend.persistence.dto.StudyForm;
 
 @Data
 @NoArgsConstructor
 @Entity
-@Table(
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"study_format", "study_degree", "study_duration",
-            "language_group_id"})
-    }
-)
+@Table(uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"language", "study_form", "title"})
+})
 public class StudyProgramVariant {
-    public enum Title {
-        BACHELOR("Bc"),
-        MASTER("Mgr"),
-        ENGINEER("Ing"),
-        DOCTOR_MEDIC("MUDr"),
-        DOCTOR("PhD");
-
-        private final String abbreviation;
-
-        Title(String abbreviation) {
-            this.abbreviation = abbreviation;
-        }
-
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "language_group_id", nullable = false)
-    private LanguageGroup languageGroup;
-
-    @Column(name = "study_format", nullable = false)
-    private String studyFormat;
-
-    @Column(name = "study_degree", nullable = false)
-    private int studyDegree;
-
-    @Column(name = "study_duration", nullable = false)
-    private int studyDuration;
+    @Column(name = "language", nullable = false)
+    private String language;
 
     @Enumerated(EnumType.STRING)
-    private Title title;
+    @Column(name = "study_form")
+    private StudyForm studyForm;
 
-    public StudyProgramVariant(LanguageGroup languageGroup, String studyFormat,
-        int studyDegree, int studyDuration, Title title) {
+    @Column(name = "title")
+    private String title;
 
-        this.languageGroup = languageGroup;
-        this.studyFormat = studyFormat;
-        this.studyDegree = studyDegree;
-        this.studyDuration = studyDuration;
+    public StudyProgramVariant(String language, StudyForm studyForm, String title) {
+        this.language = language;
+        this.studyForm = studyForm;
         this.title = title;
     }
 }

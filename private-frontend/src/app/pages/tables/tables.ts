@@ -39,7 +39,6 @@ export class Tables {
   sort = viewChild<MatSort>(MatSort);
 
   displayedColumns: string[] = [
-    'programmeCode',
     'programmeName',
     'academyTitle',
     'studyForm',

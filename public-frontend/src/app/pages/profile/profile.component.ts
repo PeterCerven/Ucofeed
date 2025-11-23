@@ -12,12 +12,10 @@ import { UniversityService } from '@services/university.service';
 import { UniversityModel } from '@models/university.model';
 import { FacultyModel } from '@models/faculty.model';
 import { ProgramModel } from '@models/program.model';
+import { VariantModel } from '@models/variant.model';
 import {
   ProfileData,
-  LANGUAGES,
-  DEGREE_LEVELS,
-  STATUSES,
-  STUDY_FORMATS
+  STATUSES
 } from '@models/profile.model';
 
 @Component({
@@ -45,28 +43,25 @@ export class ProfileComponent implements OnInit {
   readonly universities = signal<UniversityModel[]>([]);
   readonly faculties = signal<FacultyModel[]>([]);
   readonly programs = signal<ProgramModel[]>([]);
+  readonly variants = signal<VariantModel[]>([]);
 
-  readonly languages = LANGUAGES;
-  readonly degreeLevels = DEGREE_LEVELS;
   readonly statuses = STATUSES;
-  readonly studyFormats = STUDY_FORMATS;
 
   constructor() {
     this.profileForm = this.fb.group({
       universityId: [null],
       facultyId: [null],
       studyProgramId: [null],
-      language: ['sk', Validators.required],
-      degreeLevel: ['', Validators.required],
-      status: ['', Validators.required],
-      studyFormat: ['', Validators.required]
+      studyProgramVariantId: [null, Validators.required],
+      status: ['', Validators.required]
     });
 
     // Watch for university changes to load faculties
     this.profileForm.get('universityId')?.valueChanges.subscribe(universityId => {
-      this.profileForm.patchValue({ facultyId: null, studyProgramId: null });
+      this.profileForm.patchValue({ facultyId: null, studyProgramId: null, studyProgramVariantId: null });
       this.faculties.set([]);
       this.programs.set([]);
+      this.variants.set([]);
       if (universityId) {
         this.loadFaculties(universityId);
       }
@@ -74,10 +69,20 @@ export class ProfileComponent implements OnInit {
 
     // Watch for faculty changes to load programs
     this.profileForm.get('facultyId')?.valueChanges.subscribe(facultyId => {
-      this.profileForm.patchValue({ studyProgramId: null });
+      this.profileForm.patchValue({ studyProgramId: null, studyProgramVariantId: null });
       this.programs.set([]);
+      this.variants.set([]);
       if (facultyId) {
         this.loadPrograms(facultyId);
+      }
+    });
+
+    // Watch for program changes to load variants
+    this.profileForm.get('studyProgramId')?.valueChanges.subscribe(programId => {
+      this.profileForm.patchValue({ studyProgramVariantId: null });
+      this.variants.set([]);
+      if (programId) {
+        this.loadVariants(programId);
       }
     });
   }
@@ -105,6 +110,13 @@ export class ProfileComponent implements OnInit {
     this.universityService.getProgramsByFaculty(facultyId).subscribe({
       next: (programs) => this.programs.set(programs),
       error: (error) => console.error('Failed to load programs:', error)
+    });
+  }
+
+  private loadVariants(programId: number): void {
+    this.universityService.getVariantsByProgram(programId).subscribe({
+      next: (variants) => this.variants.set(variants),
+      error: (error) => console.error('Failed to load variants:', error)
     });
   }
 
@@ -144,11 +156,10 @@ export class ProfileComponent implements OnInit {
   }
 
   onReset(): void {
-    this.profileForm.reset({
-      language: 'sk'
-    });
+    this.profileForm.reset();
     this.faculties.set([]);
     this.programs.set([]);
+    this.variants.set([]);
   }
 
   getErrorMessage(field: string): string {

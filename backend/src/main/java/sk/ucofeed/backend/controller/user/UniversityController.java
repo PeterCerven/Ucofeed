@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sk.ucofeed.backend.persistence.dto.FacultyDTO;
 import sk.ucofeed.backend.persistence.dto.StudyProgramDTO;
+import sk.ucofeed.backend.persistence.dto.StudyProgramVariantDTO;
 import sk.ucofeed.backend.persistence.dto.UniversityDTO;
 import sk.ucofeed.backend.persistence.repository.FacultyRepository;
 import sk.ucofeed.backend.persistence.repository.StudyProgramRepository;
@@ -59,5 +60,16 @@ public class UniversityController {
                 .map(StudyProgramDTO::from)
                 .toList();
         return ResponseEntity.ok(programs);
+    }
+
+    @GetMapping("/program/{programId}/variants")
+    public ResponseEntity<List<StudyProgramVariantDTO>> getVariantsByProgram(@PathVariable Long programId) {
+        LOG.info("Fetching variants for program ID: {}", programId);
+        List<StudyProgramVariantDTO> variants = studyProgramRepository.findById(programId)
+                .map(program -> program.getStudyProgramVariants().stream()
+                        .map(StudyProgramVariantDTO::from)
+                        .toList())
+                .orElse(List.of());
+        return ResponseEntity.ok(variants);
     }
 }

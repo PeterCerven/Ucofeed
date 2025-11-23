@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Builder;
 import lombok.Data;
+import sk.ucofeed.backend.persistence.model.StudyProgramVariant;
 import sk.ucofeed.backend.persistence.model.UserEducation;
 
 @Data
@@ -19,17 +20,12 @@ public class UserEducationResponseDTO {
     private String universityName;
     private Long studyProgramVariantId;
     private String studyFormat;
-    private Integer degreeLevel;
     private String language;
+    private String title;
     private String status;
 
     public static UserEducationResponseDTO from(UserEducation userEducation) {
-        // Get language from LanguageGroup - use the group name or first language
-        String language = userEducation.getStudyProgramVariant().getLanguageGroup().getName();
-        if (!userEducation.getStudyProgramVariant().getLanguageGroup().getLanguages().isEmpty()) {
-            language = userEducation.getStudyProgramVariant().getLanguageGroup()
-                    .getLanguages().getFirst().getName();
-        }
+        StudyProgramVariant variant = userEducation.getStudyProgramVariant();
 
         return UserEducationResponseDTO.builder()
                 .id(userEducation.getId())
@@ -39,10 +35,10 @@ public class UserEducationResponseDTO {
                 .facultyName(userEducation.getStudyProgram().getFaculty().getName())
                 .universityId(userEducation.getStudyProgram().getFaculty().getUniversity().getId())
                 .universityName(userEducation.getStudyProgram().getFaculty().getUniversity().getName())
-                .studyProgramVariantId(userEducation.getStudyProgramVariant().getId())
-                .studyFormat(userEducation.getStudyProgramVariant().getStudyFormat())
-                .degreeLevel(userEducation.getStudyProgramVariant().getStudyDegree())
-                .language(language)
+                .studyProgramVariantId(variant.getId())
+                .studyFormat(variant.getStudyForm() != null ? variant.getStudyForm().getDisplayName() : null)
+                .language(variant.getLanguage())
+                .title(variant.getTitle())
                 .status(userEducation.getStatus().toString())
                 .build();
     }

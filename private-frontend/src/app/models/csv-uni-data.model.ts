@@ -1,5 +1,4 @@
 export interface UniversityData {
-  programmeCode: string;
   programmeName: string;
   academyTitle: string;
   studyForm: string;

@@ -23,13 +23,6 @@
   </button>
 
   <mat-table [dataSource]="dataSource" matSort>
-    <ng-container matColumnDef="programmeCode">
-      <mat-header-cell
-        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Programme Code
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{ row.programmeCode }}</mat-cell>
-    </ng-container>
-
     <ng-container matColumnDef="programmeName">
       <mat-header-cell
         *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Programme Name

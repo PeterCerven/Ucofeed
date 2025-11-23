@@ -2,7 +2,6 @@ package sk.ucofeed.backend.persistence.dto;
 
 
 public record UniversityFileDataDTO(
-    String programmeCode,
     String programmeName,
     String academyTitle,
     String studyForm,

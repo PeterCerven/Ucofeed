@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { UniversityModel } from '@models/university.model';
 import { FacultyModel } from '@models/faculty.model';
 import { ProgramModel } from '@models/program.model';
+import { VariantModel } from '@models/variant.model';
 import { environment } from '@env/environment.production';
 
 @Injectable({ providedIn: 'root' })
@@ -21,5 +22,9 @@ export class UniversityService {
 
   getProgramsByFaculty(facultyId: number): Observable<ProgramModel[]> {
     return this.http.get<ProgramModel[]>(`${this.baseUrl}/public/university/faculty/${facultyId}/programs`);
+  }
+
+  getVariantsByProgram(programId: number): Observable<VariantModel[]> {
+    return this.http.get<VariantModel[]>(`${this.baseUrl}/public/university/program/${programId}/variants`);
   }
 }

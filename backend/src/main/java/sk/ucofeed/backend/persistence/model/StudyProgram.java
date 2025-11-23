@@ -25,13 +25,8 @@ public class StudyProgram {
     @JoinColumn(name = "faculty_id", nullable = false)
     private Faculty faculty;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "study_program_study_field",
-        joinColumns = @JoinColumn(name = "study_program_id"),
-        inverseJoinColumns = @JoinColumn(name = "study_field_id")
-    )
-    private List<StudyField> studyFields = new ArrayList<>();
+    @Column(nullable=false)
+    private String studyField;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(
@@ -47,8 +42,9 @@ public class StudyProgram {
                orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 
-    public StudyProgram(String name, Faculty faculty) {
+    public StudyProgram(String name, Faculty faculty, String studyField) {
         this.name = name;
         this.faculty = faculty;
+        this.studyField = studyField;
     }
 }

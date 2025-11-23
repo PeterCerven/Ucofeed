@@ -12,12 +12,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import sk.ucofeed.backend.persistence.dto.StudyForm;
 import sk.ucofeed.backend.persistence.dto.UniversityFileDataDTO;
 import sk.ucofeed.backend.persistence.model.Faculty;
 import sk.ucofeed.backend.persistence.model.StudyProgram;
+import sk.ucofeed.backend.persistence.model.StudyProgramVariant;
 import sk.ucofeed.backend.persistence.model.University;
 import sk.ucofeed.backend.persistence.repository.FacultyRepository;
 import sk.ucofeed.backend.persistence.repository.StudyProgramRepository;
+import sk.ucofeed.backend.persistence.repository.StudyProgramVariantRepository;
 import sk.ucofeed.backend.persistence.repository.UniversityRepository;
 
 import org.apache.commons.io.FilenameUtils;
@@ -26,8 +29,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Optional;
+
+import static sk.ucofeed.backend.persistence.dto.SelectedUniversities.*;
 
 @Service
 public class FileServiceImpl implements FileService {
@@ -37,39 +41,55 @@ public class FileServiceImpl implements FileService {
     private final FacultyRepository facultyRepository;
     private final UniversityRepository universityRepository;
     private final StudyProgramRepository studyProgramRepository;
+    private final StudyProgramVariantRepository studyProgramVariantRepository;
 
-    public FileServiceImpl(FacultyRepository facultyRepository, UniversityRepository universityRepository, StudyProgramRepository studyProgramRepository) {
+    public FileServiceImpl(FacultyRepository facultyRepository, UniversityRepository universityRepository, StudyProgramRepository studyProgramRepository, StudyProgramVariantRepository studyProgramVariantRepository) {
         this.facultyRepository = facultyRepository;
         this.universityRepository = universityRepository;
         this.studyProgramRepository = studyProgramRepository;
+        this.studyProgramVariantRepository = studyProgramVariantRepository;
     }
 
     @Override
     public void saveStudyProgramFromFile(List<UniversityFileDataDTO> fileData) {
         for (UniversityFileDataDTO data : fileData) {
-            LOG.info("Will process: Programme: {}, University: {}, Faculty: {}",
-                    data.programmeName(), data.universityName(), data.facultyName());
             // Check if the university exists, if not, create it
-            University university = universityRepository.findByName(data.universityName())
-                    .orElseGet(() -> universityRepository.save(new University(data.universityName())));
+            University university = universityRepository.findByName(data.universityName()).orElseGet(() -> universityRepository.save(new University(data.universityName())));
 
-            LOG.info("University processed: {}", university.getName());
+            if (data.facultyName().trim().isEmpty()) {
+                LOG.warn("Skipping entry with empty faculty name for university: {}", data.universityName());
+                continue;
+            }
 
             // Check if the faculty exists, if not, create it
-            Faculty faculty = facultyRepository.findByNameAndUniversity(data.facultyName(), university)
-                    .orElseGet(() -> facultyRepository.save(new Faculty(data.facultyName(), university)));
-
-            LOG.info("Faculty processed: {} under University: {}", faculty.getName(), university.getName());
+            Faculty faculty = facultyRepository.findByNameAndUniversity(data.facultyName(), university).orElseGet(() -> facultyRepository.save(new Faculty(data.facultyName(), university)));
 
 
-            LOG.info("IMPORTANT Checking Study Program: {} under Faculty: {}", data.programmeName(), faculty.getName());
+            // Get or create the variant (reuse existing variants to prevent duplicates)
+            String language = data.language();
+            StudyForm studyForm = StudyForm.fromDisplayName(data.studyForm());
+            String title = data.academyTitle();
+
+            StudyProgramVariant variant = studyProgramVariantRepository.findByLanguageAndStudyFormAndTitle(language, studyForm, title).orElseGet(() -> studyProgramVariantRepository.save(new StudyProgramVariant(language, studyForm, title)));
+
             // Check if the study program already exists, if not, create it
-            StudyProgram studyProgram = studyProgramRepository.findByNameAndFaculty(data.programmeName(), faculty)
-                    .orElseGet(() -> studyProgramRepository.save(new StudyProgram(data.programmeName(), faculty)));
-
-            LOG.info("Study Program processed: {} under Faculty: {}", studyProgram.getName(), faculty.getName());
+            Optional<StudyProgram> studyProgram = studyProgramRepository.findByNameAndFaculty(data.programmeName(), faculty);
+            if (studyProgram.isEmpty()) {
+                StudyProgram newProgram = new StudyProgram(data.programmeName(), faculty, data.studyField());
+                newProgram.getStudyProgramVariants().add(variant);
+                studyProgramRepository.save(newProgram);
+            } else {
+                StudyProgram existingProgram = studyProgram.get();
+                // Check if the variant is already linked to this study program
+                boolean variantLinked = existingProgram.getStudyProgramVariants().stream().anyMatch(v -> v.getId().equals(variant.getId()));
+                if (!variantLinked) {
+                    existingProgram.getStudyProgramVariants().add(variant);
+                    studyProgramRepository.save(existingProgram);
+                }
+            }
         }
     }
+
 
     @Override
     public List<UniversityFileDataDTO> parseFile(MultipartFile file) {
@@ -81,6 +101,24 @@ public class FileServiceImpl implements FileService {
         };
     }
 
+    @Override
+    public List<UniversityFileDataDTO> getAllUniversityData() {
+        List<University> universities = universityRepository.findAll();
+        List<UniversityFileDataDTO> result = new ArrayList<>();
+
+        for (University university : universities) {
+            for (Faculty faculty : university.getFaculties()) {
+                for (StudyProgram studyProgram : faculty.getStudyPrograms()) {
+                    for (StudyProgramVariant variant : studyProgram.getStudyProgramVariants()) {
+                        UniversityFileDataDTO data = new UniversityFileDataDTO(studyProgram.getName(), variant.getTitle(), variant.getStudyForm().getDisplayName(), university.getName(), faculty.getName(), studyProgram.getStudyField(), variant.getLanguage());
+                        result.add(data);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
     private List<UniversityFileDataDTO> parseCSVFile(MultipartFile file) {
         try (InputStreamReader reader = new InputStreamReader(file.getInputStream())) {
             CSVFormat format = CSVFormat.DEFAULT.builder().setHeader().setSkipHeaderRecord(true).build();
@@ -90,7 +128,7 @@ public class FileServiceImpl implements FileService {
             for (CSVRecord record : parser) {
                 if (record.size() >= 12) {
                     UniversityFileDataDTO data = new UniversityFileDataDTO(
-                            record.get(0),  // Kôd programu
+//                          record.get(0),  // Kôd programu
                             record.get(1),  // Názov programu
 //                          record.get(2),  // Stupeň štúdia
                             record.get(3),  // Udelený akademický titul
@@ -106,17 +144,15 @@ public class FileServiceImpl implements FileService {
                     result.add(data);
                 }
             }
-            return transformData(result);
+            return transformData(filterUniversities(result));
         } catch (Exception e) {
             throw new RuntimeException("Failed to parse CSV file", e);
         }
     }
 
 
-    private List<UniversityFileDataDTO> parseExcelFile(MultipartFile
-                                                            file) {
-        try (InputStream inputStream = file.getInputStream();
-             Workbook workbook = new XSSFWorkbook(inputStream)) {
+    private List<UniversityFileDataDTO> parseExcelFile(MultipartFile file) {
+        try (InputStream inputStream = file.getInputStream(); Workbook workbook = new XSSFWorkbook(inputStream)) {
 
             Sheet sheet = workbook.getSheetAt(0);
             List<UniversityFileDataDTO> result = new ArrayList<>();
@@ -126,7 +162,7 @@ public class FileServiceImpl implements FileService {
                 Row row = sheet.getRow(i);
                 if (row != null && row.getLastCellNum() >= 12) {
                     UniversityFileDataDTO data = new UniversityFileDataDTO(
-                            getCellValueAsString(row.getCell(0)), // Kôd programu
+//                          getCellValueAsString(row.getCell(0)), // Kôd programu
                             getCellValueAsString(row.getCell(1)), // Názov programu
 //                          getCellValueAsString(row.getCell(2)),    // Stupeň štúdia
                             getCellValueAsString(row.getCell(3)), // Udelený akademický titul
@@ -142,7 +178,7 @@ public class FileServiceImpl implements FileService {
                     result.add(data);
                 }
             }
-            return transformData(result);
+            return transformData(filterUniversities(result));
         } catch (Exception e) {
             throw new RuntimeException("Failed to parse Excel file", e);
         }
@@ -152,72 +188,18 @@ public class FileServiceImpl implements FileService {
         if (cell == null) return "";
         return switch (cell.getCellType()) {
             case STRING -> cell.getStringCellValue();
-            case NUMERIC -> String.valueOf((long)
-                    cell.getNumericCellValue());
+            case NUMERIC -> String.valueOf((long) cell.getNumericCellValue());
             case BOOLEAN -> String.valueOf(cell.getBooleanCellValue());
             default -> "";
         };
     }
 
     private List<UniversityFileDataDTO> transformData(List<UniversityFileDataDTO> data) {
-        Map<String, List<UniversityFileDataDTO>> groupedByProgramme = data.stream()
-                .collect(Collectors.groupingBy(UniversityFileDataDTO::programmeName));
+        return data.stream().map(d -> new UniversityFileDataDTO(d.programmeName(), extractAcademicTitleAbbreviation(d.academyTitle()), d.studyForm(), d.universityName(), d.facultyName(), d.studyField(), d.language())).toList();
+    }
 
-        return groupedByProgramme.entrySet().stream()
-                .flatMap(entry -> {
-                    List<UniversityFileDataDTO> programmeGroup = entry.getValue();
-
-                    String combinedProgrammeCodes = programmeGroup.stream()
-                            .map(UniversityFileDataDTO::programmeCode)
-                            .distinct()
-                            .collect(Collectors.joining(", "));
-
-                    String combinedAcademyTitles = programmeGroup.stream()
-                            .map(UniversityFileDataDTO::academyTitle)
-                            .map(this::extractAcademicTitleAbbreviation)
-                            .distinct()
-                            .collect(Collectors.joining(", "));
-
-                    String combinedStudyForms = programmeGroup.stream()
-                            .map(UniversityFileDataDTO::studyForm)
-                            .distinct()
-                            .collect(Collectors.joining(", "));
-
-                    String combinedStudyFields = programmeGroup.stream()
-                            .map(UniversityFileDataDTO::studyField)
-                            .distinct()
-                            .collect(Collectors.joining(", "));
-
-                    String combinedLanguages = programmeGroup.stream()
-                            .map(UniversityFileDataDTO::language)
-                            .distinct()
-                            .collect(Collectors.joining(", "));
-
-                    // Get unique university-faculty pairs
-                    List<UniversityFileDataDTO> uniquePairs = programmeGroup.stream()
-                            .collect(Collectors.toMap(
-                                    dto -> dto.universityName() + "|||" + dto.facultyName(),
-                                    dto -> dto,
-                                    (existing, replacement) -> existing
-                            ))
-                            .values()
-                            .stream()
-                            .toList();
-
-                    // Create a row for each university-faculty combination
-                    return uniquePairs.stream()
-                            .map(dto -> new UniversityFileDataDTO(
-                                    combinedProgrammeCodes,
-                                    entry.getKey(), // programmeName
-                                    combinedAcademyTitles,
-                                    combinedStudyForms,
-                                    dto.universityName(),
-                                    dto.facultyName(),
-                                    combinedStudyFields,
-                                    combinedLanguages
-                            ));
-                })
-                .collect(Collectors.toList());
+    private List<UniversityFileDataDTO> filterUniversities(List<UniversityFileDataDTO> data) {
+        return data.stream().filter(u -> u.universityName().trim().equals(UK.getFullName()) || u.universityName().trim().equals(STU.getFullName()) || u.universityName().trim().equals(UNIZA.getFullName()) || u.universityName().trim().equals(EUBA.getFullName()) || u.universityName().trim().equals(TUKE.getFullName()) || u.universityName().trim().equals(UPJS.getFullName())).toList();
     }
 
     private String extractAcademicTitleAbbreviation(String fullTitle) {
