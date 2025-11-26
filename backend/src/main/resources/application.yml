@@ -1,14 +1,6 @@
 spring:
   application:
     name: backend
-  profiles:
-    active: dev
-  datasource:
-    url: jdbc:postgresql://postgresql_db:5432/ucf
-    driver-class-name: org.postgresql.Driver
-    hikari:
-      connection-timeout: 20000
-      maximum-pool-size: 10
   jpa:
     hibernate:
       ddl-auto: update

@@ -18,6 +18,8 @@ services:
     depends_on:
       postgresql_db:
         condition: service_started
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
     env_file:
       - ../backend/.env
     ports:
