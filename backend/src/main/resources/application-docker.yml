@@ -2,11 +2,8 @@ spring:
   datasource:
     username: user
     password: password
-    url: jdbc:postgresql://localhost:5432/ucf
+    url: jdbc:postgresql://postgresql_db:5432/ucf
     driver-class-name: org.postgresql.Driver
     hikari:
       connection-timeout: 20000
       maximum-pool-size: 10
-  devtools:
-    restart:
-      enabled: true
