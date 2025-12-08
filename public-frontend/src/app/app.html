@@ -1,37 +1,55 @@
 <mat-toolbar class="app-toolbar">
-  <div class="toolbar-brand">
+  <div class="toolbar-brand" (click)="onHome()">
     <h1 class="app-title">UcoFeed</h1>
   </div>
 
   <span class="toolbar-spacer"></span>
 
   <div class="toolbar-actions">
-    <button
-      mat-stroked-button
-      class="auth-button login-button"
-      (click)="onLogin()"
-    >
-      <mat-icon>login</mat-icon>
-      <span>Login</span>
-    </button>
+    <!-- Show when NOT logged in -->
+    @if (!isLoggedIn()) {
+      <button
+        mat-stroked-button
+        class="auth-button login-button"
+        (click)="onLogin()"
+      >
+        <mat-icon>login</mat-icon>
+        <span>Login</span>
+      </button>
 
-    <button
-      mat-flat-button
-      color="primary"
-      class="auth-button register-button"
-      (click)="onRegister()"
-    >
-      <mat-icon>person_add</mat-icon>
-      <span>Register</span>
-    </button>
+      <button
+        mat-flat-button
+        color="primary"
+        class="auth-button register-button"
+        (click)="onRegister()"
+      >
+        <mat-icon>person_add</mat-icon>
+        <span>Register</span>
+      </button>
+    }
 
-    <button
-      mat-icon-button
-      (click)="onProfile()"
-      [matTooltip]="'My Profile'"
-    >
-      <mat-icon>account_circle</mat-icon>
-    </button>
+    <!-- Show when logged in -->
+    @if (isLoggedIn()) {
+      <button
+        mat-icon-button
+        (click)="onProfile()"
+        [matTooltip]="'My Profile'"
+        class="profile-button"
+      >
+        <mat-icon>account_circle</mat-icon>
+      </button>
+
+      <span class="user-email">{{ userEmail() }}</span>
+
+      <button
+        mat-stroked-button
+        class="auth-button logout-button"
+        (click)="onLogout()"
+      >
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    }
 
     <button
       mat-icon-button

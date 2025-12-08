@@ -12,6 +12,19 @@
 -- Data for Name: university; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+-- Clear existing data before inserting
+TRUNCATE TABLE public.study_program_study_program_variant CASCADE;
+TRUNCATE TABLE public.study_program_variant CASCADE;
+TRUNCATE TABLE public.study_program CASCADE;
+TRUNCATE TABLE public.faculty CASCADE;
+TRUNCATE TABLE public.university CASCADE;
+TRUNCATE TABLE public.app_user CASCADE;
+TRUNCATE TABLE public.user_education CASCADE;
+
+--
+-- Data for Name: university; Type: TABLE DATA; Schema: public; Owner: -
+--
+
 INSERT INTO public.university (id, name) VALUES (1, 'Technická univerzita v Košiciach');
 INSERT INTO public.university (id, name) VALUES (2, 'Žilinská univerzita v Žiline');
 INSERT INTO public.university (id, name) VALUES (3, 'Univerzita Komenského v Bratislave');

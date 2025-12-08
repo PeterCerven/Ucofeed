@@ -1,4 +1,77 @@
 <div class="profile-container">
+  <!-- Verification Card -->
+  @if (showVerification()) {
+    <mat-card class="verification-card">
+      <mat-card-header class="verification-header">
+        <mat-icon class="verification-icon">verified_user</mat-icon>
+        <mat-card-title>Verify Your Account</mat-card-title>
+        <mat-card-subtitle>Enter the verification code sent to your email to complete registration</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content class="verification-content">
+        <form [formGroup]="verificationForm" class="verification-form">
+          <!-- Email Field -->
+          <mat-form-field class="full-width">
+            <mat-label>Email</mat-label>
+            <mat-icon matPrefix>email</mat-icon>
+            <input
+              matInput
+              type="email"
+              formControlName="email"
+              placeholder="your.email@university.sk"
+              autocomplete="email"
+              readonly
+            />
+            @if (verificationForm.get('email')?.touched) {
+              <mat-error>
+                {{ getVerificationErrorMessage('email') }}
+              </mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Verification Code Field -->
+          <mat-form-field class="full-width">
+            <mat-label>Verification Code</mat-label>
+            <mat-icon matPrefix>pin</mat-icon>
+            <input
+              matInput
+              type="text"
+              formControlName="verificationCode"
+              placeholder="Enter the code from your email"
+              autocomplete="off"
+            />
+            <mat-hint>Enter the 6-digit code sent to your email</mat-hint>
+            @if (verificationForm.get('verificationCode')?.touched) {
+              <mat-error>
+                {{ getVerificationErrorMessage('verificationCode') }}
+              </mat-error>
+            }
+          </mat-form-field>
+        </form>
+      </mat-card-content>
+
+      <mat-card-actions class="verification-actions">
+        <button
+          mat-flat-button
+          color="primary"
+          type="submit"
+          (click)="onVerify()"
+          class="verify-button"
+          [disabled]="verificationForm.invalid || isVerifying()"
+        >
+          @if (isVerifying()) {
+            <mat-icon>hourglass_empty</mat-icon>
+            <span>Verifying...</span>
+          } @else {
+            <mat-icon>check_circle</mat-icon>
+            <span>Verify Account</span>
+          }
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  }
+
+  <!-- Profile Card -->
   <mat-card class="profile-card">
     <mat-card-header class="profile-header">
       <mat-icon class="profile-icon">account_circle</mat-icon>

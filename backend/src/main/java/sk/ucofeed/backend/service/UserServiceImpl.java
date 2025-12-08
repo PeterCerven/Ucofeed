@@ -56,11 +56,6 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
 
-        // Update basic user info if provided
-        if (updateUserDto.getFullName() != null && !updateUserDto.getFullName().isEmpty()) {
-            user.setFullName(updateUserDto.getFullName());
-        }
-
         // Find study program and variant
         StudyProgram studyProgram = studyProgramRepository.findById(updateUserDto.getStudyProgramId())
                 .orElseThrow(() -> new RuntimeException("Study program not found with id: " + updateUserDto.getStudyProgramId()));

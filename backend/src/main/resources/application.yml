@@ -9,6 +9,20 @@ spring:
   sql:
     init:
       mode: always
+  mail:
+    host: mailhog
+    port: 1025
+    username: user@gmail.com
+    password: password
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
 info:
   application:
     name: backend
