@@ -11,8 +11,7 @@ import { UniversityService } from '@services/university.service';
 import { UniversityModel } from '@models/university.model';
 
 export interface RegisterData {
-  universityEmail: string;
-  personalEmail: string;
+  email: string;
   password: string;
 }
 
@@ -129,12 +128,11 @@ export class RegisterDialogComponent implements OnInit {
 
   constructor() {
     this.registerForm = this.fb.group({
-      universityEmail: ['', [
+      email: ['', [
         Validators.required,
         Validators.email,
         CustomValidators.universityEmail(this.allowedDomains)
       ]],
-      personalEmail: ['', [Validators.required, Validators.email]],
       password: ['', [
         Validators.required,
         Validators.minLength(8),
@@ -168,6 +166,14 @@ export class RegisterDialogComponent implements OnInit {
 
   onCancel(): void {
     this.dialogRef.close();
+  }
+
+  togglePasswordVisibility(field: 'password' | 'confirmPassword'): void {
+    if (field === 'password') {
+      this.hidePassword = !this.hidePassword;
+    } else {
+      this.hideConfirmPassword = !this.hideConfirmPassword;
+    }
   }
 
   getErrorMessage(field: string): string {
@@ -204,14 +210,6 @@ export class RegisterDialogComponent implements OnInit {
     }
 
     return '';
-  }
-
-  togglePasswordVisibility(field: 'password' | 'confirmPassword'): void {
-    if (field === 'password') {
-      this.hidePassword = !this.hidePassword;
-    } else {
-      this.hideConfirmPassword = !this.hideConfirmPassword;
-    }
   }
 
 }

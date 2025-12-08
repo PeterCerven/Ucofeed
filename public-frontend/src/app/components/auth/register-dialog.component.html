@@ -23,33 +23,14 @@
         <input
           matInput
           type="email"
-          formControlName="universityEmail"
+          formControlName="email"
           placeholder="student@stuba.sk"
           autocomplete="email"
         />
         <mat-hint>For student domain emails only</mat-hint>
-        @if (registerForm.get('universityEmail')?.touched) {
+        @if (registerForm.get('email')?.touched) {
           <mat-error>
-            {{ getErrorMessage('universityEmail') }}
-          </mat-error>
-        }
-      </mat-form-field>
-
-      <!-- Personal Email Field -->
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Personal Email</mat-label>
-        <mat-icon matPrefix>email</mat-icon>
-        <input
-          matInput
-          type="email"
-          formControlName="personalEmail"
-          placeholder="your.email@gmail.com"
-          autocomplete="email"
-        />
-        <mat-hint>For account recovery and notifications</mat-hint>
-        @if (registerForm.get('personalEmail')?.touched) {
-          <mat-error>
-            {{ getErrorMessage('personalEmail') }}
+            {{ getErrorMessage('email') }}
           </mat-error>
         }
       </mat-form-field>

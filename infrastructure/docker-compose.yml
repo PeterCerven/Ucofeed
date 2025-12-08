@@ -56,3 +56,9 @@ services:
       - "5432:5432"
     env_file:
       - ./database/.env
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"

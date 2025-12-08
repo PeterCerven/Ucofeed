@@ -1,4 +1,4 @@
-package sk.ucofeed.backend.controller.admin;
+package sk.ucofeed.backend.controller.internal;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

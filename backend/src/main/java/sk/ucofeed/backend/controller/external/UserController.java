@@ -1,4 +1,4 @@
-package sk.ucofeed.backend.controller.user;
+package sk.ucofeed.backend.controller.external;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/user/public/user")
+@RequestMapping("/api/public/user")
 public class UserController {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
