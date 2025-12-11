@@ -7,9 +7,13 @@ export interface ProgramDetailsModel {
   averageRating: number;
   totalReviews: number;
   ratingDistribution: { [key: number]: number }; // rating (1-10) -> count
+
+  // Study program variant tags (from backend StudyProgramVariant)
   tags: {
-    degreeLevel?: string;
-    studyForm?: string;
-    studyType?: string;
+    title?: string; // e.g., "Bc", "Mgr", "Ing", "MUDr", "PhD"
+    languageGroup?: string; // e.g., "Slovak", "English", "Slovak/English"
+    studyFormat?: string; // e.g., "Full-time", "Part-time", "External"
+    studyDegree?: number; // e.g., 1 (Bachelor), 2 (Master), 3 (Doctoral)
+    studyDuration?: number; // Duration in years (e.g., 3, 2, 4)
   };
 }
