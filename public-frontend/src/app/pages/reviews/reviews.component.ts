@@ -5,9 +5,13 @@ import { CommonModule } from '@angular/common';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { catchError, of } from 'rxjs';
 import { ReviewService } from '@services/review.service';
-import { ProgramDetailsModel } from '@models/program-details.model';
+import { UniversityService } from '@services/university.service';
+import { AuthStateService } from '@services/auth-state.service';
+import { ProgramDetailsModel, StudyProgramDetailsModel } from '@models/program-details.model';
 import { ReviewModel, ReviewFilterOptions, CreateReviewDto } from '@models/review.model';
+import { VariantModel } from '@models/variant.model';
 import { ProgramDetailsHeaderComponent } from '@components/program-details-header/program-details-header.component';
 import { ReviewFilterComponent } from '@components/review-filter/review-filter.component';
 import { ReviewCardComponent } from '@components/review-card/review-card.component';
@@ -32,6 +36,8 @@ import { ReviewFormComponent } from '@components/review-form/review-form.compone
 export class ReviewsComponent {
   private route = inject(ActivatedRoute);
   private reviewService = inject(ReviewService);
+  private universityService = inject(UniversityService);
+  private authState = inject(AuthStateService);
   private snackBar = inject(MatSnackBar);
 
   @ViewChild(ReviewFormComponent) reviewFormComponent?: ReviewFormComponent;
@@ -50,6 +56,11 @@ export class ReviewsComponent {
   // Study program variant ID - will come from backend/user enrollment
   studyProgramVariantId = signal<number>(1); // Will be auto-assigned from backend response
 
+  // Check if user can create a review
+  get canCreateReview(): boolean {
+    return this.authState.isVerified();
+  }
+
   constructor() {
     effect(() => {
       const id = Number(this.paramMap()?.get('id'));
@@ -62,15 +73,51 @@ export class ReviewsComponent {
 
   private loadProgramDetails(programId: number): void {
     this.isLoadingDetails.set(true);
-    this.reviewService.getProgramDetails(programId).subscribe({
-      next: (details) => {
-        this.programDetails.set(details);
-        this.isLoadingDetails.set(false);
-      },
-      error: (error) => {
-        console.error('Error loading program details:', error);
-        this.isLoadingDetails.set(false);
-      },
+
+    // Fetch study program from backend (with fallback)
+    this.universityService.getStudyProgramById(programId).pipe(
+      catchError(error => {
+        console.error('Study program endpoint not implemented:', error);
+        // Fallback to mock data for now
+        return of({
+          id: programId,
+          name: 'Computer Science',
+          studyField: 'Informatics',
+          facultyName: 'Faculty of Informatics',
+          universityName: 'Slovak University of Technology'
+        } as StudyProgramDetailsModel);
+      })
+    ).subscribe({
+      next: (program) => {
+        // Fetch variants
+        this.universityService.getVariantsByProgram(programId).subscribe({
+          next: (variants) => {
+            // Map to ProgramDetailsModel format
+            const programDetails: ProgramDetailsModel = {
+              id: program.id,
+              name: program.name,
+              description: '', // Not available from backend
+              facultyName: program.facultyName || '',
+              universityName: program.universityName || '',
+              averageRating: 0, // Will be calculated from reviews
+              totalReviews: 0,  // Will be counted from reviews
+              ratingDistribution: {},
+              tags: {
+                // Extract from variants
+                languageGroup: this.extractLanguages(variants),
+                studyFormat: this.extractFormats(variants),
+                title: this.extractTitles(variants),
+              }
+            };
+            this.programDetails.set(programDetails);
+            this.isLoadingDetails.set(false);
+          },
+          error: (error) => {
+            console.error('Error loading variants:', error);
+            this.isLoadingDetails.set(false);
+          }
+        });
+      }
     });
   }
 
@@ -80,6 +127,9 @@ export class ReviewsComponent {
       next: (reviews) => {
         this.reviews.set(reviews);
         this.isLoadingReviews.set(false);
+
+        // Update program details with review stats
+        this.updateReviewStats(reviews);
       },
       error: (error) => {
         console.error('Error loading reviews:', error);
@@ -101,7 +151,26 @@ export class ReviewsComponent {
   }
 
   onSubmitReview(reviewDto: CreateReviewDto): void {
-    this.reviewService.createReview(reviewDto).subscribe({
+    // Verify auth state
+    if (!this.authState.isLoggedIn()) {
+      console.error('User must be logged in to create review');
+      this.snackBar.open('Please log in to create a review', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['error-snackbar'],
+      });
+      return;
+    }
+
+    // Add user ID and program ID to review DTO
+    const reviewWithAuth = {
+      ...reviewDto,
+      userId: this.authState.userId(),
+      studyProgramId: this.programDetails()?.id || 0,
+    };
+
+    this.reviewService.createReview(reviewWithAuth).subscribe({
       next: (newReview) => {
         // Add new review to the list
         this.reviews.update(reviews => [newReview, ...reviews]);
@@ -117,10 +186,26 @@ export class ReviewsComponent {
         // Hide form and reset
         this.showReviewForm.set(false);
         this.reviewFormComponent?.resetForm();
+
+        // Reload reviews to get updated stats
+        const programId = this.programDetails()?.id;
+        if (programId) {
+          this.loadReviews(programId);
+        }
       },
       error: (error) => {
         console.error('Error submitting review:', error);
-        this.snackBar.open('Failed to submit review. Please try again.', 'Close', {
+
+        let errorMessage = 'Failed to submit review';
+        if (error.status === 403) {
+          errorMessage = 'You are not enrolled in this program';
+        } else if (error.status === 401) {
+          errorMessage = 'Please verify your account first';
+        } else if (error.status === 404) {
+          errorMessage = 'Review endpoint not implemented yet';
+        }
+
+        this.snackBar.open(errorMessage, 'Close', {
           duration: 5000,
           horizontalPosition: 'center',
           verticalPosition: 'top',
@@ -133,5 +218,37 @@ export class ReviewsComponent {
 
   onCancelReview(): void {
     this.showReviewForm.set(false);
+  }
+
+  private extractLanguages(variants: VariantModel[]): string {
+    const languages = [...new Set(variants.map(v => v.language))];
+    return languages.join(' / ');
+  }
+
+  private extractFormats(variants: VariantModel[]): string {
+    const formats = [...new Set(variants.map(v => v.study_form))];
+    return formats.join(' / ');
+  }
+
+  private extractTitles(variants: VariantModel[]): string {
+    const titles = [...new Set(variants.map(v => v.title))];
+    return titles.join(', ');
+  }
+
+  private updateReviewStats(reviews: ReviewModel[]): void {
+    if (reviews.length === 0) return;
+
+    const avgRating = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+    const distribution: { [key: number]: number } = {};
+    reviews.forEach(r => {
+      distribution[r.rating] = (distribution[r.rating] || 0) + 1;
+    });
+
+    this.programDetails.update(details => details ? {
+      ...details,
+      averageRating: avgRating,
+      totalReviews: reviews.length,
+      ratingDistribution: distribution
+    } : details);
   }
 }
