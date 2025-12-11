@@ -1,6 +1,10 @@
 <div class="programs-container">
   <h1>Study Programs of {{ facultyName() }}</h1>
 
+  @if (isLoading()) {
+    <p>Loading programs...</p>
+  }
+
   <div class="cards-grid">
     @for (program of programs(); track program.id) {
       <entity-card

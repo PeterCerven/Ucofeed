@@ -16,8 +16,16 @@ export class UniversityService {
     return this.http.get<UniversityModel[]>(`${this.baseUrl}/public/university`);
   }
 
+  getUniversityById(id: number): Observable<UniversityModel> {
+    return this.http.get<UniversityModel>(`${this.baseUrl}/public/university/${id}`);
+  }
+
   getFacultiesByUniversity(universityId: number): Observable<FacultyModel[]> {
     return this.http.get<FacultyModel[]>(`${this.baseUrl}/public/university/${universityId}/faculties`);
+  }
+
+  getFacultyById(id: number): Observable<FacultyModel> {
+    return this.http.get<FacultyModel>(`${this.baseUrl}/public/university/faculty/${id}`);
   }
 
   getProgramsByFaculty(facultyId: number): Observable<ProgramModel[]> {

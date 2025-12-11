@@ -1,6 +1,10 @@
 <div class="faculties-container">
   <h1>Faculties of {{ universityName() }}</h1>
 
+  @if (isLoading()) {
+    <p>Loading faculties...</p>
+  }
+
   <div class="cards-grid">
     @for (faculty of faculties(); track faculty.id) {
       <entity-card
@@ -15,17 +19,6 @@
     } @empty {
       <p>No faculties found.</p>
     }
-
-<!--  DUMMY DATA -->
-    <entity-card
-      [id]="1"
-      name="Faculty of Informatics"
-      image=""
-      entityType="faculty"
-      [review]="8"
-      description="Leading faculty in computer science..."
-      (cardClick)="onFacultyClick($event)"
-    ></entity-card>
 
   </div>
 

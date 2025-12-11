@@ -42,6 +42,15 @@ public class UniversityController {
         return ResponseEntity.ok(universities);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<UniversityDTO> getUniversityById(@PathVariable Long id) {
+        LOG.info("Fetching university with ID: {}", id);
+        return universityRepository.findById(id)
+                .map(UniversityDTO::from)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @GetMapping("/{universityId}/faculties")
     public ResponseEntity<List<FacultyDTO>> getFacultiesByUniversity(@PathVariable Long universityId) {
         LOG.info("Fetching faculties for university ID: {}", universityId);
@@ -50,6 +59,15 @@ public class UniversityController {
                 .map(FacultyDTO::from)
                 .toList();
         return ResponseEntity.ok(faculties);
+    }
+
+    @GetMapping("/faculty/{id}")
+    public ResponseEntity<FacultyDTO> getFacultyById(@PathVariable Long id) {
+        LOG.info("Fetching faculty with ID: {}", id);
+        return facultyRepository.findById(id)
+                .map(FacultyDTO::from)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/faculty/{facultyId}/programs")

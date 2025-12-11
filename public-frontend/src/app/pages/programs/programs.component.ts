@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EntityCardComponent } from '@components/entity-card/entity-card.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {ProgramModel} from '@models/program.model';
+import { UniversityService } from '@services/university.service';
 
 @Component({
   selector: 'app-programs',
@@ -14,17 +15,13 @@ import {ProgramModel} from '@models/program.model';
 export class ProgramsComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private universityService = inject(UniversityService);
 
   private paramMap = toSignal(this.route.paramMap);
 
   facultyName = signal('Faculty of Informatics');
-  // programs = signal<ProgramModel[]>([]);
-
-  programs = signal<ProgramModel[]>([
-    { id: 1, name: 'Computer Science', entityType: 'program', review: 9, description: 'Comprehensive CS curriculum covering algorithms, data structures, and software engineering' },
-    { id: 2, name: 'Information Systems', entityType: 'program', review: 8, description: 'Focus on business information systems and enterprise solutions' },
-    { id: 3, name: 'Software Engineering', entityType: 'program', review: 9, description: 'Modern software development practices and methodologies' },
-  ]);
+  programs = signal<ProgramModel[]>([]);
+  isLoading = signal(false);
 
   constructor() {
     effect(() => {
@@ -37,9 +34,30 @@ export class ProgramsComponent {
     });
   }
 
-  private loadPrograms(id: number) {
-    // Your service call here
-    // this.programs.set(result);
+  private loadPrograms(facultyId: number) {
+    this.isLoading.set(true);
+
+    // Fetch programs
+    this.universityService.getProgramsByFaculty(facultyId).subscribe({
+      next: (programs) => {
+        this.programs.set(programs);
+        this.isLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Error loading programs:', error);
+        this.isLoading.set(false);
+      },
+    });
+
+    // Fetch faculty name
+    this.universityService.getFacultyById(facultyId).subscribe({
+      next: (faculty) => {
+        this.facultyName.set(faculty.name);
+      },
+      error: (error) => {
+        console.error('Error loading faculty name:', error);
+      },
+    });
   }
 
   onProgramClick(programId: number) {
