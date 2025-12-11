@@ -16,22 +16,22 @@
 
       <!-- Tags -->
       <div class="tags">
-        @if (programDetails().tags.degreeLevel) {
+        @if (programDetails().tags.title) {
           <mat-chip class="tag">
             <mat-icon>school</mat-icon>
-            {{ programDetails().tags.degreeLevel }}
+            {{ programDetails().tags.title }}
           </mat-chip>
         }
-        @if (programDetails().tags.studyForm) {
+        @if (programDetails().tags.studyFormat) {
           <mat-chip class="tag">
             <mat-icon>schedule</mat-icon>
-            {{ programDetails().tags.studyForm }}
+            {{ programDetails().tags.studyFormat }}
           </mat-chip>
         }
-        @if (programDetails().tags.studyType) {
+        @if (programDetails().tags.languageGroup) {
           <mat-chip class="tag">
-            <mat-icon>category</mat-icon>
-            {{ programDetails().tags.studyType }}
+            <mat-icon>language</mat-icon>
+            {{ programDetails().tags.languageGroup }}
           </mat-chip>
         }
       </div>

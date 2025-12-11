@@ -9,6 +9,24 @@
       <app-program-details-header [programDetails]="programDetails()!" />
     }
 
+    <!-- Write Review Button -->
+    <div class="action-bar">
+      <button mat-raised-button color="primary" (click)="toggleReviewForm()" class="write-review-btn">
+        <mat-icon>{{ showReviewForm() ? 'close' : 'edit' }}</mat-icon>
+        {{ showReviewForm() ? 'Cancel' : 'Write a Review' }}
+      </button>
+    </div>
+
+    <!-- Review Form (Conditional) -->
+    @if (showReviewForm()) {
+      <app-review-form
+        [studyProgramId]="programDetails()?.id || 1"
+        [studyProgramVariantId]="studyProgramVariantId()"
+        (submitReview)="onSubmitReview($event)"
+        (cancelForm)="onCancelReview()"
+      />
+    }
+
     <!-- Filter Section -->
     <app-review-filter (filterChange)="onFilterChange($event)" />
 

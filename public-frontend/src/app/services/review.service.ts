@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, delay } from 'rxjs';
-import { ReviewModel, ReviewFilterOptions } from '@models/review.model';
+import { ReviewModel, ReviewFilterOptions, CreateReviewDto } from '@models/review.model';
 import { CommentModel } from '@models/comment.model';
 import { ProgramDetailsModel } from '@models/program-details.model';
 
@@ -13,15 +13,14 @@ export class ReviewService {
     {
       id: 1,
       userName: 'John Doe',
-      academicYear: '2023/2024',
-      semester: 'WINTER',
-      overallRating: 8.5,
-      teachingQualityRating: 9,
-      difficultyRating: 7,
-      resourcesRating: 8,
-      careerProspectsRating: 10,
-      reviewText:
+      studyProgramId: 1,
+      studyProgramName: 'Computer Science',
+      studyProgramVariantId: 1,
+      semester: 3,
+      rating: 9,
+      comment:
         'Excellent program with great professors. The curriculum is well-structured and covers both theoretical and practical aspects. The career support is outstanding, and many students get job offers before graduation. The only downside is that some courses can be quite challenging.',
+      anonymous: false,
       createdAt: '2024-03-15T10:30:00',
       updatedAt: '2024-03-15T10:30:00',
       isEdited: false,
@@ -30,15 +29,14 @@ export class ReviewService {
     {
       id: 2,
       userName: 'Jane Smith',
-      academicYear: '2022/2023',
-      semester: 'FULL_YEAR',
-      overallRating: 7.25,
-      teachingQualityRating: 8,
-      difficultyRating: 8,
-      resourcesRating: 6,
-      careerProspectsRating: 7,
-      reviewText:
+      studyProgramId: 1,
+      studyProgramName: 'Computer Science',
+      studyProgramVariantId: 1,
+      semester: 5,
+      rating: 7,
+      comment:
         'Good program overall, but the resources could be better. Some of the labs are outdated and need modernization. Teachers are knowledgeable and helpful. The workload is heavy but manageable if you stay organized.',
+      anonymous: false,
       createdAt: '2023-06-20T14:15:00',
       updatedAt: '2023-06-22T09:00:00',
       isEdited: true,
@@ -46,16 +44,15 @@ export class ReviewService {
     },
     {
       id: 3,
-      userName: 'Alex Johnson',
-      academicYear: '2023/2024',
-      semester: 'SUMMER',
-      overallRating: 9,
-      teachingQualityRating: 9,
-      difficultyRating: 6,
-      resourcesRating: 10,
-      careerProspectsRating: 9,
-      reviewText:
+      userName: 'Anonymous',
+      studyProgramId: 1,
+      studyProgramName: 'Computer Science',
+      studyProgramVariantId: 1,
+      semester: 2,
+      rating: 10,
+      comment:
         'Outstanding program! The faculty is top-notch, and the facilities are state-of-the-art. Great internship opportunities and strong industry connections. Highly recommended for anyone serious about this field.',
+      anonymous: true,
       createdAt: '2024-08-10T16:45:00',
       updatedAt: '2024-08-10T16:45:00',
       isEdited: false,
@@ -64,15 +61,14 @@ export class ReviewService {
     {
       id: 4,
       userName: 'Maria Garcia',
-      academicYear: '2021/2022',
-      semester: 'WINTER',
-      overallRating: 6,
-      teachingQualityRating: 6,
-      difficultyRating: 9,
-      resourcesRating: 5,
-      careerProspectsRating: 6,
-      reviewText:
+      studyProgramId: 1,
+      studyProgramName: 'Computer Science',
+      studyProgramVariantId: 2,
+      semester: 4,
+      rating: 6,
+      comment:
         'The program is very demanding and not for the faint of heart. Some professors are excellent, but others seem disconnected. Resources are limited, especially for research projects. Career prospects are decent but require a lot of self-initiative.',
+      anonymous: false,
       createdAt: '2022-12-05T11:20:00',
       updatedAt: '2022-12-05T11:20:00',
       isEdited: false,
@@ -81,15 +77,14 @@ export class ReviewService {
     {
       id: 5,
       userName: 'Michael Brown',
-      academicYear: '2023/2024',
-      semester: 'WINTER',
-      overallRating: 8.75,
-      teachingQualityRating: 9,
-      difficultyRating: 8,
-      resourcesRating: 8,
-      careerProspectsRating: 10,
-      reviewText:
+      studyProgramId: 1,
+      studyProgramName: 'Computer Science',
+      studyProgramVariantId: 1,
+      semester: 6,
+      rating: 9,
+      comment:
         'Fantastic experience! The program prepares you well for the industry. Professors are experienced professionals who bring real-world insights. The coursework is challenging but rewarding. Career services are excellent with many recruiting events.',
+      anonymous: false,
       createdAt: '2024-02-28T13:00:00',
       updatedAt: '2024-03-01T10:30:00',
       isEdited: true,
@@ -215,9 +210,11 @@ export class ReviewService {
         9: 2,
       },
       tags: {
-        degreeLevel: 'Bachelor',
-        studyForm: 'Full-time',
-        studyType: 'Academic',
+        title: 'Bc.',
+        studyDegree: 1, // Bachelor
+        studyFormat: 'Full-time / Part-time',
+        studyDuration: 3,
+        languageGroup: 'Slovak / English',
       },
     },
     2: {
@@ -235,9 +232,11 @@ export class ReviewService {
         9: 1,
       },
       tags: {
-        degreeLevel: 'Bachelor',
-        studyForm: 'Full-time',
-        studyType: 'Academic',
+        title: 'Bc.',
+        studyDegree: 1, // Bachelor
+        studyFormat: 'Full-time',
+        studyDuration: 3,
+        languageGroup: 'Slovak',
       },
     },
     3: {
@@ -254,9 +253,11 @@ export class ReviewService {
         9: 2,
       },
       tags: {
-        degreeLevel: 'Master',
-        studyForm: 'Full-time',
-        studyType: 'Academic',
+        title: 'Ing.',
+        studyDegree: 2, // Master
+        studyFormat: 'Full-time',
+        studyDuration: 2,
+        languageGroup: 'Slovak / English',
       },
     },
   };
@@ -270,7 +271,7 @@ export class ReviewService {
   }
 
   /**
-   * Get reviews for a program with optional filtering and sorting
+   * Get reviews for a program with optional sorting
    */
   getReviews(
     programId: number,
@@ -278,17 +279,8 @@ export class ReviewService {
   ): Observable<ReviewModel[]> {
     let reviews = [...this.mockReviews];
 
-    // Apply filters
+    // Apply sorting
     if (filters) {
-      if (filters.year) {
-        reviews = reviews.filter((r) => r.academicYear === filters.year);
-      }
-
-      if (filters.semester && filters.semester !== 'ALL') {
-        reviews = reviews.filter((r) => r.semester === filters.semester);
-      }
-
-      // Apply sorting
       switch (filters.sortBy) {
         case 'newest':
           reviews.sort(
@@ -303,10 +295,10 @@ export class ReviewService {
           );
           break;
         case 'highest':
-          reviews.sort((a, b) => b.overallRating - a.overallRating);
+          reviews.sort((a, b) => b.rating - a.rating);
           break;
         case 'lowest':
-          reviews.sort((a, b) => a.overallRating - b.overallRating);
+          reviews.sort((a, b) => a.rating - b.rating);
           break;
         case 'edited':
           reviews.sort(
@@ -329,26 +321,29 @@ export class ReviewService {
   }
 
   /**
-   * Create a new review (future implementation - requires auth)
+   * Create a new review
    */
-  createReview(review: Partial<ReviewModel>): Observable<ReviewModel> {
-    // This will be implemented when authentication is ready
+  createReview(reviewDto: CreateReviewDto): Observable<ReviewModel> {
+    // Mock implementation - will be replaced with actual API call
     const newReview: ReviewModel = {
       id: this.mockReviews.length + 1,
-      userName: 'Current User',
-      academicYear: review.academicYear || '2024/2025',
-      semester: review.semester || 'WINTER',
-      overallRating: review.overallRating || 0,
-      teachingQualityRating: review.teachingQualityRating || 0,
-      difficultyRating: review.difficultyRating || 0,
-      resourcesRating: review.resourcesRating || 0,
-      careerProspectsRating: review.careerProspectsRating || 0,
-      reviewText: review.reviewText || '',
+      userName: reviewDto.anonymous ? 'Anonymous' : 'Current User',
+      studyProgramId: reviewDto.studyProgramId,
+      studyProgramName: 'Computer Science',
+      studyProgramVariantId: reviewDto.studyProgramVariantId || 1,
+      semester: reviewDto.semester,
+      rating: reviewDto.rating,
+      comment: reviewDto.comment,
+      anonymous: reviewDto.anonymous || false,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       isEdited: false,
       commentsCount: 0,
     };
+
+    // Add to mock data
+    this.mockReviews.unshift(newReview);
+
     return of(newReview).pipe(delay(500));
   }
 

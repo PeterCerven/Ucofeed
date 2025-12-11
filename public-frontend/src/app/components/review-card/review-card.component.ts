@@ -43,17 +43,8 @@ export class ReviewCardComponent {
   }
 
   /** Get semester display text */
-  getSemesterText(semester: string): string {
-    switch (semester) {
-      case 'WINTER':
-        return 'Winter Semester';
-      case 'SUMMER':
-        return 'Summer Semester';
-      case 'FULL_YEAR':
-        return 'Full Year';
-      default:
-        return semester;
-    }
+  getSemesterText(semester: number): string {
+    return `Semester ${semester}`;
   }
 
   /** Get rating color based on value */

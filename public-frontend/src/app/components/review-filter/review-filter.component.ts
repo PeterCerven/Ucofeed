@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
-import { ReviewFilterOptions, Semester } from '@models/review.model';
+import { ReviewFilterOptions } from '@models/review.model';
 
 @Component({
   selector: 'app-review-filter',
@@ -22,24 +22,7 @@ import { ReviewFilterOptions, Semester } from '@models/review.model';
 export class ReviewFilterComponent {
   filterChange = output<ReviewFilterOptions>();
 
-  selectedYear = signal<string>('');
-  selectedSemester = signal<Semester | 'ALL'>('ALL');
   selectedSort = signal<'newest' | 'oldest' | 'highest' | 'lowest' | 'edited'>('newest');
-
-  academicYears: string[] = [
-    '2024/2025',
-    '2023/2024',
-    '2022/2023',
-    '2021/2022',
-    '2020/2021',
-  ];
-
-  semesters: Array<{ value: Semester | 'ALL'; label: string }> = [
-    { value: 'ALL', label: 'All Semesters' },
-    { value: 'WINTER', label: 'Winter Semester' },
-    { value: 'SUMMER', label: 'Summer Semester' },
-    { value: 'FULL_YEAR', label: 'Full Year' },
-  ];
 
   sortOptions: Array<{
     value: 'newest' | 'oldest' | 'highest' | 'lowest' | 'edited';
@@ -53,16 +36,6 @@ export class ReviewFilterComponent {
     { value: 'edited', label: 'Recently Edited', icon: 'edit' },
   ];
 
-  onYearChange(year: string): void {
-    this.selectedYear.set(year);
-    this.emitFilters();
-  }
-
-  onSemesterChange(semester: Semester | 'ALL'): void {
-    this.selectedSemester.set(semester);
-    this.emitFilters();
-  }
-
   onSortChange(sortBy: 'newest' | 'oldest' | 'highest' | 'lowest' | 'edited'): void {
     this.selectedSort.set(sortBy);
     this.emitFilters();
@@ -70,8 +43,6 @@ export class ReviewFilterComponent {
 
   private emitFilters(): void {
     this.filterChange.emit({
-      year: this.selectedYear(),
-      semester: this.selectedSemester(),
       sortBy: this.selectedSort(),
     });
   }

@@ -6,86 +6,43 @@
           <mat-icon>person</mat-icon>
         </div>
         <div class="user-details">
-          <h3 class="user-name">{{ review().userName }}</h3>
+          <h3 class="user-name">{{ review().anonymous ? 'Anonymous' : review().userName }}</h3>
           <div class="meta-info">
-            <span class="academic-year">{{ review().academicYear }}</span>
-            <span class="separator">•</span>
-            <span class="semester">{{ getSemesterText(review().semester) }}</span>
+            @if (review().semester !== undefined) {
+              <span class="semester">{{ getSemesterText(review().semester!) }}</span>
+              <span class="separator">•</span>
+            }
+            <span class="program-name">{{ review().studyProgramName || 'Computer Science' }}</span>
             @if (review().isEdited) {
+              <span class="separator">•</span>
               <mat-chip class="edited-badge">
                 <mat-icon>edit</mat-icon>
                 Edited
               </mat-chip>
             }
-          </div>
-        </div>
+          </div>        </div>
       </div>
-      <div class="overall-rating" [style.color]="getRatingColor(review().overallRating)">
-        <div class="rating-value">{{ review().overallRating.toFixed(1) }}</div>
-        <div class="rating-label">Overall</div>
+      <div class="overall-rating" [style.color]="getRatingColor(review().rating)">
+        <div class="rating-value">{{ review().rating }}</div>
+        <div class="rating-label">Rating</div>
       </div>
     </div>
   </mat-card-header>
 
   <mat-card-content>
-    <!-- Criteria ratings -->
-    <div class="criteria-ratings">
-      <div class="criterion">
-        <div class="criterion-label">
-          <mat-icon>school</mat-icon>
-          <span>Teaching Quality</span>
-        </div>
-        <div class="stars">
-          @for (filled of getStarsArray(review().teachingQualityRating); track $index) {
-            <mat-icon [class.filled]="filled">{{ filled ? 'star' : 'star_border' }}</mat-icon>
-          }
-        </div>
-        <span class="rating-number">{{ review().teachingQualityRating }}/10</span>
+    <!-- Star rating display -->
+    <div class="rating-stars-display">
+      <div class="stars">
+        @for (filled of getStarsArray(review().rating); track $index) {
+          <mat-icon [class.filled]="filled">{{ filled ? 'star' : 'star_border' }}</mat-icon>
+        }
       </div>
-
-      <div class="criterion">
-        <div class="criterion-label">
-          <mat-icon>trending_up</mat-icon>
-          <span>Difficulty</span>
-        </div>
-        <div class="stars">
-          @for (filled of getStarsArray(review().difficultyRating); track $index) {
-            <mat-icon [class.filled]="filled">{{ filled ? 'star' : 'star_border' }}</mat-icon>
-          }
-        </div>
-        <span class="rating-number">{{ review().difficultyRating }}/10</span>
-      </div>
-
-      <div class="criterion">
-        <div class="criterion-label">
-          <mat-icon>library_books</mat-icon>
-          <span>Resources</span>
-        </div>
-        <div class="stars">
-          @for (filled of getStarsArray(review().resourcesRating); track $index) {
-            <mat-icon [class.filled]="filled">{{ filled ? 'star' : 'star_border' }}</mat-icon>
-          }
-        </div>
-        <span class="rating-number">{{ review().resourcesRating }}/10</span>
-      </div>
-
-      <div class="criterion">
-        <div class="criterion-label">
-          <mat-icon>work</mat-icon>
-          <span>Career Prospects</span>
-        </div>
-        <div class="stars">
-          @for (filled of getStarsArray(review().careerProspectsRating); track $index) {
-            <mat-icon [class.filled]="filled">{{ filled ? 'star' : 'star_border' }}</mat-icon>
-          }
-        </div>
-        <span class="rating-number">{{ review().careerProspectsRating }}/10</span>
-      </div>
+      <span class="rating-number">{{ review().rating }}/10</span>
     </div>
 
     <!-- Review text -->
     <div class="review-text">
-      <p>{{ review().reviewText }}</p>
+      <p>{{ review().comment }}</p>
     </div>
 
     <!-- Footer -->
