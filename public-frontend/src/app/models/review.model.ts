@@ -18,7 +18,13 @@ export interface ReviewModel {
 }
 
 export interface ReviewFilterOptions {
-  year?: string;
-  semester?: Semester | 'ALL';
   sortBy: 'newest' | 'oldest' | 'highest' | 'lowest' | 'edited';
+}
+
+export interface CreateReviewDto {
+  studyProgramId: number;
+  studyProgramVariantId: number;
+  comment: string;
+  rating: number;
+  anonymous: boolean;
 }

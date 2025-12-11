@@ -1,0 +1,79 @@
+<div class="review-form-container">
+  <h2 class="form-title">Write a Review</h2>
+
+  <form [formGroup]="reviewForm" (ngSubmit)="onSubmit()" class="review-form">
+
+    <!-- Review Comment -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Your Review</mat-label>
+      <textarea
+        matInput
+        formControlName="comment"
+        rows="6"
+        placeholder="Share your experience with this program..."></textarea>
+      <mat-hint>
+        {{ reviewForm.get('comment')?.value?.length || 0 }} characters (minimum 20)
+      </mat-hint>
+      @if (reviewForm.get('comment')?.hasError('required') && reviewForm.get('comment')?.touched) {
+        <mat-error>Review comment is required</mat-error>
+      }
+      @if (reviewForm.get('comment')?.hasError('minlength')) {
+        <mat-error>Comment must be at least 20 characters</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Rating Slider -->
+    <div class="rating-section">
+      <label class="rating-label">
+        Overall Rating: <strong>{{ reviewForm.get('rating')?.value || 1 }}/10</strong>
+      </label>
+      <mat-slider
+        min="1"
+        max="10"
+        step="1"
+        showTickMarks
+        discrete
+        class="full-width">
+        <input matSliderThumb formControlName="rating" />
+      </mat-slider>
+      <div class="rating-stars">
+        @for (star of ratingStars(); track $index) {
+          <mat-icon [class.filled]="star" class="star-icon">
+            {{ star ? 'star' : 'star_border' }}
+          </mat-icon>
+        }
+      </div>
+    </div>
+
+    <!-- Anonymous Checkbox -->
+    <div class="anonymous-section">
+      <mat-checkbox formControlName="anonymous">
+        Post anonymously
+      </mat-checkbox>
+      <span class="anonymous-hint">Your name won't be visible to others</span>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="form-actions">
+      <button
+        mat-raised-button
+        type="button"
+        (click)="onCancel()">
+        Cancel
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="reviewForm.invalid || isSubmitting()">
+        @if (isSubmitting()) {
+          <ng-container>
+            <mat-icon>hourglass_empty</mat-icon> Submitting...
+          </ng-container>
+        } @else {
+          Submit Review
+        }
+      </button>
+    </div>
+  </form>
+</div>
