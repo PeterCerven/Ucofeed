@@ -4,6 +4,7 @@ import { EntityCardComponent } from '@components/entity-card/entity-card.compone
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import {FacultyModel} from '@models/faculty.model';
+import { UniversityService } from '@services/university.service';
 
 @Component({
   selector: 'app-faculties',
@@ -15,12 +16,14 @@ import {FacultyModel} from '@models/faculty.model';
 export class FacultiesComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private universityService = inject(UniversityService);
 
   private paramMap = toSignal(this.route.paramMap);
 
   // TODO: (dynamic in future)
   universityName = signal('STU');
   faculties = signal<FacultyModel[]>([]);
+  isLoading = signal(false);
 
   constructor() {
     // Effect runs whenever route param 'id' changes
@@ -38,7 +41,29 @@ export class FacultiesComponent {
   }
 
   private loadFaculties(universityId: number) {
-    // Load faculties from service based on universityId
+    this.isLoading.set(true);
+
+    // Fetch faculties
+    this.universityService.getFacultiesByUniversity(universityId).subscribe({
+      next: (faculties) => {
+        this.faculties.set(faculties);
+        this.isLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Error loading faculties:', error);
+        this.isLoading.set(false);
+      },
+    });
+
+    // Fetch university name
+    this.universityService.getUniversityById(universityId).subscribe({
+      next: (university) => {
+        this.universityName.set(university.name);
+      },
+      error: (error) => {
+        console.error('Error loading university name:', error);
+      },
+    });
   }
 
   onFacultyClick(facultyId: number) {

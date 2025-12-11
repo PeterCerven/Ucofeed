@@ -11,6 +11,7 @@ import { TranslocoService } from '@jsverse/transloco';
 import { LoginDialogComponent, LoginData } from '@components/auth/login-dialog.component';
 import { RegisterDialogComponent, RegisterData } from '@components/auth/register-dialog.component';
 import { AuthService } from '@services/auth.service';
+import { AuthStateService } from '@services/auth-state.service';
 
 @Component({
   selector: 'app-root',
@@ -32,25 +33,14 @@ export class App {
   private readonly snackBar = inject(MatSnackBar);
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
+  private readonly authState = inject(AuthStateService);
 
   readonly isDarkMode = signal(false);
   readonly currentLanguage = signal('sk');
-  readonly isLoggedIn = signal(false);
-  readonly userEmail = signal<string | null>(null);
 
-  constructor() {
-    // Check if user is already logged in from localStorage
-    const savedAuth = localStorage.getItem('authUser');
-    if (savedAuth) {
-      try {
-        const authData = JSON.parse(savedAuth);
-        this.isLoggedIn.set(true);
-        this.userEmail.set(authData.email);
-      } catch (error) {
-        console.error('Failed to load auth state:', error);
-      }
-    }
-  }
+  // Delegate to auth state service
+  readonly isLoggedIn = this.authState.isLoggedIn;
+  readonly userEmail = this.authState.userEmail;
 
   toggleDarkMode(): void {
     this.isDarkMode.update(v => !v);
@@ -80,10 +70,12 @@ export class App {
       if (result) {
         this.authService.login(result.email, result.password).subscribe({
           next: (response) => {
-            // Set auth state
-            this.isLoggedIn.set(true);
-            this.userEmail.set(response.email);
-            localStorage.setItem('authUser', JSON.stringify({ id: response.id, email: response.email, role: response.role }));
+            // Update shared auth state
+            this.authState.setAuthState({
+              id: response.id,
+              email: response.email,
+              role: response.role
+            });
 
             this.snackBar.open('Login successful!', 'Close', {
               duration: 3000,
@@ -160,10 +152,8 @@ export class App {
   onLogout(): void {
     this.authService.logout().subscribe({
       next: () => {
-        // Clear auth state
-        this.isLoggedIn.set(false);
-        this.userEmail.set(null);
-        localStorage.removeItem('authUser');
+        // Clear shared auth state
+        this.authState.clearAuthState();
 
         this.snackBar.open('Logged out successfully', 'Close', {
           duration: 3000,
@@ -175,9 +165,7 @@ export class App {
       error: (error) => {
         console.error('Logout error:', error);
         // Clear auth state even if server request fails
-        this.isLoggedIn.set(false);
-        this.userEmail.set(null);
-        localStorage.removeItem('authUser');
+        this.authState.clearAuthState();
         this.router.navigate(['/']);
       }
     });

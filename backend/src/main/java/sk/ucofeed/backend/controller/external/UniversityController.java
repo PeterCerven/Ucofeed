@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sk.ucofeed.backend.persistence.dto.FacultyDTO;
 import sk.ucofeed.backend.persistence.dto.StudyProgramDTO;
+import sk.ucofeed.backend.persistence.dto.StudyProgramDetailsDTO;
 import sk.ucofeed.backend.persistence.dto.StudyProgramVariantDTO;
 import sk.ucofeed.backend.persistence.dto.UniversityDTO;
 import sk.ucofeed.backend.persistence.repository.FacultyRepository;
@@ -42,6 +43,15 @@ public class UniversityController {
         return ResponseEntity.ok(universities);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<UniversityDTO> getUniversityById(@PathVariable Long id) {
+        LOG.info("Fetching university with ID: {}", id);
+        return universityRepository.findById(id)
+                .map(UniversityDTO::from)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @GetMapping("/{universityId}/faculties")
     public ResponseEntity<List<FacultyDTO>> getFacultiesByUniversity(@PathVariable Long universityId) {
         LOG.info("Fetching faculties for university ID: {}", universityId);
@@ -52,6 +62,15 @@ public class UniversityController {
         return ResponseEntity.ok(faculties);
     }
 
+    @GetMapping("/faculty/{id}")
+    public ResponseEntity<FacultyDTO> getFacultyById(@PathVariable Long id) {
+        LOG.info("Fetching faculty with ID: {}", id);
+        return facultyRepository.findById(id)
+                .map(FacultyDTO::from)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @GetMapping("/faculty/{facultyId}/programs")
     public ResponseEntity<List<StudyProgramDTO>> getProgramsByFaculty(@PathVariable Long facultyId) {
         LOG.info("Fetching programs for faculty ID: {}", facultyId);
@@ -60,6 +79,15 @@ public class UniversityController {
                 .map(StudyProgramDTO::from)
                 .toList();
         return ResponseEntity.ok(programs);
+    }
+
+    @GetMapping("/program/{id}")
+    public ResponseEntity<StudyProgramDetailsDTO> getStudyProgramById(@PathVariable Long id) {
+        LOG.info("Fetching study program with ID: {}", id);
+        return studyProgramRepository.findById(id)
+                .map(StudyProgramDetailsDTO::from)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/program/{programId}/variants")

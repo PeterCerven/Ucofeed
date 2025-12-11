@@ -1,13 +1,17 @@
-import { Injectable } from '@angular/core';
-import { Observable, of, delay } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of, delay, catchError } from 'rxjs';
 import { ReviewModel, ReviewFilterOptions, CreateReviewDto } from '@models/review.model';
 import { CommentModel } from '@models/comment.model';
 import { ProgramDetailsModel } from '@models/program-details.model';
+import { environment } from '@env/environment.production';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ReviewService {
+  private http = inject(HttpClient);
+  private baseUrl = environment.apiUrl;
   // Mock data for reviews
   private mockReviews: ReviewModel[] = [
     {
@@ -271,12 +275,37 @@ export class ReviewService {
   }
 
   /**
-   * Get reviews for a program with optional sorting
+   * Get reviews for a program from backend (with fallback to mock data)
    */
   getReviews(
     programId: number,
     filters?: ReviewFilterOptions
   ): Observable<ReviewModel[]> {
+    // Try backend first
+    return this.http.get<ReviewModel[]>(
+      `${this.baseUrl}/public/reviews`,
+      { params: { programId: programId.toString() } }
+    ).pipe(
+      catchError(error => {
+        // Backend not implemented yet - return empty array for now
+        if (error.status === 404) {
+          console.warn('Review endpoints not implemented yet, returning empty array');
+          return of([]);
+        }
+        // For other errors, fallback to mock data
+        console.error('Error fetching reviews:', error);
+        return of(this.getMockReviews(programId, filters));
+      })
+    );
+  }
+
+  /**
+   * Get mock reviews (fallback for development)
+   */
+  private getMockReviews(
+    programId: number,
+    filters?: ReviewFilterOptions
+  ): ReviewModel[] {
     let reviews = [...this.mockReviews];
 
     // Apply sorting
@@ -309,7 +338,7 @@ export class ReviewService {
       }
     }
 
-    return of(reviews).pipe(delay(500)); // Simulate network delay
+    return reviews;
   }
 
   /**
@@ -321,30 +350,13 @@ export class ReviewService {
   }
 
   /**
-   * Create a new review
+   * Create a new review (calls backend API)
    */
   createReview(reviewDto: CreateReviewDto): Observable<ReviewModel> {
-    // Mock implementation - will be replaced with actual API call
-    const newReview: ReviewModel = {
-      id: this.mockReviews.length + 1,
-      userName: reviewDto.anonymous ? 'Anonymous' : 'Current User',
-      studyProgramId: reviewDto.studyProgramId,
-      studyProgramName: 'Computer Science',
-      studyProgramVariantId: reviewDto.studyProgramVariantId || 1,
-      semester: reviewDto.semester,
-      rating: reviewDto.rating,
-      comment: reviewDto.comment,
-      anonymous: reviewDto.anonymous || false,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      isEdited: false,
-      commentsCount: 0,
-    };
-
-    // Add to mock data
-    this.mockReviews.unshift(newReview);
-
-    return of(newReview).pipe(delay(500));
+    return this.http.post<ReviewModel>(
+      `${this.baseUrl}/public/reviews`,
+      reviewDto
+    );
   }
 
   /**
