@@ -3,7 +3,7 @@ package sk.ucofeed.backend.controller.internal;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import sk.ucofeed.backend.persistence.dto.DashboardMessageDataDTO;
+import sk.ucofeed.backend.persistence.dto.DashboardMessageDTO;
 import sk.ucofeed.backend.service.DashboardService;
 
 import java.util.List;
@@ -19,9 +19,9 @@ public class DashboardController {
     }
 
     @GetMapping("/message")
-    public ResponseEntity<List<DashboardMessageDataDTO>> getAllDashboardMessages() {
+    public ResponseEntity<List<DashboardMessageDTO>> getAllDashboardMessages() {
         try {
-            List<DashboardMessageDataDTO> data = dashboardService.getAllDashboardMessages();
+            List<DashboardMessageDTO> data = dashboardService.getAllDashboardMessages();
             return ResponseEntity.ok(data);
         } catch (Exception e) {
             return ResponseEntity.status(500).body(null);
