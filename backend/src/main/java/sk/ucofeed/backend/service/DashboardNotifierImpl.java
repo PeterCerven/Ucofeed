@@ -23,8 +23,11 @@ public class DashboardNotifierImpl implements DashboardNotifier {
     @Override
     @Transactional
     public void notify(String message) {
-        LOG.info("New dashboard event generated with message {}", message);
+        if(message == null || message.isBlank()) {
+            return;
+        }
 
+        LOG.info("New dashboard event generated with message: {}", message);
         dashboardRepository.save(new DashboardMessage(message));
     }
 }

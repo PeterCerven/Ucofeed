@@ -82,8 +82,7 @@ public class ReviewServiceImpl implements ReviewService {
         review = reviewRepository.save(review);
         LOG.info("Review created successfully with ID: {}", review.getId());
 
-        // TODO: Add more info to notification?
-        dashboardNotifier.notify("New review submitted for " + review.getStudyProgram().getName());
+        dashboardNotifier.reviewCreated(studyProgram, user.getId());
 
         return ReviewResponse.from(review);
     }
