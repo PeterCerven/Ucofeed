@@ -48,7 +48,7 @@ export class ProfileComponent implements OnInit {
 
   readonly profileForm: FormGroup;
   readonly verificationForm: FormGroup;
-  readonly universities = signal<UniversityModel[]>([]);
+  readonly university = signal<UniversityModel | null>(null);
   readonly faculties = signal<FacultyModel[]>([]);
   readonly programs = signal<ProgramModel[]>([]);
   readonly variants = signal<VariantModel[]>([]);
@@ -112,7 +112,7 @@ export class ProfileComponent implements OnInit {
       }
     });
 
-    this.loadUniversities();
+    this.loadStudentsUniversity();
     this.loadSavedProfile();
   }
 
@@ -172,10 +172,22 @@ export class ProfileComponent implements OnInit {
     return '';
   }
 
-  private loadUniversities(): void {
-    this.universityService.getUniversities().subscribe({
-      next: (universities) => this.universities.set(universities),
-      error: (error) => console.error('Failed to load universities:', error)
+  private loadStudentsUniversity(): void {
+    const savedAuth = localStorage.getItem('authUser');
+    if (!savedAuth) {
+      console.log('No auth data found in localStorage');
+      return;
+    }
+    const authData = JSON.parse(savedAuth);
+    const domain = authData.email.split('@')[1];
+    this.universityService.getUniversityByDomain(domain).subscribe({
+      next: (university) => {
+        this.university.set(university);
+        if (university && university.id) {
+          this.profileForm.patchValue({ universityId: university.id });
+        }
+      },
+      error: (error) => console.error('Failed to load university:', error)
     });
   }
 
@@ -246,7 +258,7 @@ export class ProfileComponent implements OnInit {
           this.snackBar.open('Profile saved successfully!', 'Close', {
             duration: 3000,
             horizontalPosition: 'end',
-            verticalPosition: 'top'
+            verticalPosition: 'top',
           });
         },
         error: (error) => {

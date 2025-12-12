@@ -26,7 +26,14 @@ public class University {
                orphanRemoval = true)
     private List<Faculty> faculties = new ArrayList<>();
 
-    public University(String name) {
+    @Column(unique = true)
+    private String universityEmailDomain;
+
+    public University(String name, String universityEmailDomain) {
         this.name = name;
+        this.universityEmailDomain = universityEmailDomain;
     }
+
+
+
 }

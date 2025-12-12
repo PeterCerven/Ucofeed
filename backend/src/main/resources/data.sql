@@ -25,12 +25,12 @@ TRUNCATE TABLE public.user_education CASCADE;
 -- Data for Name: university; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.university (id, name) VALUES (1, 'Technická univerzita v Košiciach');
-INSERT INTO public.university (id, name) VALUES (2, 'Žilinská univerzita v Žiline');
-INSERT INTO public.university (id, name) VALUES (3, 'Univerzita Komenského v Bratislave');
-INSERT INTO public.university (id, name) VALUES (4, 'Ekonomická univerzita v Bratislave');
-INSERT INTO public.university (id, name) VALUES (5, 'Slovenská technická univerzita v Bratislave');
-INSERT INTO public.university (id, name) VALUES (6, 'Univerzita Pavla Jozefa Šafárika v Košiciach');
+INSERT INTO public.university (id, name, university_email_domain) VALUES (1, 'Technická univerzita v Košiciach', 'tuke.sk');
+INSERT INTO public.university (id, name, university_email_domain) VALUES (2, 'Žilinská univerzita v Žiline', 'uniza.sk');
+INSERT INTO public.university (id, name, university_email_domain) VALUES (3, 'Univerzita Komenského v Bratislave', 'uniba.sk');
+INSERT INTO public.university (id, name, university_email_domain) VALUES (4, 'Ekonomická univerzita v Bratislave', 'euba.sk');
+INSERT INTO public.university (id, name, university_email_domain) VALUES (5, 'Slovenská technická univerzita v Bratislave', 'stuba.sk');
+INSERT INTO public.university (id, name, university_email_domain) VALUES (6, 'Univerzita Pavla Jozefa Šafárika v Košiciach', 'upjs.sk');
 
 
 --

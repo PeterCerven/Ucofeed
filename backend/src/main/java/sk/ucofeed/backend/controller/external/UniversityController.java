@@ -52,6 +52,15 @@ public class UniversityController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/domain/{domain}")
+    public ResponseEntity<UniversityDTO> getUniversityByDomain(@PathVariable String domain) {
+        LOG.info("Fetching university with domain: {}", domain);
+        return universityRepository.findByUniversityEmailDomain(domain)
+                .map(UniversityDTO::from)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @GetMapping("/{universityId}/faculties")
     public ResponseEntity<List<FacultyDTO>> getFacultiesByUniversity(@PathVariable Long universityId) {
         LOG.info("Fetching faculties for university ID: {}", universityId);

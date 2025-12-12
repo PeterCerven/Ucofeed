@@ -21,6 +21,10 @@ export class UniversityService {
     return this.http.get<UniversityModel>(`${this.baseUrl}/public/university/${id}`);
   }
 
+  getUniversityByDomain(domain: string): Observable<UniversityModel> {
+    return this.http.get<UniversityModel>(`${this.baseUrl}/public/university/domain/${domain}`);
+  }
+
   getStudyProgramById(programId: number): Observable<StudyProgramDetailsModel> {
     return this.http.get<StudyProgramDetailsModel>(`${this.baseUrl}/public/university/program/${programId}`);
   }

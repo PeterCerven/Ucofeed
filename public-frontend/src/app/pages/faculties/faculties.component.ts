@@ -20,7 +20,6 @@ export class FacultiesComponent {
 
   private paramMap = toSignal(this.route.paramMap);
 
-  // TODO: (dynamic in future)
   universityName = signal('STU');
   faculties = signal<FacultyModel[]>([]);
   isLoading = signal(false);
