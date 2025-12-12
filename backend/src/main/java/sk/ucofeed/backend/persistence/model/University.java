@@ -34,6 +34,4 @@ public class University {
         this.universityEmailDomain = universityEmailDomain;
     }
 
-
-
 }

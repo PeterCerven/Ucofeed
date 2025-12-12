@@ -11,7 +11,7 @@ SET idle_in_transaction_session_timeout = 0;
 SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
+SELECT pg_catalog.set_config('search_path', 'public', false);
 SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
@@ -57,6 +57,24 @@ CREATE SCHEMA public;
 
 
 ALTER SCHEMA public OWNER TO pg_database_owner;
+
+-- peter@stuba.sk
+-- 1234abcd!!A
+--
+-- artur@student.euba.sk
+-- moh123MOH@
+--
+-- andrej@student.upjs.sk
+-- HattHH23!
+--
+-- antonio1@stud.uniza.sk
+-- HH1mofdsh12!!
+--
+-- martin1@student.tuke.sk
+-- Kop123@!@
+
+
+
 
 --
 -- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: pg_database_owner
