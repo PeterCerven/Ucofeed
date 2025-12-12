@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, retry, timer } from 'rxjs';
 import { UniversityModel } from '@models/university.model';
 import { FacultyModel } from '@models/faculty.model';
 import { ProgramModel } from '@models/program.model';
@@ -14,7 +14,9 @@ export class UniversityService {
   private baseUrl = environment.apiUrl;
 
   getUniversities(): Observable<UniversityModel[]> {
-    return this.http.get<UniversityModel[]>(`${this.baseUrl}/public/university`);
+    return this.http.get<UniversityModel[]>(`${this.baseUrl}/public/university`).pipe(
+      retry({ count: 3, delay: 1000 })
+    );
   }
 
   getUniversityById(id: number): Observable<UniversityModel> {
