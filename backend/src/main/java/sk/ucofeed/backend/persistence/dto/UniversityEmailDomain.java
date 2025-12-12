@@ -4,12 +4,12 @@ import lombok.Getter;
 
 @Getter
 public enum UniversityEmailDomain {
-    TUKE("tuke.sk", "Technická univerzita v Košiciach"),
-    UNIZA("uniza.sk", "Žilinská univerzita v Žiline"),
+    TUKE("student.tuke.sk", "Technická univerzita v Košiciach"),
+    UNIZA("stud.uniza.sk", "Žilinská univerzita v Žiline"),
     UK("uniba.sk", "Univerzita Komenského v Bratislave"),
-    EUBA("euba.sk", "Ekonomická univerzita v Bratislave"),
+    EUBA("student.euba.sk", "Ekonomická univerzita v Bratislave"),
     STU("stuba.sk", "Slovenská technická univerzita v Bratislave"),
-    UPJS("upjs.sk", "Univerzita Pavla Jozefa Šafárika v Košiciach"),
+    UPJS("student.upjs.sk", "Univerzita Pavla Jozefa Šafárika v Košiciach"),
     ;
 
     private final String domain;

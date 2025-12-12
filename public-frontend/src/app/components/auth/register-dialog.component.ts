@@ -55,24 +55,17 @@ export class CustomValidators {
 
       // University-specific validation patterns
       const universityPatterns: { [key: string]: RegExp } = {
-        // UK Bratislava: last name with number + @uniba.sk
         'uniba.sk': /^[a-z]+\d+$/,
 
-        // STU Bratislava: AIS login + @stuba.sk
         'stuba.sk': /^[a-z]+\d*$/,
 
-        // TUKE Košice: first name.last name + @student.tuke.sk
-        'student.tuke.sk': /^[a-z]+\.[a-z]+$/,
+        'student.tuke.sk': /^[a-z]+\d*$/,
 
-        // UPJŠ Košice: first name.last name + @student.upjs.sk OR aisID + @upjs.sk
-        'student.upjs.sk': /^[a-z]+\.[a-z]+$/,
-        'upjs.sk': /^[a-z]+\d*$/,
+        'student.upjs.sk': /^[a-z]+\d*$/,
 
-        // UNIZA Žilina: last name without diacritics with number + @stud.uniza.sk
         'stud.uniza.sk': /^[a-z]+\d+$/,
 
-        // EUBA Bratislava: [letter][last name][number] + @euba.sk
-        'euba.sk': /^[a-z][a-z]+\d+$/
+        'student.euba.sk': /^[a-z]+\d*$/
       };
 
       // Check if the domain is valid
@@ -118,9 +111,8 @@ export class RegisterDialogComponent implements OnInit {
     'stuba.sk',
     'student.tuke.sk',
     'student.upjs.sk',
-    'upjs.sk',
     'stud.uniza.sk',
-    'euba.sk'
+    'student.euba.sk'
   ];
 
   hidePassword = true;
