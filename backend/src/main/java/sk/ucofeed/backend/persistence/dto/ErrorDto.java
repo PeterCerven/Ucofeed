@@ -18,6 +18,9 @@ public class ErrorDto {
     public enum ErrorType {
         VALIDATION_ERROR,
         USER_ALREADY_EXISTS,
+        USER_NOT_ENROLLED,
+        REVIEW_ALREADY_EXISTS,
+        STUDY_PROGRAM_NOT_FOUND,
         UNKNOWN
     }
 }

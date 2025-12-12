@@ -78,4 +78,43 @@ public class GenericExceptionHandler extends ResponseEntityExceptionHandler {
                 );
 
     }
+
+    @ExceptionHandler({UserNotEnrolledException.class})
+    protected ResponseEntity<ErrorDto> handleUserNotEnrolledException(UserNotEnrolledException ex) {
+        LOG.error(ex.toString());
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(
+                        ErrorDto.builder()
+                                .type(ErrorDto.ErrorType.USER_NOT_ENROLLED)
+                                .error(List.of(ex.getMessage()))
+                                .build()
+                );
+    }
+
+    @ExceptionHandler({ReviewAlreadyExistsException.class})
+    protected ResponseEntity<ErrorDto> handleReviewAlreadyExistsException(ReviewAlreadyExistsException ex) {
+        LOG.error(ex.toString());
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(
+                        ErrorDto.builder()
+                                .type(ErrorDto.ErrorType.REVIEW_ALREADY_EXISTS)
+                                .error(List.of(ex.getMessage()))
+                                .build()
+                );
+    }
+
+    @ExceptionHandler({StudyProgramNotFoundException.class})
+    protected ResponseEntity<ErrorDto> handleStudyProgramNotFoundException(StudyProgramNotFoundException ex) {
+        LOG.error(ex.toString());
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(
+                        ErrorDto.builder()
+                                .type(ErrorDto.ErrorType.STUDY_PROGRAM_NOT_FOUND)
+                                .error(List.of(ex.getMessage()))
+                                .build()
+                );
+    }
 }

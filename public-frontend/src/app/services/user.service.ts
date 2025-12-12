@@ -29,17 +29,22 @@ export class UserService {
   private baseUrl = environment.apiUrl;
 
   getUserById(userId: string): Observable<UserResponse> {
-    return this.http.get<UserResponse>(`${this.baseUrl}/public/user/${userId}`);
+    return this.http.get<UserResponse>(`${this.baseUrl}/public/user/${userId}`, {
+      withCredentials: true
+    });
   }
 
   updateUser(userId: string, updateData: UpdateUserRequest): Observable<UserResponse> {
     return this.http.put<UserResponse>(
       `${this.baseUrl}/public/user/${userId}`,
-      updateData
+      updateData,
+      { withCredentials: true }
     );
   }
 
   getAllUsers(): Observable<UserResponse[]> {
-    return this.http.get<UserResponse[]>(`${this.baseUrl}/public/user`);
+    return this.http.get<UserResponse[]>(`${this.baseUrl}/public/user`, {
+      withCredentials: true
+    });
   }
 }

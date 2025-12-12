@@ -1,6 +1,8 @@
 package sk.ucofeed.backend.persistence.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,6 +16,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "uk_review_user_program_semester",
+            columnNames = {"user_id", "study_program_id", "semester"}
+        )
+    }
+)
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,10 +41,13 @@ public class Review {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Min(value = 1, message = "Semester must be at least 1")
     private int semester;
 
     private String comment;
 
+    @Min(value = 1, message = "Rating must be at least 1")
+    @Max(value = 10, message = "Rating must be at most 10")
     @Column(nullable = false)
     private int rating;
 
