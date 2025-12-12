@@ -74,8 +74,6 @@ ALTER SCHEMA public OWNER TO pg_database_owner;
 -- Kop123@!@
 
 
-
-
 --
 -- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: pg_database_owner
 --

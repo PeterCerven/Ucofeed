@@ -34,15 +34,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        HttpSessionSecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
-
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
-                .securityContext(context -> context
-                        .securityContextRepository(securityContextRepository)
-                        .requireExplicitSave(false)
-                )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                         .maximumSessions(1)
