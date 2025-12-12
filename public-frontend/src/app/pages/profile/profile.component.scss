@@ -2,6 +2,9 @@
   max-width: 800px;
   margin: 2rem auto;
   padding: 1rem;
+  min-height: calc(100vh - 64px);
+  background: #f5f5f5;
+  transition: background-color 0.3s ease;
 
   .verification-card {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -141,6 +144,10 @@
 
 // Dark mode support
 :host-context(.dark-mode) {
+  .profile-container {
+    background: #121212;
+  }
+
   .verification-header,
   .profile-header {
     border-bottom-color: rgba(255, 255, 255, 0.12);

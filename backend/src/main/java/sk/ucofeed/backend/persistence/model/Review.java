@@ -19,8 +19,8 @@ import java.time.LocalDateTime;
 @Table(
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "uk_review_user_program_semester",
-            columnNames = {"user_id", "study_program_id", "semester"}
+            name = "uk_review_user_program",
+            columnNames = {"user_id", "study_program_id"}
         )
     }
 )
@@ -40,9 +40,6 @@ public class Review {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
-    @Min(value = 1, message = "Semester must be at least 1")
-    private int semester;
 
     private String comment;
 

@@ -10,6 +10,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -26,26 +28,31 @@ public class SecurityConfig {
     }
 
     @Bean
+    public SecurityContextRepository securityContextRepository() {
+        return new HttpSessionSecurityContextRepository();
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
+                .securityContext(context -> context
+                        .requireExplicitSave(false)
+                )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                         .maximumSessions(1)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        // Public read-only endpoints
-                        .requestMatchers(HttpMethod.GET, "/api/public/**").permitAll()
-                        // Auth endpoints (register, login, verify)
-                        .requestMatchers("/api/public/auth/**").permitAll()
-                        // Review creation requires authentication
+                        .requestMatchers("/api/public/auth/login", "/api/public/auth/register",
+                                "/api/public/auth/verify", "/api/public/auth/validate",
+                                "/api/public/auth/logout").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/public/university/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/public/review/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/public/review").authenticated()
-                        // User management requires authentication
                         .requestMatchers("/api/public/user/**").authenticated()
-                        // Actuator endpoints
                         .requestMatchers("/actuator/**").permitAll()
-                        // Everything else requires authentication
                         .anyRequest().authenticated()
                 );
 

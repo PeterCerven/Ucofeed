@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import sk.ucofeed.backend.persistence.dto.StudyForm;
+import sk.ucofeed.backend.persistence.dto.UniversityEmailDomain;
 import sk.ucofeed.backend.persistence.dto.UniversityFileDataDTO;
 import sk.ucofeed.backend.persistence.model.Faculty;
 import sk.ucofeed.backend.persistence.model.StudyProgram;
@@ -57,7 +58,11 @@ public class FileServiceImpl implements FileService {
             // Check if the university exists, if not, create it
             University university = universityRepository
                     .findByName(data.universityName())
-                    .orElseGet(() -> universityRepository.save(new University(data.universityName())));
+                    .orElseGet(() -> universityRepository.save(
+                            new University(
+                                    data.universityName(),
+                                    UniversityEmailDomain.getDomainByUniversityName(data.universityName())
+                            )));
 
             if (data.facultyName().trim().isEmpty()) {
                 LOG.warn("Skipping entry with empty faculty name for university: {}", data.universityName());
@@ -227,11 +232,11 @@ public class FileServiceImpl implements FileService {
         return data.stream()
                 .filter(u ->
                         u.universityName().trim().equals(UK.getFullName()) ||
-                        u.universityName().trim().equals(STU.getFullName()) ||
-                        u.universityName().trim().equals(UNIZA.getFullName()) ||
-                        u.universityName().trim().equals(EUBA.getFullName()) ||
-                        u.universityName().trim().equals(TUKE.getFullName()) ||
-                        u.universityName().trim().equals(UPJS.getFullName())
+                                u.universityName().trim().equals(STU.getFullName()) ||
+                                u.universityName().trim().equals(UNIZA.getFullName()) ||
+                                u.universityName().trim().equals(EUBA.getFullName()) ||
+                                u.universityName().trim().equals(TUKE.getFullName()) ||
+                                u.universityName().trim().equals(UPJS.getFullName())
                 )
                 .toList();
     }

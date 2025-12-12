@@ -66,4 +66,11 @@ export class AuthService {
       withCredentials: true
     });
   }
+
+  validateSession(): Observable<{ valid: boolean; id?: string; email?: string; role?: string }> {
+    return this.http.get<{ valid: boolean; id?: string; email?: string; role?: string }>(
+      `${this.baseUrl}/public/auth/validate`,
+      { withCredentials: true }
+    );
+  }
 }

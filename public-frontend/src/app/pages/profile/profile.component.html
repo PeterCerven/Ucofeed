@@ -82,16 +82,17 @@
     <mat-card-content class="profile-content">
       <form [formGroup]="profileForm" class="profile-form">
 
-        <!-- University Selection -->
+        <!-- University Display (Read-only) -->
         <mat-form-field class="full-width">
           <mat-label>University</mat-label>
           <mat-icon matPrefix>school</mat-icon>
-          <mat-select formControlName="universityId" placeholder="Select your university">
-            @for (university of universities(); track university.id) {
-              <mat-option [value]="university.id">{{ university.name }}</mat-option>
-            }
-          </mat-select>
-          <mat-hint>Select your university</mat-hint>
+          <input
+            matInput
+            [value]="university()?.name || 'Loading...'"
+            readonly
+            disabled
+          />
+          <mat-hint>Automatically detected from your email domain</mat-hint>
         </mat-form-field>
 
         <!-- Faculty Selection -->
@@ -107,7 +108,7 @@
               <mat-option [value]="faculty.id">{{ faculty.name }}</mat-option>
             }
           </mat-select>
-          <mat-hint>Select your faculty (choose university first)</mat-hint>
+          <mat-hint>Select your faculty</mat-hint>
         </mat-form-field>
 
         <!-- Study Programme Selection -->

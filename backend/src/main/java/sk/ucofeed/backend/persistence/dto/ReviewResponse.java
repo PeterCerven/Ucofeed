@@ -18,7 +18,6 @@ public class ReviewResponse {
     Long studyProgramVariantId;
     Integer rating;
     String comment;
-    Integer semester;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
     Boolean anonymous;
@@ -40,7 +39,6 @@ public class ReviewResponse {
                 .studyProgramVariantId(review.getStudyProgramVariant().getId())
                 .rating(review.getRating())
                 .comment(review.getComment())
-                .semester(review.getSemester())
                 .createdAt(review.getCreatedAt())
                 .updatedAt(review.getUpdatedAt())
                 .anonymous(review.isAnonymous())

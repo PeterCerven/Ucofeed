@@ -8,10 +8,6 @@
         <div class="user-details">
           <h3 class="user-name">{{ review().anonymous ? 'Anonymous' : review().userName }}</h3>
           <div class="meta-info">
-            @if (review().semester !== undefined) {
-              <span class="semester">{{ getSemesterText(review().semester!) }}</span>
-              <span class="separator">•</span>
-            }
             <span class="program-name">{{ review().studyProgramName || 'Computer Science' }}</span>
             @if (review().isEdited) {
               <span class="separator">•</span>

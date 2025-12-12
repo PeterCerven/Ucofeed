@@ -20,4 +20,11 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
+  background: #ffffff;
+  transition: background-color 0.3s ease;
+}
+
+html.dark-mode body {
+  background: #121212;
+  color: #e0e0e0;
 }

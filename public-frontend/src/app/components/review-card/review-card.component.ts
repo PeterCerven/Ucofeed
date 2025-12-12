@@ -1,4 +1,4 @@
-import { Component, input, signal, inject } from '@angular/core';
+import { Component, input, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReviewModel } from '@models/review.model';
 import { MatCardModule } from '@angular/material/card';
@@ -40,11 +40,6 @@ export class ReviewCardComponent {
       month: 'long',
       day: 'numeric',
     });
-  }
-
-  /** Get semester display text */
-  getSemesterText(semester: number): string {
-    return `Semester ${semester}`;
   }
 
   /** Get rating color based on value */
