@@ -26,15 +26,18 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final StudyProgramRepository studyProgramRepository;
     private final UserEducationRepository userEducationRepository;
+    private final DashboardNotifier dashboardNotifier;
 
     public ReviewServiceImpl(
             ReviewRepository reviewRepository,
             StudyProgramRepository studyProgramRepository,
-            UserEducationRepository userEducationRepository
+            UserEducationRepository userEducationRepository,
+            DashboardNotifier dashboardNotifier
     ) {
         this.reviewRepository = reviewRepository;
         this.studyProgramRepository = studyProgramRepository;
         this.userEducationRepository = userEducationRepository;
+        this.dashboardNotifier = dashboardNotifier;
     }
 
     @Override
@@ -78,6 +81,8 @@ public class ReviewServiceImpl implements ReviewService {
 
         review = reviewRepository.save(review);
         LOG.info("Review created successfully with ID: {}", review.getId());
+
+        dashboardNotifier.reviewCreated(studyProgram, user.getId());
 
         return ReviewResponse.from(review);
     }
