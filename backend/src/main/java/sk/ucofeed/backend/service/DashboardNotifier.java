@@ -1,18 +1,18 @@
 package sk.ucofeed.backend.service;
 
 import sk.ucofeed.backend.persistence.model.StudyProgram;
-import sk.ucofeed.backend.persistence.dto.DashboardReviewMessageDataDTO;
+import sk.ucofeed.backend.persistence.dto.DashboardMessageDTO;
 
 import java.util.UUID;
 
 public interface DashboardNotifier {
     /**
-     * Create a new dashboard message.
-     * @param message the text to display on the dashboard
+     * Creates a new dashboard message.
+     * @param message the text to display in the dashboard message
      */
     void notify(String message);
 
     default void reviewCreated(StudyProgram studyProgram, UUID userId) {
-        notify(DashboardReviewMessageDataDTO.from(studyProgram, userId));
+        notify(DashboardMessageDTO.Review.from(studyProgram, userId));
     }
 }

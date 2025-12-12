@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import sk.ucofeed.backend.persistence.dto.DashboardMessageDataDTO;
+import sk.ucofeed.backend.persistence.dto.DashboardMessageDTO;
 import sk.ucofeed.backend.persistence.repository.DashboardRepository;
 
 import java.util.List;
@@ -25,10 +25,10 @@ public class DashboardServiceImpl implements DashboardService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<DashboardMessageDataDTO> getAllDashboardMessages() {
+    public List<DashboardMessageDTO> getAllDashboardMessages() {
         return dashboardRepository.findAll()
                 .stream()
-                .map(DashboardMessageDataDTO::from)
+                .map(DashboardMessageDTO::from)
                 .collect(Collectors.toList());
     }
 
