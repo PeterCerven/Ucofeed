@@ -32,8 +32,10 @@ export class AuthService {
 
   register(email: string, password: string): Observable<AuthResponse> {
     const request: SignUpRequest = { email, password };
-    return this.http.post<AuthResponse>(`${this.baseUrl}/public/auth/register`,
-      request
+    return this.http.post<AuthResponse>(
+      `${this.baseUrl}/public/auth/register`,
+      request,
+      { withCredentials: true }
     );
   }
 
@@ -44,7 +46,8 @@ export class AuthService {
     const request: VerifyCodeRequest = { email, verificationCode };
     return this.http.post<AuthResponse>(
       `${this.baseUrl}/public/auth/verify`,
-      request
+      request,
+      { withCredentials: true }
     );
   }
 
@@ -52,13 +55,15 @@ export class AuthService {
     const request: LoginRequest = { email, password };
     return this.http.post<AuthResponse>(
       `${this.baseUrl}/public/auth/login`,
-      request
+      request,
+      { withCredentials: true }
     );
   }
 
   logout(): Observable<string> {
     return this.http.post(`${this.baseUrl}/public/auth/logout`, null, {
-      responseType: 'text'
+      responseType: 'text',
+      withCredentials: true
     });
   }
 }

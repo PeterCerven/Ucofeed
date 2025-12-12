@@ -2,6 +2,7 @@ package sk.ucofeed.backend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -34,8 +35,17 @@ public class SecurityConfig {
                         .maximumSessions(1)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/public/**").permitAll()
+                        // Public read-only endpoints
+                        .requestMatchers(HttpMethod.GET, "/api/public/**").permitAll()
+                        // Auth endpoints (register, login, verify)
+                        .requestMatchers("/api/public/auth/**").permitAll()
+                        // Review creation requires authentication
+                        .requestMatchers(HttpMethod.POST, "/api/public/review").authenticated()
+                        // User management requires authentication
+                        .requestMatchers("/api/public/user/**").authenticated()
+                        // Actuator endpoints
                         .requestMatchers("/actuator/**").permitAll()
+                        // Everything else requires authentication
                         .anyRequest().authenticated()
                 );
 
