@@ -15,7 +15,6 @@ public interface ReviewService {
      * @return Created review details
      * @throws sk.ucofeed.backend.exception.StudyProgramNotFoundException if study program doesn't exist
      * @throws sk.ucofeed.backend.exception.UserNotEnrolledException if user is not enrolled in the program
-     * @throws sk.ucofeed.backend.exception.ReviewAlreadyExistsException if user already reviewed this program for this semester
      */
     ReviewResponse createReview(User user, CreateReviewRequest request);
 

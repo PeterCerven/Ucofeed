@@ -4,7 +4,6 @@ export interface ReviewModel {
   studyProgramId: number;
   studyProgramName?: string;
   studyProgramVariantId: number;
-  semester?: number; // Semester number (1-8 or similar)
   rating: number; // Single rating 1-10
   comment: string;
   anonymous: boolean;
@@ -17,7 +16,6 @@ export interface ReviewModel {
 export interface CreateReviewDto {
   studyProgramId: number;
   studyProgramVariantId?: number; // Auto-selected if not provided
-  semester?: number;
   comment: string;
   rating: number; // 1-10
   anonymous?: boolean;

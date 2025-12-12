@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sk.ucofeed.backend.exception.ReviewAlreadyExistsException;
 import sk.ucofeed.backend.exception.StudyProgramNotFoundException;
 import sk.ucofeed.backend.exception.UserNotEnrolledException;
 import sk.ucofeed.backend.persistence.dto.CreateReviewRequest;
@@ -51,17 +50,6 @@ public class ReviewServiceImpl implements ReviewService {
                         .message("Study program not found with ID: " + request.studyProgramId())
                         .build());
 
-        // Step 2: Check for duplicate review
-        if (reviewRepository.existsByUserAndStudyProgramAndSemester(
-                user, studyProgram, request.semester())) {
-            throw ReviewAlreadyExistsException.builder()
-                    .errorType(ErrorDto.ErrorType.REVIEW_ALREADY_EXISTS)
-                    .message(String.format(
-                            "You have already reviewed %s for semester %d",
-                            studyProgram.getName(), request.semester()))
-                    .build();
-        }
-
         // Step 3: Validate user enrollment and get StudyProgramVariant
         StudyProgramVariant variant = validateEnrollmentAndGetVariant(user, studyProgram);
 
@@ -70,7 +58,6 @@ public class ReviewServiceImpl implements ReviewService {
                 .studyProgram(studyProgram)
                 .studyProgramVariant(variant)
                 .user(user)
-                .semester(request.semester())
                 .rating(request.rating())
                 .comment(request.comment())
                 .anonymous(request.anonymous())
@@ -84,7 +71,6 @@ public class ReviewServiceImpl implements ReviewService {
 
     /**
      * Validates user enrollment and selects appropriate StudyProgramVariant.
-     *
      * Priority order: ENROLLED > ON_HOLD > COMPLETED
      * Throws UserNotEnrolledException if user is not eligible to review.
      */

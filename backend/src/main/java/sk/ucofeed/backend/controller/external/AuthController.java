@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
@@ -114,6 +115,21 @@ public class AuthController {
         }
     }
 
+    @GetMapping("/validate")
+    public ResponseEntity<?> validateSession() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !(auth.getPrincipal() instanceof String)) {
+            User user = (User) auth.getPrincipal();
+            return ResponseEntity.ok(Map.of(
+                    "valid", true,
+                    "id", user.getId().toString(),
+                    "email", user.getEmail(),
+                    "role", user.getRole().toString()
+            ));
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("valid", false));
+    }
+
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
@@ -133,5 +149,8 @@ public class AuthController {
 
         HttpSession session = request.getSession(true);
         session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
+
+        LOG.info("User authenticated: {}, Session ID: {}, Authorities: {}",
+                user.getEmail(), session.getId(), user.getAuthorities());
     }
 }

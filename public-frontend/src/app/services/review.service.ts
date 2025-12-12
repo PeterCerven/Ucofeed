@@ -20,7 +20,6 @@ export class ReviewService {
       studyProgramId: 1,
       studyProgramName: 'Computer Science',
       studyProgramVariantId: 1,
-      semester: 3,
       rating: 9,
       comment:
         'Excellent program with great professors. The curriculum is well-structured and covers both theoretical and practical aspects. The career support is outstanding, and many students get job offers before graduation. The only downside is that some courses can be quite challenging.',
@@ -36,7 +35,6 @@ export class ReviewService {
       studyProgramId: 1,
       studyProgramName: 'Computer Science',
       studyProgramVariantId: 1,
-      semester: 5,
       rating: 7,
       comment:
         'Good program overall, but the resources could be better. Some of the labs are outdated and need modernization. Teachers are knowledgeable and helpful. The workload is heavy but manageable if you stay organized.',
@@ -52,7 +50,6 @@ export class ReviewService {
       studyProgramId: 1,
       studyProgramName: 'Computer Science',
       studyProgramVariantId: 1,
-      semester: 2,
       rating: 10,
       comment:
         'Outstanding program! The faculty is top-notch, and the facilities are state-of-the-art. Great internship opportunities and strong industry connections. Highly recommended for anyone serious about this field.',
@@ -68,7 +65,6 @@ export class ReviewService {
       studyProgramId: 1,
       studyProgramName: 'Computer Science',
       studyProgramVariantId: 2,
-      semester: 4,
       rating: 6,
       comment:
         'The program is very demanding and not for the faint of heart. Some professors are excellent, but others seem disconnected. Resources are limited, especially for research projects. Career prospects are decent but require a lot of self-initiative.',
@@ -84,7 +80,6 @@ export class ReviewService {
       studyProgramId: 1,
       studyProgramName: 'Computer Science',
       studyProgramVariantId: 1,
-      semester: 6,
       rating: 9,
       comment:
         'Fantastic experience! The program prepares you well for the industry. Professors are experienced professionals who bring real-world insights. The coursework is challenging but rewarding. Career services are excellent with many recruiting events.',
@@ -283,8 +278,8 @@ export class ReviewService {
   ): Observable<ReviewModel[]> {
     // Try backend first
     return this.http.get<ReviewModel[]>(
-      `${this.baseUrl}/public/reviews`,
-      { params: { programId: programId.toString() } }
+      `${this.baseUrl}/public/review/program/${programId}`,
+      { withCredentials: true }
     ).pipe(
       catchError(error => {
         // Backend not implemented yet - return empty array for now
@@ -354,8 +349,9 @@ export class ReviewService {
    */
   createReview(reviewDto: CreateReviewDto): Observable<ReviewModel> {
     return this.http.post<ReviewModel>(
-      `${this.baseUrl}/public/reviews`,
-      reviewDto
+      `${this.baseUrl}/public/review`,
+      reviewDto,
+      { withCredentials: true }
     );
   }
 
