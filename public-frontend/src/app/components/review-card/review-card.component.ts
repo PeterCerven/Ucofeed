@@ -26,20 +26,15 @@ import { CommentsSectionComponent } from '@components/comments-section/comments-
 export class ReviewCardComponent {
   review = input.required<ReviewModel>();
   showActions = input<boolean>(false);
-  currentUserId = input<string | null>(null); // For ownership check
 
   editReview = output<ReviewModel>();
   deleteReview = output<number>(); // Emits review ID
 
   isExpanded = signal(false);
 
-  /** Check if current user owns this review */
+  /** Check if current user owns this review (server-calculated) */
   isOwner = computed(() => {
-    const review = this.review();
-    const userId = this.currentUserId();
-
-
-    return userId !== null && review.user_id === userId;
+    return this.review().is_owner === true;
   });
 
   /** Check if action buttons should be shown */
@@ -50,7 +45,7 @@ export class ReviewCardComponent {
   /** Check if review was edited (based on timestamps) */
   isEdited = computed(() => {
     const review = this.review();
-    return review.createdAt !== review.updatedAt;
+    return review.created_at !== review.updated_at;
   });
 
   /** Toggle comments section */
@@ -60,7 +55,17 @@ export class ReviewCardComponent {
 
   /** Format date to readable string */
   formatDate(dateString: string): string {
+    if (!dateString) {
+      return 'Unknown date';
+    }
+
     const date = new Date(dateString);
+
+    // Check if date is valid
+    if (isNaN(date.getTime())) {
+      return 'Unknown date';
+    }
+
     return date.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',

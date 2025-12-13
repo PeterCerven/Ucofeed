@@ -55,8 +55,12 @@ public interface ReviewService {
 
     /**
      * Get all reviews for a specific study program.
+     *
+     * @param studyProgramId Study program ID
+     * @param currentUser Optionally authenticated user (null if public request)
+     * @return List of reviews with isOwner flag calculated
      */
-    List<ReviewResponse> getReviewsByStudyProgram(Long studyProgramId);
+    List<ReviewResponse> getReviewsByStudyProgram(Long studyProgramId, User currentUser);
 
     /**
      * Get all reviews created by a user.

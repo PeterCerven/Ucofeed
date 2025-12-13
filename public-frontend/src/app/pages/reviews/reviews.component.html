@@ -52,7 +52,6 @@
             <app-review-card
               [review]="review"
               [showActions]="authState.isLoggedIn()"
-              [currentUserId]="authState.userId()"
               (editReview)="onEditReview($event)"
               (deleteReview)="onDeleteReview($event)"
             />

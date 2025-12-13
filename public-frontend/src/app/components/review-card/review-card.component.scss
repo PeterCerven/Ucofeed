@@ -42,22 +42,17 @@
     }
 
     .user-details {
-      .user-name {
-        margin: 0 0 0.25rem 0;
-        font-size: 1.125rem;
-        font-weight: 600;
-        color: #333;
-      }
-
-      .meta-info {
+      .user-name-row {
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        font-size: 0.875rem;
-        color: #666;
+        margin-bottom: 0.5rem;
 
-        .separator {
-          color: #ccc;
+        .user-name {
+          margin: 0;
+          font-size: 1.125rem;
+          font-weight: 600;
+          color: #333;
         }
 
         .edited-badge {
