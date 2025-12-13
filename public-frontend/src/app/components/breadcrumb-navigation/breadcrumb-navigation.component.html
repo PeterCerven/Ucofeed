@@ -1,0 +1,17 @@
+<nav class="breadcrumb-nav">
+  @for (item of items(); track $index; let isLast = $last) {
+    @if (item.route) {
+      <span class="breadcrumb-item clickable" (click)="navigateTo(item.route)">
+        {{ item.label }}
+      </span>
+    } @else {
+      <span class="breadcrumb-item current">
+        {{ item.label }}
+      </span>
+    }
+
+    @if (!isLast) {
+      <mat-icon class="separator">chevron_right</mat-icon>
+    }
+  }
+</nav>
