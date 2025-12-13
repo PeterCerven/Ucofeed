@@ -1,10 +1,40 @@
 {
-  "components" :
-  {
+  "components": {
     "sidebar": {
       "dashboard": "Dashboard",
       "settings": "Nastavenia",
       "tables": "Tabuľky"
+    }
+  },
+  "pages": {
+    "dashboard": {
+      "placeholder": "Dashboard funguje!"
+    },
+    "settings": {
+      "placeholder": "Nastavenia fungujú!"
+    },
+    "tables": {
+      "aria": {
+        "pagination": "Vybrať stranu",
+        "sort": "Zoradiť podľa názvu"
+      },
+      "buttons": {
+        "import": "Importovať údaje",
+        "save": "Uložiť údaje",
+        "show": "Zobraziť údaje"
+      },
+      "columns": {
+        "academyTitle": "Akademický titul",
+        "facultyName": "Názov fakulty",
+        "language": "Jazyk",
+        "programmeName": "Názov programu",
+        "studyField": "Študijný odbor",
+        "studyForm": "Forma štúdia",
+        "universityName": "Názov univerzity"
+      },
+      "labels": {
+        "filter": "Filter"
+      }
     }
   }
 }
