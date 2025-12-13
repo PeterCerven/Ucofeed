@@ -2,11 +2,11 @@
 export interface StudyProgramDetailsModel {
   id: number;
   name: string;
-  studyField: string;
-  facultyId?: number;
-  facultyName?: string;
-  universityId?: number;
-  universityName?: string;
+  study_field: string;
+  faculty_id?: number;
+  faculty_name?: string;
+  university_id?: number;
+  university_name?: string;
 }
 
 // Full model with calculated stats and tags (used by frontend)
@@ -14,8 +14,10 @@ export interface ProgramDetailsModel {
   id: number;
   name: string;
   description: string;
-  facultyName: string;
-  universityName: string;
+  faculty_id?: number;
+  faculty_name: string;
+  university_id?: number;
+  university_name: string;
   averageRating: number;
   totalReviews: number;
   ratingDistribution: { [key: number]: number }; // rating (1-10) -> count

@@ -1,6 +1,7 @@
 import { Component, effect, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { EntityCardComponent } from '@components/entity-card/entity-card.component';
+import { BackNavigationComponent } from '@components/back-navigation/back-navigation.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import {FacultyModel} from '@models/faculty.model';
@@ -9,7 +10,7 @@ import { UniversityService } from '@services/university.service';
 @Component({
   selector: 'app-faculties',
   standalone: true,
-  imports: [EntityCardComponent],
+  imports: [EntityCardComponent, BackNavigationComponent],
   templateUrl: './faculties.component.html',
   styleUrl: './faculties.component.scss'
 })

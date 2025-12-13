@@ -1,4 +1,8 @@
 <div class="programs-container">
+  @if (breadcrumbItems().length > 0) {
+    <app-breadcrumb-navigation [items]="breadcrumbItems()" />
+  }
+
   <h1>Study Programs of {{ facultyName() }}</h1>
 
   @if (isLoading()) {

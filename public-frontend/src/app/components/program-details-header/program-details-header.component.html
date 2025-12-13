@@ -1,9 +1,13 @@
 <div class="program-header">
   <!-- Breadcrumb navigation -->
   <nav class="breadcrumb">
-    <span>{{ programDetails().universityName }}</span>
+    <span class="breadcrumb-link" (click)="navigateToUniversities()">
+      {{ programDetails().university_name }}
+    </span>
     <mat-icon>chevron_right</mat-icon>
-    <span>{{ programDetails().facultyName }}</span>
+    <span class="breadcrumb-link" (click)="navigateToFaculties()">
+      {{ programDetails().faculty_name }}
+    </span>
     <mat-icon>chevron_right</mat-icon>
     <span class="current">{{ programDetails().name }}</span>
   </nav>

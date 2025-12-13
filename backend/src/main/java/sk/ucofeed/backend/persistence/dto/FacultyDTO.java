@@ -12,11 +12,15 @@ import sk.ucofeed.backend.persistence.model.Faculty;
 public class FacultyDTO {
     private Long id;
     private String name;
+    private Long universityId;
+    private String universityName;
 
     public static FacultyDTO from(Faculty faculty) {
         return FacultyDTO.builder()
                 .id(faculty.getId())
                 .name(faculty.getName())
+                .universityId(faculty.getUniversity() != null ? faculty.getUniversity().getId() : null)
+                .universityName(faculty.getUniversity() != null ? faculty.getUniversity().getName() : null)
                 .build();
     }
 }

@@ -1,4 +1,5 @@
-import { Component, input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ProgramDetailsModel } from '@models/program-details.model';
 import { MatChipsModule } from '@angular/material/chips';
@@ -12,7 +13,25 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './program-details-header.component.scss'
 })
 export class ProgramDetailsHeaderComponent {
+  private router = inject(Router);
+
   programDetails = input.required<ProgramDetailsModel>();
+
+  /** Navigate to faculties page for the university */
+  navigateToUniversities(): void {
+    const univId = this.programDetails().university_id;
+    if (univId) {
+      this.router.navigate(['/universities', univId, 'faculties']);
+    }
+  }
+
+  /** Navigate to programs page for the faculty */
+  navigateToFaculties(): void {
+    const facultyId = this.programDetails().faculty_id;
+    if (facultyId) {
+      this.router.navigate(['/faculties', facultyId, 'programs']);
+    }
+  }
 
   /** Get array of rating keys for distribution display */
   get ratingKeys(): number[] {
