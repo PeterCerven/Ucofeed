@@ -6,11 +6,9 @@
           <mat-icon>person</mat-icon>
         </div>
         <div class="user-details">
-          <h3 class="user-name">{{ review().anonymous ? t('anonymous') : review().user_full_name }}</h3>
-          <div class="meta-info">
-            <span class="program-name">{{ review().studyProgramName || 'Computer Science' }}</span>
+          <div class="user-name-row">
+            <h3 class="user-name">{{ review().anonymous ? 'Anonymous' : review().user_full_name }}</h3>
             @if (isEdited()) {
-              <span class="separator">•</span>
               <mat-chip class="edited-badge">
                 <mat-icon>edit</mat-icon>
                 {{ t('edited') }}
@@ -73,7 +71,6 @@
     <div class="review-footer">
       <div class="date-info">
         <mat-icon>schedule</mat-icon>
-
         <span>{{ t('posted', { date: formatDate(review().createdAt) }) }}</span>
 
         @if (review().isEdited) {

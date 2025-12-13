@@ -97,14 +97,19 @@ public class ReviewController {
 
     /**
      * Get all reviews for a specific study program.
-     * Public endpoint - no authentication required.
+     * Public endpoint - authentication is OPTIONAL.
+     * If authenticated, isOwner flag will be calculated.
      */
     @GetMapping("/program/{studyProgramId}")
     public ResponseEntity<List<ReviewResponse>> getReviewsByProgram(
-            @PathVariable Long studyProgramId) {
+            @PathVariable Long studyProgramId,
+            @AuthenticationPrincipal(errorOnInvalidType = false) User currentUser) {
 
-        LOG.info("Fetching reviews for study program {}", studyProgramId);
-        List<ReviewResponse> reviews = reviewService.getReviewsByStudyProgram(studyProgramId);
+        LOG.info("Fetching reviews for study program {} (user: {})",
+                studyProgramId,
+                currentUser != null ? currentUser.getId() : "anonymous");
+
+        List<ReviewResponse> reviews = reviewService.getReviewsByStudyProgram(studyProgramId, currentUser);
         return ResponseEntity.ok(reviews);
     }
 

@@ -74,7 +74,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         dashboardNotifier.reviewCreated(studyProgram, user.getId());
 
-        return ReviewResponse.from(review);
+        return ReviewResponse.from(review, user);
     }
 
     /**
@@ -156,7 +156,7 @@ public class ReviewServiceImpl implements ReviewService {
         review = reviewRepository.save(review);
         LOG.info("Review {} updated successfully", reviewId);
 
-        return ReviewResponse.from(review);
+        return ReviewResponse.from(review, user);
     }
 
     @Override
@@ -211,7 +211,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<ReviewResponse> getReviewsByStudyProgram(Long studyProgramId) {
+    public List<ReviewResponse> getReviewsByStudyProgram(Long studyProgramId, User currentUser) {
         StudyProgram studyProgram = studyProgramRepository.findById(studyProgramId)
                 .orElseThrow(() -> StudyProgramNotFoundException.builder()
                         .errorType(ErrorDto.ErrorType.STUDY_PROGRAM_NOT_FOUND)
@@ -220,7 +220,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         return reviewRepository.findByStudyProgramOrderByCreatedAtDesc(studyProgram)
                 .stream()
-                .map(ReviewResponse::from)
+                .map(review -> ReviewResponse.from(review, currentUser))
                 .toList();
     }
 
@@ -228,7 +228,7 @@ public class ReviewServiceImpl implements ReviewService {
     public List<ReviewResponse> getReviewsByUser(User user) {
         return reviewRepository.findByUser(user)
                 .stream()
-                .map(ReviewResponse::from)
+                .map(review -> ReviewResponse.from(review, user))
                 .toList();
     }
 }

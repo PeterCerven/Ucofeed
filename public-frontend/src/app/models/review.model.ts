@@ -12,12 +12,12 @@ export interface ReviewModel {
   rating: number; // Single rating 1-10
   comment: string;
   anonymous: boolean;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
   isEdited?: boolean; // Optional, will be calculated from timestamps
   commentsCount?: number;
+  is_owner?: boolean; // Server-calculated ownership flag
 
-  user_id?: string;
   user_email?: string;
   user_full_name?: string;
 
