@@ -1,1 +1,41 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+  <div class="section-header">
+    <h2>Recent Activity</h2>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading-container">
+      <mat-progress-spinner mode="indeterminate" [diameter]="50"></mat-progress-spinner>
+      <p>Loading notifications...</p>
+    </div>
+  } @else if (notifications().length === 0) {
+    <div class="empty-state">
+      <mat-icon>notifications_none</mat-icon>
+      <p>No notifications yet</p>
+      <span>When users create reviews, you'll see them here.</span>
+    </div>
+  } @else {
+    <div class="notifications-grid">
+      @for (notification of notifications(); track notification.id) {
+        <app-notification-card
+          [notification]="notification"
+          (notificationClicked)="onNotificationClick($event)"
+          (deleteClicked)="onDelete($event)">
+        </app-notification-card>
+      }
+    </div>
+
+    <!-- Pagination commented out - will be re-enabled when backend supports pagination
+    <div class="pagination-container">
+      <mat-paginator
+        [length]="totalCount()"
+        [pageSize]="pageSize()"
+        [pageIndex]="currentPage()"
+        [pageSizeOptions]="[3, 5, 8, 10, 20]"
+        (page)="onPageChange($event)"
+        aria-label="Select page of notifications">
+      </mat-paginator>
+    </div>
+    -->
+  }
+</div>

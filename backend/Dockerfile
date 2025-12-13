@@ -3,8 +3,10 @@ FROM amazoncorretto:21-alpine-jdk AS build
 WORKDIR /app
 COPY mvnw pom.xml ./
 COPY .mvn .mvn
+RUN chmod +x ./mvnw
 RUN ./mvnw dependency:go-offline
 COPY . .
+RUN chmod +x ./mvnw
 RUN ./mvnw clean package -DskipTests
 
 
