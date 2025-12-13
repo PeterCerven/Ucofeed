@@ -1,12 +1,12 @@
-<div class="programs-container">
+<div class="programs-container" *transloco="let t; prefix 'pages.programs'">
   @if (breadcrumbItems().length > 0) {
     <app-breadcrumb-navigation [items]="breadcrumbItems()" />
   }
 
-  <h1>Study Programs of {{ facultyName() }}</h1>
+  <h1>{{ t('studyProgramsOf', { name: facultyName() }) }}</h1>
 
   @if (isLoading()) {
-    <p>Loading programs...</p>
+    <p>{{ t('loading') }}</p>
   }
 
   <div class="cards-grid">
@@ -20,7 +20,7 @@
         (cardClick)="onProgramClick($event)">
       </entity-card>
     } @empty {
-      <p>No programs found.</p>
+      <p>{{ t('noPrograms') }}</p>
     }
 
     <!-- More program cards -->

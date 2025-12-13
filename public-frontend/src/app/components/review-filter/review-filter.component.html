@@ -1,13 +1,13 @@
-<div class="filter-container">
+<div class="filter-container" *transloco="let t; prefix 'reviewFilter'">
   <div class="filter-header">
     <mat-icon>sort</mat-icon>
-    <h3>Sort Reviews</h3>
+    <h3>{{ t('sortReviews') }}</h3>
   </div>
 
   <div class="filters">
     <!-- Sort By -->
     <mat-form-field appearance="outline" class="filter-field">
-      <mat-label>Sort By</mat-label>
+      <mat-label>{{ t('sortBy') }}</mat-label>
       <mat-icon matIconPrefix>sort</mat-icon>
       <mat-select
         [(value)]="selectedSort"
@@ -15,7 +15,7 @@
       >
         @for (option of sortOptions; track option.value) {
           <mat-option [value]="option.value">
-            {{ option.label }}
+            {{ t('sortOptions.' + option.value) }}
           </mat-option>
         }
       </mat-select>

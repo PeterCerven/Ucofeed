@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
+import { TranslocoService, TranslocoDirective } from '@jsverse/transloco';
 import { UniversityService } from '@services/university.service';
 import { UniversityModel } from '@models/university.model';
 
@@ -94,7 +95,8 @@ export class CustomValidators {
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MatSelectModule
+    MatSelectModule,
+    TranslocoDirective
   ],
   templateUrl: './register-dialog.component.html',
   styleUrl: './register-dialog.component.scss'
@@ -103,6 +105,7 @@ export class RegisterDialogComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly dialogRef = inject(MatDialogRef<RegisterDialogComponent>);
   private readonly universityService = inject(UniversityService);
+  private readonly translocoService = inject(TranslocoService);
 
   readonly registerForm: FormGroup;
   readonly universities = signal<UniversityModel[]>([]);
@@ -172,33 +175,35 @@ export class RegisterDialogComponent implements OnInit {
     const control = this.registerForm.get(field);
 
     if (control?.hasError('required')) {
-      return 'This field is required';
+      return this.translocoService.translate('auth.validation.required');
     }
 
     if (control?.hasError('email')) {
-      return 'Please enter a valid email address';
+      return this.translocoService.translate('auth.validation.emailInvalid');
     }
 
     if (control?.hasError('invalidUniversityDomain')) {
-      return `Must be one of: ${this.allowedDomains.join(', ')}`;
+      return this.translocoService.translate('auth.validation.invalidUniversityDomain', {
+        domains: this.allowedDomains.join(', ')
+      });
     }
 
     if (control?.hasError('invalidEmailFormat')) {
       const domain = control.errors?.['invalidEmailFormat'].domain;
-      return `Invalid email format for ${domain}`;
+      return this.translocoService.translate('auth.validation.invalidEmailFormat', { domain });
     }
 
     if (control?.hasError('minlength')) {
       const minLength = control.errors?.['minlength'].requiredLength;
-      return `Must be at least ${minLength} characters`;
+      return this.translocoService.translate('auth.validation.minLength', { length: minLength });
     }
 
     if (control?.hasError('pattern')) {
-      return 'Must contain uppercase, lowercase, number and special character';
+      return this.translocoService.translate('auth.validation.passwordPattern');
     }
 
     if (control?.hasError('passwordMismatch')) {
-      return 'Passwords do not match';
+      return this.translocoService.translate('auth.validation.passwordMismatch');
     }
 
     return '';

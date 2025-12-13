@@ -1,9 +1,9 @@
-<div class="reviews-page">
+<div class="reviews-page" *transloco="let t; prefix 'pages.reviews'">
   <div class="container">
     <!-- Program Details Header with Breadcrumb -->
     @if (isLoadingDetails()) {
       <div class="loading-header">
-        <p>Loading program details...</p>
+        <p>{{ t('loading.details') }}</p>
       </div>
     } @else if (programDetails()) {
       <app-program-details-header [programDetails]="programDetails()!" />
@@ -13,7 +13,7 @@
     <div class="action-bar">
       <button mat-raised-button color="primary" (click)="toggleReviewForm()" class="write-review-btn">
         <mat-icon>{{ showReviewForm() ? 'close' : 'edit' }}</mat-icon>
-        {{ showReviewForm() ? 'Cancel' : 'Write a Review' }}
+        {{ showReviewForm() ? t('actions.cancel') : t('actions.writeReview') }}
       </button>
     </div>
 
@@ -33,7 +33,7 @@
     <!-- Reviews List -->
     @if (isLoadingReviews()) {
       <div class="loading-reviews">
-        <p>Loading reviews...</p>
+        <p>{{ t('loading.reviews') }}</p>
       </div>
     } @else {
       @if (reviews().length === 0) {
@@ -41,8 +41,8 @@
           <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          <h3>No Reviews Found</h3>
-          <p>Be the first to write a review for this program!</p>
+          <h3>{{ t('empty.title') }}</h3>
+          <p>{{ t('empty.description') }}</p>
         </div>
       } @else {
         <div class="reviews-list">

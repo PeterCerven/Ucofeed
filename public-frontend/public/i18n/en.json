@@ -1,1 +1,171 @@
-{}
+{
+  "app": {
+    "snackbar": {
+      "accountVerifiedSuccess": "Account verified successfully! You can now complete your profile.",
+      "close": "Close",
+      "loginFailed": "Login failed. Please try again.",
+      "loginSuccess": "Login successful!",
+      "logoutSuccess": "Logged out successfully",
+      "pleaseLogin": "Please log in to save your profile",
+      "profileFillRequired": "Please fill in all required fields",
+      "profileSaveFailed": "Failed to save profile. Please try again.",
+      "profileSaveSuccess": "Profile saved successfully!",
+      "registerSuccess": "Registration successful! Please check your email for verification code.",
+      "registrationFailed": "Registration failed. Please try again.",
+      "verificationFailed": "Verification failed. Please check your code and try again."
+    },
+    "toolbar": {
+      "darkMode": "Dark mode",
+      "lightMode": "Light mode",
+      "login": "Login",
+      "logout": "Logout",
+      "myProfile": "My Profile",
+      "register": "Register",
+      "switchLanguage": "Switch language"
+    }
+  },
+  "auth": {
+    "aria": {
+      "closeDialog": "Close dialog",
+      "hidePassword": "Hide password",
+      "showPassword": "Show password"
+    },
+    "login": {
+      "cancel": "Cancel",
+      "email": "Personal Email",
+      "emailPlaceholder": "your.email@example.com",
+      "forgotPassword": "Forgot password?",
+      "login": "Login",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "title": "Login to UcoFeed"
+    },
+    "register": {
+      "cancel": "Cancel",
+      "confirmPassword": "Confirm Password",
+      "confirmPasswordPlaceholder": "Re-enter your password",
+      "createAccount": "Create Account",
+      "email": "University Email",
+      "emailHint": "For student domain emails only",
+      "emailPlaceholder": "student@stuba.sk",
+      "password": "Password",
+      "passwordHint": "Min 8 characters, with upper, lower, number & special char",
+      "passwordPlaceholder": "Create a strong password",
+      "title": "Create Account"
+    },
+    "validation": {
+      "emailInvalid": "Please enter a valid email address",
+      "invalidEmailFormat": "Invalid email format for {{domain}}",
+      "invalidUniversityDomain": "Must be one of: {{domains}}",
+      "max": "Must be at most {{max}}",
+      "min": "Must be at least {{min}}",
+      "minLength": "Must be at least {{length}} characters",
+      "passwordMinLength": "Password must be at least {{length}} characters",
+      "passwordMismatch": "Passwords do not match",
+      "passwordPattern": "Must contain uppercase, lowercase, number and special character",
+      "required": "This field is required"
+    }
+  },
+  "comments": {
+    "comments": "Comments",
+    "edited": "Edited",
+    "loading": "Loading comments...",
+    "loginRequired": "Login required to add comments",
+    "noComments": "No comments yet. Be the first to comment!"
+  },
+  "pages": {
+    "faculties": {
+      "backToUniversities": "Back to Universities",
+      "facultiesOf": "Faculties of {{name}}",
+      "loading": "Loading faculties...",
+      "noFaculties": "No faculties found."
+    },
+    "profile": {
+      "autoDetected": "Automatically detected from your email domain",
+      "email": "Email",
+      "emailPlaceholder": "your.email@university.sk",
+      "faculty": "Faculty",
+      "facultyHint": "Select your faculty",
+      "facultyPlaceholder": "Select your faculty",
+      "loading": "Loading...",
+      "reset": "Reset",
+      "saveProfile": "Save Profile",
+      "status": "Status",
+      "statusPlaceholder": "Select your status",
+      "statuses": {
+        "completed": "Completed",
+        "droppedOut": "Dropped Out",
+        "enrolled": "Enrolled",
+        "onHold": "On Hold"
+      },
+      "studyProgram": "Study Programme",
+      "studyProgramHint": "Select your study programme (choose faculty first)",
+      "studyProgramPlaceholder": "Select your study programme",
+      "studyVariant": "Study Variant",
+      "studyVariantHint": "Select your study variant (choose programme first)",
+      "studyVariantPlaceholder": "Select study variant",
+      "subtitle": "Manage your academic information",
+      "title": "My Profile",
+      "university": "University",
+      "verificationCode": "Verification Code",
+      "verificationCodeHint": "Enter the 6-digit code sent to your email",
+      "verificationCodePlaceholder": "Enter the code from your email",
+      "verificationSubtitle": "Enter the verification code sent to your email to complete registration",
+      "verificationTitle": "Verify Your Account",
+      "verify": "Verify Account",
+      "verifying": "Verifying..."
+    },
+    "programs": {
+      "loading": "Loading programs...",
+      "noPrograms": "No programs found.",
+      "studyProgramsOf": "Study Programs of {{name}}"
+    },
+    "reviews": {
+      "cancel": "Cancel",
+      "loadingDetails": "Loading program details...",
+      "loadingReviews": "Loading reviews...",
+      "noReviews": {
+        "message": "Be the first to write a review for this program!",
+        "title": "No Reviews Found"
+      },
+      "writeReview": "Write a Review"
+    },
+    "universities": {
+      "title": "Universities"
+    }
+  },
+  "reviewCard": {
+    "anonymous": "Anonymous",
+    "comment": "Comment",
+    "comments": "Comments",
+    "edited": "Edited",
+    "posted": "Posted {{date}}",
+    "rating": "Rating",
+    "updated": "(Updated {{date}})"
+  },
+  "reviewFilter": {
+    "sortBy": "Sort By",
+    "sortOptions": {
+      "edited": "Recently Edited",
+      "highest": "Highest Rated",
+      "lowest": "Lowest Rated",
+      "newest": "Newest First",
+      "oldest": "Oldest First"
+    },
+    "sortReviews": "Sort Reviews"
+  },
+  "reviewForm": {
+    "anonymousCheckbox": "Post anonymously",
+    "anonymousHint": "Your name won't be visible to others",
+    "cancel": "Cancel",
+    "charactersMinimum": "characters (minimum 20)",
+    "commentMinLength": "Comment must be at least 20 characters",
+    "commentPlaceholder": "Share your experience with this program...",
+    "commentRequired": "Review comment is required",
+    "overallRating": "Overall Rating:",
+    "submit": "Submit Review",
+    "submitting": "Submitting...",
+    "title": "Write a Review",
+    "yourReview": "Your Review"
+  }
+}

@@ -1,88 +1,90 @@
-<div class="button-container">
-  <button matFab extended (click)="showData()">
-    <mat-icon>storage</mat-icon>
-    Show Data
-  </button>
+<div *transloco="let t; prefix 'pages.tables'">
+  <div class="button-container">
+    <button matFab extended (click)="showData()">
+      <mat-icon>storage</mat-icon>
+      {{ t('buttons.show') }}
+    </button>
 
-  <button matFab extended (click)="fileInput.click()">
-    <mat-icon>file_upload</mat-icon>
-    Import Data
-  </button>
-  <input hidden (change)="parseData($event)" #fileInput type="file" accept=".csv, .xlsx">
-</div>
+    <button matFab extended (click)="fileInput.click()">
+      <mat-icon>file_upload</mat-icon>
+      {{ t('buttons.import') }}
+    </button>
+    <input hidden (change)="parseData($event)" #fileInput type="file" accept=".csv, .xlsx">
+  </div>
 
-<div class="mat-elevation-z8 table">
-  <mat-form-field class="filter-input">
-    <mat-label>Filter</mat-label>
-    <input matInput (keyup)="applyFilter($event)">
-  </mat-form-field>
+  <div class="mat-elevation-z8 table">
+    <mat-form-field class="filter-input">
+      <mat-label>{{ t('labels.filter') }}</mat-label>
+      <input matInput (keyup)="applyFilter($event)">
+    </mat-form-field>
 
-  <button matFab extended (click)="saveData()">
-    <mat-icon>save_alt</mat-icon>
-    Save Data
-  </button>
+    <button matFab extended (click)="saveData()">
+      <mat-icon>save_alt</mat-icon>
+      {{ t('buttons.save') }}
+    </button>
 
-  <mat-table [dataSource]="dataSource" matSort>
-    <ng-container matColumnDef="programmeName">
-      <mat-header-cell
-        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Programme Name
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{ row.programmeName }}</mat-cell>
-    </ng-container>
+    <mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="programmeName">
+        <mat-header-cell
+          *matHeaderCellDef mat-sort-header [sortActionDescription]="t('aria.sort')"> {{ t('columns.programmeName') }}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{ row.programmeName }}</mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="academyTitle">
-      <mat-header-cell
-        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Academy Title
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{ row.academyTitle }}</mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="academyTitle">
+        <mat-header-cell
+          *matHeaderCellDef mat-sort-header [sortActionDescription]="t('aria.sort')"> {{ t('columns.academyTitle') }}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{ row.academyTitle }}</mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="studyForm">
-      <mat-header-cell
-        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Study Form
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{ row.studyForm }}</mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="studyForm">
+        <mat-header-cell
+          *matHeaderCellDef mat-sort-header [sortActionDescription]="t('aria.sort')"> {{ t('columns.studyForm') }}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{ row.studyForm }}</mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="universityName">
-      <mat-header-cell
-        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> University Name
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{ row.universityName }}</mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="universityName">
+        <mat-header-cell
+          *matHeaderCellDef mat-sort-header [sortActionDescription]="t('aria.sort')"> {{ t('columns.universityName') }}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{ row.universityName }}</mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="facultyName">
-      <mat-header-cell
-        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Faculty Name
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{ row.facultyName }}</mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="facultyName">
+        <mat-header-cell
+          *matHeaderCellDef mat-sort-header [sortActionDescription]="t('aria.sort')"> {{ t('columns.facultyName') }}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{ row.facultyName }}</mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="studyField">
-      <mat-header-cell
-        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Study Field
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{ row.studyField }}</mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="studyField">
+        <mat-header-cell
+          *matHeaderCellDef mat-sort-header [sortActionDescription]="t('aria.sort')"> {{ t('columns.studyField') }}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{ row.studyField }}</mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="language">
-      <mat-header-cell
-        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Language
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{ row.language }}</mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="language">
+        <mat-header-cell
+          *matHeaderCellDef mat-sort-header [sortActionDescription]="t('aria.sort')"> {{ t('columns.language') }}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{ row.language }}</mat-cell>
+      </ng-container>
 
-    <!-- Header and Row Declarations -->
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row
-      *matRowDef="let row; columns: displayedColumns;"
-      (click)="onRowClicked(row)"
-      class="clickable-row">
-    </mat-row>
-  </mat-table>
+      <!-- Header and Row Declarations -->
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row
+        *matRowDef="let row; columns: displayedColumns;"
+        (click)="onRowClicked(row)"
+        class="clickable-row">
+      </mat-row>
+    </mat-table>
 
-  <mat-paginator [pageSizeOptions]="[10, 50, 100]"
-                 showFirstLastButtons
-                 aria-label="Select page of periodic elements">
-  </mat-paginator>
+    <mat-paginator [pageSizeOptions]="[10, 50, 100]"
+                   showFirstLastButtons
+                   [attr.aria-label]="t('aria.pagination')">
+    </mat-paginator>
+  </div>
 </div>

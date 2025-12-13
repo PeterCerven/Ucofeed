@@ -1,4 +1,4 @@
-<mat-card class="review-card">
+<mat-card class="review-card" *transloco="let t; prefix 'reviewCard'">
   <mat-card-header>
     <div class="header-content">
       <div class="user-info">
@@ -6,21 +6,21 @@
           <mat-icon>person</mat-icon>
         </div>
         <div class="user-details">
-          <h3 class="user-name">{{ review().anonymous ? 'Anonymous' : review().userName }}</h3>
+          <h3 class="user-name">{{ review().anonymous ? t('anonymous') : review().userName }}</h3>
           <div class="meta-info">
             <span class="program-name">{{ review().studyProgramName || 'Computer Science' }}</span>
             @if (review().isEdited) {
               <span class="separator">•</span>
               <mat-chip class="edited-badge">
                 <mat-icon>edit</mat-icon>
-                Edited
+                {{ t('edited') }}
               </mat-chip>
             }
           </div>        </div>
       </div>
       <div class="overall-rating" [style.color]="getRatingColor(review().rating)">
         <div class="rating-value">{{ review().rating }}</div>
-        <div class="rating-label">Rating</div>
+        <div class="rating-label">{{ t('rating') }}</div>
       </div>
     </div>
   </mat-card-header>
@@ -45,14 +45,14 @@
     <div class="review-footer">
       <div class="date-info">
         <mat-icon>schedule</mat-icon>
-        <span>Posted {{ formatDate(review().createdAt) }}</span>
+        <span>{{ t('posted', { date: formatDate(review().createdAt) }) }}</span>
         @if (review().isEdited) {
-          <span class="edited-date">(Updated {{ formatDate(review().updatedAt) }})</span>
+          <span class="edited-date">{{ t('updated', { date: formatDate(review().updatedAt) }) }}</span>
         }
       </div>
       <button mat-button (click)="toggleComments()" class="comments-toggle">
         <mat-icon>comment</mat-icon>
-        <span>{{ review().commentsCount }} {{ review().commentsCount === 1 ? 'Comment' : 'Comments' }}</span>
+        <span>{{ review().commentsCount }} {{ review().commentsCount === 1 ? t('comment') : t('comments') }}</span>
         <mat-icon class="expand-icon" [class.expanded]="isExpanded()">expand_more</mat-icon>
       </button>
     </div>

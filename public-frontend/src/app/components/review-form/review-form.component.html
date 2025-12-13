@@ -1,31 +1,31 @@
-<div class="review-form-container">
-  <h2 class="form-title">Write a Review</h2>
+<div class="review-form-container" *transloco="let t; prefix 'reviewForm'">
+  <h2 class="form-title">{{ t('title') }}</h2>
 
   <form [formGroup]="reviewForm" (ngSubmit)="onSubmit()" class="review-form">
 
     <!-- Review Comment -->
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Your Review</mat-label>
+      <mat-label>{{ t('yourReview') }}</mat-label>
       <textarea
         matInput
         formControlName="comment"
         rows="6"
-        placeholder="Share your experience with this program..."></textarea>
+        [placeholder]="t('commentPlaceholder')"></textarea>
       <mat-hint>
-        {{ reviewForm.get('comment')?.value?.length || 0 }} characters (minimum 20)
+        {{ reviewForm.get('comment')?.value?.length || 0 }} {{ t('charactersMinimum') }}
       </mat-hint>
       @if (reviewForm.get('comment')?.hasError('required') && reviewForm.get('comment')?.touched) {
-        <mat-error>Review comment is required</mat-error>
+        <mat-error>{{ t('commentRequired') }}</mat-error>
       }
       @if (reviewForm.get('comment')?.hasError('minlength')) {
-        <mat-error>Comment must be at least 20 characters</mat-error>
+        <mat-error>{{ t('commentMinLength') }}</mat-error>
       }
     </mat-form-field>
 
     <!-- Rating Slider -->
     <div class="rating-section">
       <label class="rating-label">
-        Overall Rating: <strong>{{ reviewForm.get('rating')?.value || 1 }}/10</strong>
+        {{ t('overallRating') }} <strong>{{ reviewForm.get('rating')?.value || 1 }}/10</strong>
       </label>
       <mat-slider
         min="1"
@@ -48,9 +48,9 @@
     <!-- Anonymous Checkbox -->
     <div class="anonymous-section">
       <mat-checkbox formControlName="anonymous">
-        Post anonymously
+        {{ t('anonymousCheckbox') }}
       </mat-checkbox>
-      <span class="anonymous-hint">Your name won't be visible to others</span>
+      <span class="anonymous-hint">{{ t('anonymousHint') }}</span>
     </div>
 
     <!-- Action Buttons -->
@@ -59,7 +59,7 @@
         mat-raised-button
         type="button"
         (click)="onCancel()">
-        Cancel
+        {{ t('cancel') }}
       </button>
       <button
         mat-raised-button
@@ -68,10 +68,10 @@
         [disabled]="reviewForm.invalid || isSubmitting()">
         @if (isSubmitting()) {
           <ng-container>
-            <mat-icon>hourglass_empty</mat-icon> Submitting...
+            <mat-icon>hourglass_empty</mat-icon> {{ t('submitting') }}
           </ng-container>
         } @else {
-          Submit Review
+          {{ t('submit') }}
         }
       </button>
     </div>

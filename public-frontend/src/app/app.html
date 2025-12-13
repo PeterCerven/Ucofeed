@@ -1,4 +1,4 @@
-<mat-toolbar class="app-toolbar">
+<mat-toolbar class="app-toolbar" *transloco="let t; prefix 'app.toolbar'">
   <div class="toolbar-brand" (click)="onHome()">
     <h1 class="app-title">UcoFeed</h1>
   </div>
@@ -14,7 +14,7 @@
         (click)="onLogin()"
       >
         <mat-icon>login</mat-icon>
-        <span>Login</span>
+        <span>{{ t('login') }}</span>
       </button>
 
       <button
@@ -24,7 +24,7 @@
         (click)="onRegister()"
       >
         <mat-icon>person_add</mat-icon>
-        <span>Register</span>
+        <span>{{ t('register') }}</span>
       </button>
     }
 
@@ -33,7 +33,7 @@
       <button
         mat-icon-button
         (click)="onProfile()"
-        [matTooltip]="'My Profile'"
+        [matTooltip]="t('myProfile')"
         class="profile-button"
       >
         <mat-icon>account_circle</mat-icon>
@@ -47,7 +47,7 @@
         (click)="onLogout()"
       >
         <mat-icon>logout</mat-icon>
-        <span>Logout</span>
+        <span>{{ t('logout') }}</span>
       </button>
     }
 
@@ -55,7 +55,7 @@
       mat-icon-button
       class="language-toggle"
       (click)="switchLanguage()"
-      [matTooltip]="'Switch language'"
+      [matTooltip]="t('switchLanguage')"
     >
       <mat-icon class="globe-icon">language</mat-icon>
       <span class="language-text">{{ currentLanguage() }}</span>
@@ -64,7 +64,7 @@
     <button
       mat-icon-button
       (click)="toggleDarkMode()"
-      [matTooltip]="isDarkMode() ? 'Light mode' : 'Dark mode'"
+      [matTooltip]="isDarkMode() ? t('lightMode') : t('darkMode')"
     >
       <mat-icon>{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
     </button>

@@ -1,10 +1,40 @@
 {
-  "components" :
-  {
+  "components": {
     "sidebar": {
       "dashboard": "Dashboard",
       "settings": "Settings",
       "tables": "Tables"
+    }
+  },
+  "pages": {
+    "dashboard": {
+      "placeholder": "Dashboard works!"
+    },
+    "settings": {
+      "placeholder": "Settings works!"
+    },
+    "tables": {
+      "aria": {
+        "pagination": "Select page",
+        "sort": "Sort by name"
+      },
+      "buttons": {
+        "import": "Import Data",
+        "save": "Save Data",
+        "show": "Show Data"
+      },
+      "columns": {
+        "academyTitle": "Academy Title",
+        "facultyName": "Faculty Name",
+        "language": "Language",
+        "programmeName": "Programme Name",
+        "studyField": "Study Field",
+        "studyForm": "Study Form",
+        "universityName": "University Name"
+      },
+      "labels": {
+        "filter": "Filter"
+      }
     }
   }
 }

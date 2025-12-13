@@ -7,7 +7,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoDirective } from '@jsverse/transloco';
 import { LoginDialogComponent, LoginData } from '@components/auth/login-dialog.component';
 import { RegisterDialogComponent, RegisterData } from '@components/auth/register-dialog.component';
 import { AuthService } from '@services/auth.service';
@@ -22,7 +22,8 @@ import { AuthStateService } from '@services/auth-state.service';
     MatButtonModule,
     MatSidenavModule,
     MatTooltipModule,
-    RouterOutlet
+    RouterOutlet,
+    TranslocoDirective
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -77,20 +78,28 @@ export class App {
               role: response.role
             });
 
-            this.snackBar.open('Login successful!', 'Close', {
-              duration: 3000,
-              horizontalPosition: 'end',
-              verticalPosition: 'top'
-            });
+            this.snackBar.open(
+              this.translocoService.translate('app.snackbar.loginSuccess'),
+              this.translocoService.translate('app.snackbar.close'),
+              {
+                duration: 3000,
+                horizontalPosition: 'end',
+                verticalPosition: 'top'
+              }
+            );
             this.router.navigate(['/profile']);
           },
           error: (error) => {
-            const errorMessage = error.error || 'Login failed. Please try again.';
-            this.snackBar.open(errorMessage, 'Close', {
-              duration: 5000,
-              horizontalPosition: 'end',
-              verticalPosition: 'top'
-            });
+            const errorMessage = error.error || this.translocoService.translate('app.snackbar.loginFailed');
+            this.snackBar.open(
+              errorMessage,
+              this.translocoService.translate('app.snackbar.close'),
+              {
+                duration: 5000,
+                horizontalPosition: 'end',
+                verticalPosition: 'top'
+              }
+            );
           }
         });
       }
@@ -115,11 +124,15 @@ export class App {
             this.userEmail.set(result.email);
             localStorage.setItem('authUser', JSON.stringify({ id: response.id, email: response.email, role: response.role }));
 
-            this.snackBar.open('Registration successful! Please check your email for verification code.', 'Close', {
-              duration: 5000,
-              horizontalPosition: 'end',
-              verticalPosition: 'top'
-            });
+            this.snackBar.open(
+              this.translocoService.translate('app.snackbar.registerSuccess'),
+              this.translocoService.translate('app.snackbar.close'),
+              {
+                duration: 5000,
+                horizontalPosition: 'end',
+                verticalPosition: 'top'
+              }
+            );
             // Redirect to profile page with verification query params
             this.router.navigate(['/profile'], {
               queryParams: {
@@ -129,12 +142,16 @@ export class App {
             });
           },
           error: (error) => {
-            const errorMessage = error.error || 'Registration failed. Please try again.';
-            this.snackBar.open(errorMessage, 'Close', {
-              duration: 5000,
-              horizontalPosition: 'end',
-              verticalPosition: 'top'
-            });
+            const errorMessage = error.error || this.translocoService.translate('app.snackbar.registrationFailed');
+            this.snackBar.open(
+              errorMessage,
+              this.translocoService.translate('app.snackbar.close'),
+              {
+                duration: 5000,
+                horizontalPosition: 'end',
+                verticalPosition: 'top'
+              }
+            );
           }
         });
       }
@@ -155,11 +172,15 @@ export class App {
         // Clear shared auth state
         this.authState.clearAuthState();
 
-        this.snackBar.open('Logged out successfully', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'end',
-          verticalPosition: 'top'
-        });
+        this.snackBar.open(
+          this.translocoService.translate('app.snackbar.logoutSuccess'),
+          this.translocoService.translate('app.snackbar.close'),
+          {
+            duration: 3000,
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          }
+        );
         this.router.navigate(['/']);
       },
       error: (error) => {

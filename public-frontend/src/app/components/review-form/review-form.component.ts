@@ -8,6 +8,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { CreateReviewDto } from '@models/review.model';
 
 @Component({
@@ -23,6 +24,7 @@ import { CreateReviewDto } from '@models/review.model';
     MatCheckboxModule,
     MatSelectModule,
     MatIconModule,
+    TranslocoDirective,
   ],
   templateUrl: './review-form.component.html',
   styleUrl: './review-form.component.scss',
