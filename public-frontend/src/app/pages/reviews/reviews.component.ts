@@ -82,9 +82,9 @@ export class ReviewsComponent {
         return of({
           id: programId,
           name: 'Computer Science',
-          studyField: 'Informatics',
-          facultyName: 'Faculty of Informatics',
-          universityName: 'Slovak University of Technology'
+          study_field: 'Informatics',
+          faculty_name: 'Faculty of Informatics',
+          university_name: 'Slovak University of Technology'
         } as StudyProgramDetailsModel);
       })
     ).subscribe({
@@ -97,8 +97,10 @@ export class ReviewsComponent {
               id: program.id,
               name: program.name,
               description: '', // Not available from backend
-              facultyName: program.facultyName || '',
-              universityName: program.universityName || '',
+              faculty_id: program.faculty_id,
+              faculty_name: program.faculty_name || '',
+              university_id: program.university_id,
+              university_name: program.university_name || '',
               averageRating: 0, // Will be calculated from reviews
               totalReviews: 0,  // Will be counted from reviews
               ratingDistribution: {},

@@ -1,0 +1,8 @@
+<button
+  mat-button
+  class="back-nav-btn"
+  [matTooltip]="backLabel()"
+  (click)="navigateBack()">
+  <mat-icon>arrow_back</mat-icon>
+  <span class="back-label">{{ backLabel() }}</span>
+</button>

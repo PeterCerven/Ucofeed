@@ -48,12 +48,12 @@ DROP TABLE IF EXISTS public.study_program;
 DROP TABLE IF EXISTS public.review;
 DROP TABLE IF EXISTS public.faculty;
 DROP TABLE IF EXISTS public.app_user;
-DROP SCHEMA IF EXISTS public;
+-- DROP SCHEMA IF EXISTS public;
 --
 -- Name: public; Type: SCHEMA; Schema: -; Owner: pg_database_owner
 --
 
-CREATE SCHEMA public;
+-- CREATE SCHEMA public;
 
 
 ALTER SCHEMA public OWNER TO pg_database_owner;

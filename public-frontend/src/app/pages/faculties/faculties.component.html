@@ -1,4 +1,8 @@
 <div class="faculties-container">
+  <app-back-navigation
+    backRoute="/universities"
+    backLabel="Back to Universities" />
+
   <h1>Faculties of {{ universityName() }}</h1>
 
   @if (isLoading()) {

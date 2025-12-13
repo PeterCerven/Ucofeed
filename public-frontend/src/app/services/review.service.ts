@@ -198,8 +198,8 @@ export class ReviewService {
       name: 'Computer Science',
       description:
         'Comprehensive CS curriculum covering algorithms, data structures, software engineering, artificial intelligence, and more. This program prepares students for careers in software development, research, and technology innovation.',
-      facultyName: 'Faculty of Informatics',
-      universityName: 'Slovak University of Technology',
+      faculty_name: 'Faculty of Informatics',
+      university_name: 'Slovak University of Technology',
       averageRating: 7.9,
       totalReviews: 5,
       ratingDistribution: {
@@ -221,8 +221,8 @@ export class ReviewService {
       name: 'Information Systems',
       description:
         'Focus on business information systems and enterprise solutions with emphasis on database management, system analysis, and IT project management.',
-      facultyName: 'Faculty of Informatics',
-      universityName: 'Slovak University of Technology',
+      faculty_name: 'Faculty of Informatics',
+      university_name: 'Slovak University of Technology',
       averageRating: 8.0,
       totalReviews: 3,
       ratingDistribution: {
@@ -243,8 +243,8 @@ export class ReviewService {
       name: 'Software Engineering',
       description:
         'Modern software development practices and methodologies including agile development, DevOps, cloud computing, and software architecture.',
-      facultyName: 'Faculty of Informatics',
-      universityName: 'Slovak University of Technology',
+      faculty_name: 'Faculty of Informatics',
+      university_name: 'Slovak University of Technology',
       averageRating: 8.5,
       totalReviews: 4,
       ratingDistribution: {

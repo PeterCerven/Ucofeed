@@ -1,0 +1,34 @@
+.back-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  color: var(--mat-sys-primary);
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+
+  .back-label {
+    font-weight: 500;
+  }
+}
+
+// Dark mode
+:host-context(.dark-mode) .back-nav-btn {
+  color: var(--mat-sys-primary-container);
+}
+
+// Responsive - icon only on mobile
+@media (max-width: 480px) {
+  .back-label {
+    display: none;
+  }
+}

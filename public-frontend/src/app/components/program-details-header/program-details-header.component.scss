@@ -19,6 +19,16 @@
       height: 1rem;
     }
 
+    .breadcrumb-link {
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+
+      &:hover {
+        opacity: 1;
+        text-decoration: underline;
+      }
+    }
+
     .current {
       font-weight: 600;
     }
