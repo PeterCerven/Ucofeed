@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Builder;
 import lombok.Value;
 import sk.ucofeed.backend.persistence.model.Review;
+import sk.ucofeed.backend.persistence.model.User;
 
 import java.time.LocalDateTime;
 
@@ -21,6 +22,7 @@ public class ReviewResponse {
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
     Boolean anonymous;
+    Boolean isOwner;  // Server-calculated ownership flag
 
     // Auto-populated tags from StudyProgramVariant
     String language;
@@ -28,10 +30,15 @@ public class ReviewResponse {
     String title;      // Academic degree title
 
     // User info (conditionally included based on anonymous flag)
-    String userId;     // UUID as string, null if anonymous
-    String userEmail;  // null if anonymous
+    String userEmail;    // null if anonymous
+    String userFullName; // null if anonymous
 
-    public static ReviewResponse from(Review review) {
+    public static ReviewResponse from(Review review, User currentUser) {
+        // Calculate ownership: current user must match review author
+        boolean isOwner = currentUser != null
+                && review.getUser() != null
+                && review.getUser().getId().equals(currentUser.getId());
+
         return ReviewResponse.builder()
                 .id(review.getId())
                 .studyProgramId(review.getStudyProgram().getId())
@@ -42,11 +49,12 @@ public class ReviewResponse {
                 .createdAt(review.getCreatedAt())
                 .updatedAt(review.getUpdatedAt())
                 .anonymous(review.isAnonymous())
+                .isOwner(isOwner)
                 .language(review.getStudyProgramVariant().getLanguage())
                 .studyForm(review.getStudyProgramVariant().getStudyForm().getDisplayName())
                 .title(review.getStudyProgramVariant().getTitle())
-                .userId(review.isAnonymous() ? null : review.getUser().getId().toString())
                 .userEmail(review.isAnonymous() ? null : review.getUser().getEmail())
+                .userFullName(review.isAnonymous() ? null : review.getUser().getFullName())
                 .build();
     }
 }

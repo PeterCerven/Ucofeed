@@ -117,4 +117,30 @@ public class GenericExceptionHandler extends ResponseEntityExceptionHandler {
                                 .build()
                 );
     }
+
+    @ExceptionHandler({ReviewNotFoundException.class})
+    protected ResponseEntity<ErrorDto> handleReviewNotFoundException(ReviewNotFoundException ex) {
+        LOG.error(ex.toString());
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(
+                        ErrorDto.builder()
+                                .type(ErrorDto.ErrorType.REVIEW_NOT_FOUND)
+                                .error(List.of(ex.getMessage()))
+                                .build()
+                );
+    }
+
+    @ExceptionHandler({UnauthorizedReviewActionException.class})
+    protected ResponseEntity<ErrorDto> handleUnauthorizedReviewActionException(UnauthorizedReviewActionException ex) {
+        LOG.error(ex.toString());
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(
+                        ErrorDto.builder()
+                                .type(ErrorDto.ErrorType.UNAUTHORIZED_REVIEW_ACTION)
+                                .error(List.of(ex.getMessage()))
+                                .build()
+                );
+    }
 }

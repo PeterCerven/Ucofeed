@@ -69,6 +69,9 @@ public class User implements UserDetails {
     @Column(unique = true, nullable = false)
     private String email;
 
+    @Column(name = "full_name", nullable = false)
+    private String fullName;
+
     @Column(nullable = false)
     private String password;
 
@@ -97,8 +100,9 @@ public class User implements UserDetails {
                orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 
-    public User(String email, String password, Role role) {
+    public User(String email, String fullName, String password, Role role) {
         this.email = email;
+        this.fullName = fullName;
         this.password = password;
         this.enabled = false;
         this.role = role;

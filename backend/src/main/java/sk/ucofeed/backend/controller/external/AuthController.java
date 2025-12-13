@@ -41,7 +41,7 @@ public class AuthController {
     ) {
         LOG.info("Registering user with email: {}", request.email());
         try {
-            User user = authService.registerUser(request.email(), request.password());
+            User user = authService.registerUser(request.email(), request.fullName(), request.password());
             return ResponseEntity.ok(Map.of(
                     "message", "Account verified successfully",
                     "id", user.getId().toString(),

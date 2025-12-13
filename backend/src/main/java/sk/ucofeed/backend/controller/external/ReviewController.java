@@ -10,6 +10,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import sk.ucofeed.backend.persistence.dto.CreateReviewRequest;
 import sk.ucofeed.backend.persistence.dto.ReviewResponse;
+import sk.ucofeed.backend.persistence.dto.UpdateReviewRequest;
 import sk.ucofeed.backend.persistence.model.User;
 import sk.ucofeed.backend.service.ReviewService;
 
@@ -47,15 +48,68 @@ public class ReviewController {
     }
 
     /**
+     * Update an existing review.
+     * Requires authentication and ownership.
+     */
+    @PutMapping("/{reviewId}")
+    public ResponseEntity<ReviewResponse> updateReview(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long reviewId,
+            @Valid @RequestBody @NotNull UpdateReviewRequest request) {
+
+        LOG.info("Review update request from user {} for review {}",
+                user.getId(), reviewId);
+
+        ReviewResponse response = reviewService.updateReview(user, reviewId, request);
+
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Delete a review.
+     * Requires authentication and ownership.
+     */
+    @DeleteMapping("/{reviewId}")
+    public ResponseEntity<Void> deleteReview(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long reviewId) {
+
+        LOG.info("Review deletion request from user {} for review {}",
+                user.getId(), reviewId);
+
+        reviewService.deleteReview(user, reviewId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Check if authenticated user can create a review for a study program.
+     * Requires authentication.
+     */
+    @GetMapping("/can-review/{studyProgramId}")
+    public ResponseEntity<Boolean> canCreateReview(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long studyProgramId) {
+
+        boolean canReview = reviewService.canCreateReview(user, studyProgramId);
+        return ResponseEntity.ok(canReview);
+    }
+
+    /**
      * Get all reviews for a specific study program.
-     * Public endpoint - no authentication required.
+     * Public endpoint - authentication is OPTIONAL.
+     * If authenticated, isOwner flag will be calculated.
      */
     @GetMapping("/program/{studyProgramId}")
     public ResponseEntity<List<ReviewResponse>> getReviewsByProgram(
-            @PathVariable Long studyProgramId) {
+            @PathVariable Long studyProgramId,
+            @AuthenticationPrincipal(errorOnInvalidType = false) User currentUser) {
 
-        LOG.info("Fetching reviews for study program {}", studyProgramId);
-        List<ReviewResponse> reviews = reviewService.getReviewsByStudyProgram(studyProgramId);
+        LOG.info("Fetching reviews for study program {} (user: {})",
+                studyProgramId,
+                currentUser != null ? currentUser.getId() : "anonymous");
+
+        List<ReviewResponse> reviews = reviewService.getReviewsByStudyProgram(studyProgramId, currentUser);
         return ResponseEntity.ok(reviews);
     }
 

@@ -34,6 +34,23 @@
           </mat-error>
         }
       </mat-form-field>
+      <!-- Full Name Field -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Full Name</mat-label>
+        <mat-icon matPrefix>person</mat-icon>
+        <input
+          matInput
+          type="text"
+          formControlName="fullName"
+          placeholder="Full Name"
+          autocomplete="name"
+        />
+        @if (registerForm.get('fullName')?.touched) {
+          <mat-error>
+            {{ getErrorMessage('fullName') }}
+          </mat-error>
+        }
+      </mat-form-field>
 
       <!-- Password Field -->
       <mat-form-field appearance="outline" class="full-width">

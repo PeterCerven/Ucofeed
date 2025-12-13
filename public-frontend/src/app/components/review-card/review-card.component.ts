@@ -1,12 +1,13 @@
-import { Component, input, signal } from '@angular/core';
+import { Component, input, signal, output, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReviewModel } from '@models/review.model';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { CommentsSectionComponent } from '@components/comments-section/comments-section.component';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-review-card',
@@ -17,6 +18,7 @@ import { CommentsSectionComponent } from '@components/comments-section/comments-
     MatIconModule,
     MatButtonModule,
     MatChipsModule,
+    MatTooltipModule,
     TranslocoDirective,
     CommentsSectionComponent,
   ],
@@ -27,7 +29,26 @@ export class ReviewCardComponent {
   review = input.required<ReviewModel>();
   showActions = input<boolean>(false);
 
+  editReview = output<ReviewModel>();
+  deleteReview = output<number>(); // Emits review ID
+
   isExpanded = signal(false);
+
+  /** Check if current user owns this review (server-calculated) */
+  isOwner = computed(() => {
+    return this.review().is_owner === true;
+  });
+
+  /** Check if action buttons should be shown */
+  canShowActions = computed(() => {
+    return this.showActions() && this.isOwner();
+  });
+
+  /** Check if review was edited (based on timestamps) */
+  isEdited = computed(() => {
+    const review = this.review();
+    return review.created_at !== review.updated_at;
+  });
 
   /** Toggle comments section */
   toggleComments(): void {
@@ -36,7 +57,17 @@ export class ReviewCardComponent {
 
   /** Format date to readable string */
   formatDate(dateString: string): string {
+    if (!dateString) {
+      return 'Unknown date';
+    }
+
     const date = new Date(dateString);
+
+    // Check if date is valid
+    if (isNaN(date.getTime())) {
+      return 'Unknown date';
+    }
+
     return date.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
@@ -54,5 +85,15 @@ export class ReviewCardComponent {
   /** Get array for star display (1-10) */
   getStarsArray(rating: number): boolean[] {
     return Array.from({ length: 10 }, (_, i) => i < rating);
+  }
+
+  /** Handle edit button click */
+  onEdit(): void {
+    this.editReview.emit(this.review());
+  }
+
+  /** Handle delete button click */
+  onDelete(): void {
+    this.deleteReview.emit(this.review().id);
   }
 }

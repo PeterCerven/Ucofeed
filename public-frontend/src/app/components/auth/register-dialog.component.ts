@@ -13,6 +13,7 @@ import { UniversityModel } from '@models/university.model';
 
 export interface RegisterData {
   email: string;
+  fullName: string;
   password: string;
 }
 
@@ -128,6 +129,10 @@ export class RegisterDialogComponent implements OnInit {
         Validators.email,
         CustomValidators.universityEmail(this.allowedDomains)
       ]],
+      fullName: ['', [
+        Validators.required,
+        Validators.minLength(3) // Prípadne pridajte minLength validáciu
+      ]],
       password: ['', [
         Validators.required,
         Validators.minLength(8),
@@ -152,7 +157,10 @@ export class RegisterDialogComponent implements OnInit {
 
   onSubmit(): void {
     if (this.registerForm.valid) {
+      // Použijeme deštrukturalizáciu pre vylúčenie confirmPassword
       const { confirmPassword, ...registerData } = this.registerForm.value;
+
+      // registerData teraz obsahuje { email, fullName, password }
       this.dialogRef.close(registerData as RegisterData);
     } else {
       this.registerForm.markAllAsTouched();
@@ -178,10 +186,33 @@ export class RegisterDialogComponent implements OnInit {
       return this.translocoService.translate('auth.validation.required');
     }
 
+    // Spojenie minlength do jedného bloku (ak je definovaný)
+    if (control?.hasError('minlength')) {
+      const minLength = control.errors?.['minlength'].requiredLength;
+      return `Must be at least ${minLength} characters`;
+    }
+
+    // Prehodenie emailu a patternu sem, sú to špecifické chyby
+    // Spojenie minlength do jedného bloku (ak je definovaný)
+    if (control?.hasError('minlength')) {
+      const minLength = control.errors?.['minlength'].requiredLength;
+      return `Must be at least ${minLength} characters`;
+    }
+
+    // Prehodenie emailu a patternu sem, sú to špecifické chyby
     if (control?.hasError('email')) {
       return this.translocoService.translate('auth.validation.emailInvalid');
     }
 
+    if (control?.hasError('pattern')) {
+      return 'Must contain uppercase, lowercase, number and special character';
+    }
+
+    if (control?.hasError('pattern')) {
+      return 'Must contain uppercase, lowercase, number and special character';
+    }
+
+    // Špecifické chyby pre registráciu/validáciu emailu
     if (control?.hasError('invalidUniversityDomain')) {
       return this.translocoService.translate('auth.validation.invalidUniversityDomain', {
         domains: this.allowedDomains.join(', ')
@@ -202,6 +233,7 @@ export class RegisterDialogComponent implements OnInit {
       return this.translocoService.translate('auth.validation.passwordPattern');
     }
 
+    // Chyba pri zhodnosti hesiel
     if (control?.hasError('passwordMismatch')) {
       return this.translocoService.translate('auth.validation.passwordMismatch');
     }

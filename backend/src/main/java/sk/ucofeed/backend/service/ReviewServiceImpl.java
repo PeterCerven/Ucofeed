@@ -4,11 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sk.ucofeed.backend.exception.ReviewNotFoundException;
 import sk.ucofeed.backend.exception.StudyProgramNotFoundException;
+import sk.ucofeed.backend.exception.UnauthorizedReviewActionException;
 import sk.ucofeed.backend.exception.UserNotEnrolledException;
 import sk.ucofeed.backend.persistence.dto.CreateReviewRequest;
 import sk.ucofeed.backend.persistence.dto.ErrorDto;
 import sk.ucofeed.backend.persistence.dto.ReviewResponse;
+import sk.ucofeed.backend.persistence.dto.UpdateReviewRequest;
 import sk.ucofeed.backend.persistence.model.*;
 import sk.ucofeed.backend.persistence.repository.ReviewRepository;
 import sk.ucofeed.backend.persistence.repository.StudyProgramRepository;
@@ -71,7 +74,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         dashboardNotifier.reviewCreated(studyProgram, user.getId());
 
-        return ReviewResponse.from(review);
+        return ReviewResponse.from(review, user);
     }
 
     /**
@@ -124,7 +127,91 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<ReviewResponse> getReviewsByStudyProgram(Long studyProgramId) {
+    @Transactional
+    public ReviewResponse updateReview(User user, Long reviewId, UpdateReviewRequest request) {
+        LOG.info("Updating review {} by user {}", reviewId, user.getId());
+
+        // Find review and verify ownership
+        Review review = reviewRepository.findByIdAndUser(reviewId, user)
+                .orElseThrow(() -> {
+                    // Check if review exists at all
+                    if (!reviewRepository.existsById(reviewId)) {
+                        return ReviewNotFoundException.builder()
+                                .errorType(ErrorDto.ErrorType.REVIEW_NOT_FOUND)
+                                .message("Review not found with ID: " + reviewId)
+                                .build();
+                    }
+                    // Review exists but user is not the owner
+                    return UnauthorizedReviewActionException.builder()
+                            .errorType(ErrorDto.ErrorType.UNAUTHORIZED_REVIEW_ACTION)
+                            .message("You are not authorized to edit this review")
+                            .build();
+                });
+
+        // Update fields
+        review.setRating(request.rating());
+        review.setComment(request.comment());
+        review.setAnonymous(request.anonymous());
+
+        review = reviewRepository.save(review);
+        LOG.info("Review {} updated successfully", reviewId);
+
+        return ReviewResponse.from(review, user);
+    }
+
+    @Override
+    @Transactional
+    public void deleteReview(User user, Long reviewId) {
+        LOG.info("Deleting review {} by user {}", reviewId, user.getId());
+
+        // Find review and verify ownership
+        Review review = reviewRepository.findByIdAndUser(reviewId, user)
+                .orElseThrow(() -> {
+                    // Check if review exists at all
+                    if (!reviewRepository.existsById(reviewId)) {
+                        return ReviewNotFoundException.builder()
+                                .errorType(ErrorDto.ErrorType.REVIEW_NOT_FOUND)
+                                .message("Review not found with ID: " + reviewId)
+                                .build();
+                    }
+                    // Review exists but user is not the owner
+                    return UnauthorizedReviewActionException.builder()
+                            .errorType(ErrorDto.ErrorType.UNAUTHORIZED_REVIEW_ACTION)
+                            .message("You are not authorized to delete this review")
+                            .build();
+                });
+
+        reviewRepository.delete(review);
+        LOG.info("Review {} deleted successfully", reviewId);
+    }
+
+    @Override
+    public boolean canCreateReview(User user, Long studyProgramId) {
+        // Check if study program exists
+        StudyProgram studyProgram = studyProgramRepository.findById(studyProgramId)
+                .orElse(null);
+
+        if (studyProgram == null) {
+            return false;
+        }
+
+        // Check if user already has a review for this program
+        if (reviewRepository.existsByUserAndStudyProgram(user, studyProgram)) {
+            return false;
+        }
+
+        // Check if user is enrolled (ENROLLED, ON_HOLD, or COMPLETED - not DROPPED_OUT)
+        List<UserEducation> enrollments = userEducationRepository.findByUser(user)
+                .stream()
+                .filter(ed -> ed.getStudyProgram().getId().equals(studyProgramId))
+                .filter(ed -> ed.getStatus() != UserEducation.Status.DROPPED_OUT)
+                .toList();
+
+        return !enrollments.isEmpty();
+    }
+
+    @Override
+    public List<ReviewResponse> getReviewsByStudyProgram(Long studyProgramId, User currentUser) {
         StudyProgram studyProgram = studyProgramRepository.findById(studyProgramId)
                 .orElseThrow(() -> StudyProgramNotFoundException.builder()
                         .errorType(ErrorDto.ErrorType.STUDY_PROGRAM_NOT_FOUND)
@@ -133,7 +220,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         return reviewRepository.findByStudyProgramOrderByCreatedAtDesc(studyProgram)
                 .stream()
-                .map(ReviewResponse::from)
+                .map(review -> ReviewResponse.from(review, currentUser))
                 .toList();
     }
 
@@ -141,7 +228,7 @@ public class ReviewServiceImpl implements ReviewService {
     public List<ReviewResponse> getReviewsByUser(User user) {
         return reviewRepository.findByUser(user)
                 .stream()
-                .map(ReviewResponse::from)
+                .map(review -> ReviewResponse.from(review, user))
                 .toList();
     }
 }
