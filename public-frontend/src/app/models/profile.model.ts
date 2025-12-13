@@ -1,4 +1,6 @@
 export interface ProfileData {
+  universityId?: number;
+  facultyId?: number;
   studyProgramId: number;
   studyProgramVariantId: number;
   status: string;

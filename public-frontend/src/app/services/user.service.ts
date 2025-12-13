@@ -10,9 +10,17 @@ export interface UpdateUserRequest {
 }
 
 export interface UserEducationResponse {
-  id: string;
+  id: number;
   study_program_id: number;
+  study_program_name: string;
+  faculty_id: number;
+  faculty_name: string;
+  university_id: number;
+  university_name: string;
   study_program_variant_id: number;
+  study_format: string;
+  language: string;
+  title: string;
   status: string;
 }
 

@@ -2,6 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, of, switchMap, tap, map } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -196,7 +197,7 @@ export class ProfileComponent implements OnInit {
       next: (university) => {
         this.university.set(university);
         if (university && university.id) {
-          this.profileForm.patchValue({ universityId: university.id });
+          this.profileForm.patchValue({ universityId: university.id }, { emitEvent: false });
         }
       },
       error: (error) => console.error('Failed to load university:', error)
@@ -224,12 +225,58 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  private loadCascadingOptions(
+    universityId: number | null,
+    facultyId: number | null,
+    studyProgramId: number | null
+  ): Observable<void> {
+    if (!universityId) {
+      return of(undefined);
+    }
+
+    return this.universityService.getFacultiesByUniversity(universityId).pipe(
+      tap(faculties => this.faculties.set(faculties)),
+      switchMap(() => {
+        if (!facultyId) {
+          return of(undefined);
+        }
+        return this.universityService.getProgramsByFaculty(facultyId).pipe(
+          tap(programs => this.programs.set(programs))
+        );
+      }),
+      switchMap(() => {
+        if (!studyProgramId) {
+          return of(undefined);
+        }
+        return this.universityService.getVariantsByProgram(studyProgramId).pipe(
+          tap(variants => this.variants.set(variants))
+        );
+      }),
+      map(() => undefined)
+    );
+  }
+
   private loadSavedProfile(): void {
     const savedProfile = localStorage.getItem('userProfile');
     if (savedProfile) {
       try {
-        const profileData = JSON.parse(savedProfile);
-        this.profileForm.patchValue(profileData);
+        const profileData: ProfileData = JSON.parse(savedProfile);
+        const { universityId, facultyId, studyProgramId, studyProgramVariantId, status } = profileData;
+
+        // Load options in cascade without triggering valueChanges
+        this.loadCascadingOptions(universityId || null, facultyId || null, studyProgramId).subscribe({
+          next: () => {
+            // Set form values with emitEvent: false to prevent valueChanges triggers
+            this.profileForm.patchValue({
+              universityId,
+              facultyId,
+              studyProgramId,
+              studyProgramVariantId,
+              status
+            }, { emitEvent: false });
+          },
+          error: (error) => console.error('Failed to load cascading options:', error)
+        });
       } catch (error) {
         console.error('Failed to load saved profile:', error);
       }
@@ -268,8 +315,15 @@ export class ProfileComponent implements OnInit {
       // Call backend to update user
       this.userService.updateUser(userId, updateRequest).subscribe({
         next: (response) => {
-          // Also save to localStorage for offline access
-          localStorage.setItem('userProfile', JSON.stringify(profileData));
+          // Save complete profile data including parent IDs for proper reload
+          const completeProfileData: ProfileData = {
+            universityId: this.profileForm.value.universityId,
+            facultyId: this.profileForm.value.facultyId,
+            studyProgramId: profileData.studyProgramId,
+            studyProgramVariantId: profileData.studyProgramVariantId,
+            status: profileData.status
+          };
+          localStorage.setItem('userProfile', JSON.stringify(completeProfileData));
 
           this.snackBar.open(
             this.translocoService.translate('app.snackbar.profileSaveSuccess'),
