@@ -1,5 +1,5 @@
 <div class="review-form-container">
-  <h2 class="form-title">Write a Review</h2>
+  <h2 class="form-title">{{ editingReview() ? 'Edit Your Review' : 'Write a Review' }}</h2>
 
   <form [formGroup]="reviewForm" (ngSubmit)="onSubmit()" class="review-form">
 
@@ -71,7 +71,7 @@
             <mat-icon>hourglass_empty</mat-icon> Submitting...
           </ng-container>
         } @else {
-          Submit Review
+          {{ editingReview() ? 'Update Review' : 'Submit Review' }}
         }
       </button>
     </div>

@@ -9,20 +9,22 @@
       <app-program-details-header [programDetails]="programDetails()!" />
     }
 
-    <!-- Write Review Button -->
-    <div class="action-bar">
-      <button mat-raised-button color="primary" (click)="toggleReviewForm()" class="write-review-btn">
-        <mat-icon>{{ showReviewForm() ? 'close' : 'edit' }}</mat-icon>
-        {{ showReviewForm() ? 'Cancel' : 'Write a Review' }}
-      </button>
-    </div>
+    <!-- Write Review Button (only show if user is logged in and eligible) -->
+    @if (authState.isLoggedIn() && canUserCreateReview()) {
+      <div class="action-bar">
+        <button mat-raised-button color="primary" (click)="toggleReviewForm()" class="write-review-btn">
+          <mat-icon>{{ showReviewForm() ? 'close' : 'edit' }}</mat-icon>
+          {{ showReviewForm() ? (editingReview() ? 'Cancel Edit' : 'Cancel') : (editingReview() ? 'Cancel Edit' : 'Write a Review') }}
+        </button>
+      </div>
+    }
 
     <!-- Review Form (Conditional) -->
     @if (showReviewForm()) {
       <app-review-form
         [studyProgramId]="programDetails()?.id || 1"
-        [studyProgramVariantId]="studyProgramVariantId()"
-        (submitReview)="onSubmitReview($event)"
+        [editingReview]="editingReview()"
+        (submitReview)="editingReview() ? onUpdateReview($event) : onSubmitReview($event)"
         (cancelForm)="onCancelReview()"
       />
     }
@@ -47,7 +49,13 @@
       } @else {
         <div class="reviews-list">
           @for (review of reviews(); track review.id) {
-            <app-review-card [review]="review" />
+            <app-review-card
+              [review]="review"
+              [showActions]="authState.isLoggedIn()"
+              [currentUserId]="authState.userId()"
+              (editReview)="onEditReview($event)"
+              (deleteReview)="onDeleteReview($event)"
+            />
           }
         </div>
       }

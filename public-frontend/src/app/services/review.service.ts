@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, delay, catchError } from 'rxjs';
-import { ReviewModel, ReviewFilterOptions, CreateReviewDto } from '@models/review.model';
+import { ReviewModel, ReviewFilterOptions, CreateReviewDto, UpdateReviewDto } from '@models/review.model';
 import { CommentModel } from '@models/comment.model';
 import { ProgramDetailsModel } from '@models/program-details.model';
 import { environment } from '@env/environment.production';
@@ -12,84 +12,6 @@ import { environment } from '@env/environment.production';
 export class ReviewService {
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
-  // Mock data for reviews
-  private mockReviews: ReviewModel[] = [
-    {
-      id: 1,
-      userName: 'John Doe',
-      studyProgramId: 1,
-      studyProgramName: 'Computer Science',
-      studyProgramVariantId: 1,
-      rating: 9,
-      comment:
-        'Excellent program with great professors. The curriculum is well-structured and covers both theoretical and practical aspects. The career support is outstanding, and many students get job offers before graduation. The only downside is that some courses can be quite challenging.',
-      anonymous: false,
-      createdAt: '2024-03-15T10:30:00',
-      updatedAt: '2024-03-15T10:30:00',
-      isEdited: false,
-      commentsCount: 3,
-    },
-    {
-      id: 2,
-      userName: 'Jane Smith',
-      studyProgramId: 1,
-      studyProgramName: 'Computer Science',
-      studyProgramVariantId: 1,
-      rating: 7,
-      comment:
-        'Good program overall, but the resources could be better. Some of the labs are outdated and need modernization. Teachers are knowledgeable and helpful. The workload is heavy but manageable if you stay organized.',
-      anonymous: false,
-      createdAt: '2023-06-20T14:15:00',
-      updatedAt: '2023-06-22T09:00:00',
-      isEdited: true,
-      commentsCount: 1,
-    },
-    {
-      id: 3,
-      userName: 'Anonymous',
-      studyProgramId: 1,
-      studyProgramName: 'Computer Science',
-      studyProgramVariantId: 1,
-      rating: 10,
-      comment:
-        'Outstanding program! The faculty is top-notch, and the facilities are state-of-the-art. Great internship opportunities and strong industry connections. Highly recommended for anyone serious about this field.',
-      anonymous: true,
-      createdAt: '2024-08-10T16:45:00',
-      updatedAt: '2024-08-10T16:45:00',
-      isEdited: false,
-      commentsCount: 5,
-    },
-    {
-      id: 4,
-      userName: 'Maria Garcia',
-      studyProgramId: 1,
-      studyProgramName: 'Computer Science',
-      studyProgramVariantId: 2,
-      rating: 6,
-      comment:
-        'The program is very demanding and not for the faint of heart. Some professors are excellent, but others seem disconnected. Resources are limited, especially for research projects. Career prospects are decent but require a lot of self-initiative.',
-      anonymous: false,
-      createdAt: '2022-12-05T11:20:00',
-      updatedAt: '2022-12-05T11:20:00',
-      isEdited: false,
-      commentsCount: 2,
-    },
-    {
-      id: 5,
-      userName: 'Michael Brown',
-      studyProgramId: 1,
-      studyProgramName: 'Computer Science',
-      studyProgramVariantId: 1,
-      rating: 9,
-      comment:
-        'Fantastic experience! The program prepares you well for the industry. Professors are experienced professionals who bring real-world insights. The coursework is challenging but rewarding. Career services are excellent with many recruiting events.',
-      anonymous: false,
-      createdAt: '2024-02-28T13:00:00',
-      updatedAt: '2024-03-01T10:30:00',
-      isEdited: true,
-      commentsCount: 0,
-    },
-  ];
 
   // Mock data for comments
   private mockComments: { [reviewId: number]: CommentModel[] } = {
@@ -287,9 +209,10 @@ export class ReviewService {
           console.warn('Review endpoints not implemented yet, returning empty array');
           return of([]);
         }
-        // For other errors, fallback to mock data
+        // // For other errors, fallback to mock data
         console.error('Error fetching reviews:', error);
-        return of(this.getMockReviews(programId, filters));
+        // return of(this.getMockReviews(programId, filters));
+        return of([]);
       })
     );
   }
@@ -297,51 +220,51 @@ export class ReviewService {
   /**
    * Get mock reviews (fallback for development)
    */
-  private getMockReviews(
-    programId: number,
-    filters?: ReviewFilterOptions
-  ): ReviewModel[] {
-    let reviews = [...this.mockReviews];
-
-    // Apply sorting
-    if (filters) {
-      switch (filters.sortBy) {
-        case 'newest':
-          reviews.sort(
-            (a, b) =>
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          );
-          break;
-        case 'oldest':
-          reviews.sort(
-            (a, b) =>
-              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-          );
-          break;
-        case 'highest':
-          reviews.sort((a, b) => b.rating - a.rating);
-          break;
-        case 'lowest':
-          reviews.sort((a, b) => a.rating - b.rating);
-          break;
-        case 'edited':
-          reviews.sort(
-            (a, b) =>
-              new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-          );
-          break;
-      }
-    }
-
-    return reviews;
-  }
+  // private getMockReviews(
+  //   programId: number,
+  //   filters?: ReviewFilterOptions
+  // ): ReviewModel[] {
+  //   let reviews = [...this.mockReviews];
+  //
+  //   // Apply sorting
+  //   if (filters) {
+  //     switch (filters.sortBy) {
+  //       case 'newest':
+  //         reviews.sort(
+  //           (a, b) =>
+  //             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  //         );
+  //         break;
+  //       case 'oldest':
+  //         reviews.sort(
+  //           (a, b) =>
+  //             new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+  //         );
+  //         break;
+  //       case 'highest':
+  //         reviews.sort((a, b) => b.rating - a.rating);
+  //         break;
+  //       case 'lowest':
+  //         reviews.sort((a, b) => a.rating - b.rating);
+  //         break;
+  //       case 'edited':
+  //         reviews.sort(
+  //           (a, b) =>
+  //             new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+  //         );
+  //         break;
+  //     }
+  //   }
+  //
+  //   return reviews;
+  // }
 
   /**
    * Get comments for a specific review
    */
   getComments(reviewId: number): Observable<CommentModel[]> {
-    const comments = this.mockComments[reviewId] || [];
-    return of(comments).pipe(delay(300)); // Simulate network delay
+    const comments = [];
+    return of().pipe(delay(300)); // Simulate network delay
   }
 
   /**
@@ -351,6 +274,37 @@ export class ReviewService {
     return this.http.post<ReviewModel>(
       `${this.baseUrl}/public/review`,
       reviewDto,
+      { withCredentials: true }
+    );
+  }
+
+  /**
+   * Update an existing review (requires authentication and ownership)
+   */
+  updateReview(reviewId: number, reviewDto: UpdateReviewDto): Observable<ReviewModel> {
+    return this.http.put<ReviewModel>(
+      `${this.baseUrl}/public/review/${reviewId}`,
+      reviewDto,
+      { withCredentials: true }
+    );
+  }
+
+  /**
+   * Delete a review (requires authentication and ownership)
+   */
+  deleteReview(reviewId: number): Observable<void> {
+    return this.http.delete<void>(
+      `${this.baseUrl}/public/review/${reviewId}`,
+      { withCredentials: true }
+    );
+  }
+
+  /**
+   * Check if current user can create a review for a study program
+   */
+  canCreateReview(studyProgramId: number): Observable<boolean> {
+    return this.http.get<boolean>(
+      `${this.baseUrl}/public/review/can-review/${studyProgramId}`,
       { withCredentials: true }
     );
   }

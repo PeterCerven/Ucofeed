@@ -12,6 +12,7 @@ import { UniversityModel } from '@models/university.model';
 
 export interface RegisterData {
   email: string;
+  fullName: string;
   password: string;
 }
 
@@ -125,6 +126,10 @@ export class RegisterDialogComponent implements OnInit {
         Validators.email,
         CustomValidators.universityEmail(this.allowedDomains)
       ]],
+      fullName: ['', [
+        Validators.required,
+        Validators.minLength(3) // Prípadne pridajte minLength validáciu
+      ]],
       password: ['', [
         Validators.required,
         Validators.minLength(8),
@@ -149,7 +154,10 @@ export class RegisterDialogComponent implements OnInit {
 
   onSubmit(): void {
     if (this.registerForm.valid) {
+      // Použijeme deštrukturalizáciu pre vylúčenie confirmPassword
       const { confirmPassword, ...registerData } = this.registerForm.value;
+
+      // registerData teraz obsahuje { email, fullName, password }
       this.dialogRef.close(registerData as RegisterData);
     } else {
       this.registerForm.markAllAsTouched();
@@ -175,10 +183,22 @@ export class RegisterDialogComponent implements OnInit {
       return 'This field is required';
     }
 
+    // Spojenie minlength do jedného bloku (ak je definovaný)
+    if (control?.hasError('minlength')) {
+      const minLength = control.errors?.['minlength'].requiredLength;
+      return `Must be at least ${minLength} characters`;
+    }
+
+    // Prehodenie emailu a patternu sem, sú to špecifické chyby
     if (control?.hasError('email')) {
       return 'Please enter a valid email address';
     }
 
+    if (control?.hasError('pattern')) {
+      return 'Must contain uppercase, lowercase, number and special character';
+    }
+
+    // Špecifické chyby pre registráciu/validáciu emailu
     if (control?.hasError('invalidUniversityDomain')) {
       return `Must be one of: ${this.allowedDomains.join(', ')}`;
     }
@@ -188,15 +208,7 @@ export class RegisterDialogComponent implements OnInit {
       return `Invalid email format for ${domain}`;
     }
 
-    if (control?.hasError('minlength')) {
-      const minLength = control.errors?.['minlength'].requiredLength;
-      return `Must be at least ${minLength} characters`;
-    }
-
-    if (control?.hasError('pattern')) {
-      return 'Must contain uppercase, lowercase, number and special character';
-    }
-
+    // Chyba pri zhodnosti hesiel
     if (control?.hasError('passwordMismatch')) {
       return 'Passwords do not match';
     }

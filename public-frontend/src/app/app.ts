@@ -108,7 +108,7 @@ export class App {
 
     dialogRef.afterClosed().subscribe((result: RegisterData | undefined) => {
       if (result) {
-        this.authService.register(result.email, result.password).subscribe({
+        this.authService.register(result.email, result.fullName, result.password).subscribe({
           next: (response) => {
             // Set auth state immediately after registration (pending verification)
             this.isLoggedIn.set(true);

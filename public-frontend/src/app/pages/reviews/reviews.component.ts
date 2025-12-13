@@ -10,7 +10,7 @@ import { ReviewService } from '@services/review.service';
 import { UniversityService } from '@services/university.service';
 import { AuthStateService } from '@services/auth-state.service';
 import { ProgramDetailsModel, StudyProgramDetailsModel } from '@models/program-details.model';
-import { ReviewModel, ReviewFilterOptions, CreateReviewDto } from '@models/review.model';
+import { ReviewModel, ReviewFilterOptions, CreateReviewDto, UpdateReviewDto } from '@models/review.model';
 import { VariantModel } from '@models/variant.model';
 import { ProgramDetailsHeaderComponent } from '@components/program-details-header/program-details-header.component';
 import { ReviewFilterComponent } from '@components/review-filter/review-filter.component';
@@ -37,7 +37,7 @@ export class ReviewsComponent {
   private route = inject(ActivatedRoute);
   private reviewService = inject(ReviewService);
   private universityService = inject(UniversityService);
-  private authState = inject(AuthStateService);
+  public authState = inject(AuthStateService);
   private snackBar = inject(MatSnackBar);
 
   @ViewChild(ReviewFormComponent) reviewFormComponent?: ReviewFormComponent;
@@ -52,14 +52,8 @@ export class ReviewsComponent {
   isLoadingDetails = signal(true);
   isLoadingReviews = signal(true);
   showReviewForm = signal(false);
-
-  // Study program variant ID - will come from backend/user enrollment
-  studyProgramVariantId = signal<number>(1); // Will be auto-assigned from backend response
-
-  // Check if user can create a review
-  get canCreateReview(): boolean {
-    return this.authState.isVerified();
-  }
+  canUserCreateReview = signal<boolean>(false);
+  editingReview = signal<ReviewModel | null>(null);
 
   constructor() {
     effect(() => {
@@ -67,6 +61,7 @@ export class ReviewsComponent {
       if (id) {
         this.loadProgramDetails(id);
         this.loadReviews(id);
+        this.checkReviewEligibility(id);
       }
     });
   }
@@ -140,6 +135,21 @@ export class ReviewsComponent {
     });
   }
 
+  private checkReviewEligibility(programId: number): void {
+    if (!this.authState.isLoggedIn()) {
+      this.canUserCreateReview.set(false);
+      return;
+    }
+
+    this.reviewService.canCreateReview(programId).subscribe({
+      next: (canReview) => this.canUserCreateReview.set(canReview),
+      error: (error) => {
+        console.error('Error checking review eligibility:', error);
+        this.canUserCreateReview.set(false);
+      }
+    });
+  }
+
   onFilterChange(newFilters: ReviewFilterOptions): void {
     this.filters.set(newFilters);
     const id = Number(this.paramMap()?.get('id'));
@@ -149,7 +159,13 @@ export class ReviewsComponent {
   }
 
   toggleReviewForm(): void {
-    this.showReviewForm.set(!this.showReviewForm());
+    const isOpening = !this.showReviewForm();
+    this.showReviewForm.set(isOpening);
+
+    // Reset editing state when closing the form
+    if (!isOpening) {
+      this.editingReview.set(null);
+    }
   }
 
   onSubmitReview(reviewDto: CreateReviewDto): void {
@@ -165,14 +181,8 @@ export class ReviewsComponent {
       return;
     }
 
-    // Add user ID and program ID to review DTO
-    const reviewWithAuth = {
-      ...reviewDto,
-      userId: this.authState.userId(),
-      studyProgramId: this.programDetails()?.id || 0,
-    };
-
-    this.reviewService.createReview(reviewWithAuth).subscribe({
+    // Backend gets userId from session via @AuthenticationPrincipal
+    this.reviewService.createReview(reviewDto).subscribe({
       next: (newReview) => {
         // Add new review to the list
         this.reviews.update(reviews => [newReview, ...reviews]);
@@ -220,6 +230,121 @@ export class ReviewsComponent {
 
   onCancelReview(): void {
     this.showReviewForm.set(false);
+    this.editingReview.set(null);
+  }
+
+  onEditReview(review: ReviewModel): void {
+    this.editingReview.set(review);
+    this.showReviewForm.set(true);
+  }
+
+  onUpdateReview(reviewDto: CreateReviewDto): void {
+    const review = this.editingReview();
+    if (!review) {
+      console.error('No review selected for editing');
+      return;
+    }
+
+    // Convert CreateReviewDto to UpdateReviewDto
+    const updateDto: UpdateReviewDto = {
+      rating: reviewDto.rating,
+      comment: reviewDto.comment,
+      anonymous: reviewDto.anonymous || false,
+    };
+
+    this.reviewService.updateReview(review.id, updateDto).subscribe({
+      next: (updatedReview) => {
+        // Update review in the list
+        this.reviews.update(reviews =>
+          reviews.map(r => r.id === updatedReview.id ? updatedReview : r)
+        );
+
+        // Show success message
+        this.snackBar.open('Review updated successfully!', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['success-snackbar'],
+        });
+
+        // Hide form and reset editing state
+        this.showReviewForm.set(false);
+        this.editingReview.set(null);
+        this.reviewFormComponent?.resetForm();
+
+        // Reload reviews to get updated stats
+        const programId = this.programDetails()?.id;
+        if (programId) {
+          this.loadReviews(programId);
+        }
+      },
+      error: (error) => {
+        console.error('Error updating review:', error);
+
+        let errorMessage = 'Failed to update review';
+        if (error.status === 403) {
+          errorMessage = 'You are not authorized to edit this review';
+        } else if (error.status === 404) {
+          errorMessage = 'Review not found';
+        }
+
+        this.snackBar.open(errorMessage, 'Close', {
+          duration: 5000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['error-snackbar'],
+        });
+      },
+    });
+  }
+
+  onDeleteReview(reviewId: number): void {
+    // Show confirmation dialog
+    const confirmed = window.confirm(
+      'Are you sure you want to delete this review? This action cannot be undone.'
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.reviewService.deleteReview(reviewId).subscribe({
+      next: () => {
+        // Remove review from the list
+        this.reviews.update(reviews => reviews.filter(r => r.id !== reviewId));
+
+        // Show success message
+        this.snackBar.open('Review deleted successfully!', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['success-snackbar'],
+        });
+
+        // Reload reviews to get updated stats
+        const programId = this.programDetails()?.id;
+        if (programId) {
+          this.loadReviews(programId);
+        }
+      },
+      error: (error) => {
+        console.error('Error deleting review:', error);
+
+        let errorMessage = 'Failed to delete review';
+        if (error.status === 403) {
+          errorMessage = 'You are not authorized to delete this review';
+        } else if (error.status === 404) {
+          errorMessage = 'Review not found';
+        }
+
+        this.snackBar.open(errorMessage, 'Close', {
+          duration: 5000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['error-snackbar'],
+        });
+      },
+    });
   }
 
   private extractLanguages(variants: VariantModel[]): string {
