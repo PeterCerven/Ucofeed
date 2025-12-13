@@ -1,6 +1,11 @@
-<div class="review-form-container" *transloco="let t; prefix 'reviewForm'">
-  <h2 class="form-title">{{ t('title') }}</h2>
-
+<div class="review-form-container" *transloco="let t; prefix: 'reviewForm'">
+  <h2 class="form-title">
+    {{
+      editingReview()
+        ? t('title.edit')
+        : t('title.create')
+    }}
+  </h2>
   <form [formGroup]="reviewForm" (ngSubmit)="onSubmit()" class="review-form">
 
     <!-- Review Comment -->
@@ -71,7 +76,11 @@
             <mat-icon>hourglass_empty</mat-icon> {{ t('submitting') }}
           </ng-container>
         } @else {
-          {{ t('submit') }}
+          {{
+            editingReview()
+              ? t('actions.update')
+              : t('actions.submit')
+          }}
         }
       </button>
     </div>

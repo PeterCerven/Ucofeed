@@ -6,22 +6,50 @@
           <mat-icon>person</mat-icon>
         </div>
         <div class="user-details">
-          <h3 class="user-name">{{ review().anonymous ? t('anonymous') : review().userName }}</h3>
+          <h3 class="user-name">{{ review().anonymous ? t('anonymous') : review().user_full_name }}</h3>
           <div class="meta-info">
             <span class="program-name">{{ review().studyProgramName || 'Computer Science' }}</span>
-            @if (review().isEdited) {
+            @if (isEdited()) {
               <span class="separator">•</span>
               <mat-chip class="edited-badge">
                 <mat-icon>edit</mat-icon>
                 {{ t('edited') }}
               </mat-chip>
             }
-          </div>        </div>
+          </div>
+          <!-- Variant tags -->
+          @if (review().language || review().studyForm || review().title) {
+            <div class="variant-tags">
+              @if (review().language) {
+                <mat-chip class="variant-tag">{{ review().language }}</mat-chip>
+              }
+              @if (review().studyForm) {
+                <mat-chip class="variant-tag">{{ review().studyForm }}</mat-chip>
+              }
+              @if (review().title) {
+                <mat-chip class="variant-tag">{{ review().title }}</mat-chip>
+              }
+            </div>
+          }
+        </div>
       </div>
-      <div class="overall-rating" [style.color]="getRatingColor(review().rating)">
-        <div class="rating-value">{{ review().rating }}</div>
-        <div class="rating-label">{{ t('rating') }}</div>
-      </div>
+      <div class="rating-actions">
+        <div class="overall-rating" [style.color]="getRatingColor(review().rating)">
+          <div class="rating-value">{{ review().rating }}</div>
+          <div class="rating-label">{{ t('rating') }}</div>
+        </div>
+        <!-- Action buttons for owner -->
+        @if (canShowActions()) {
+          <div class="action-buttons">
+            <button mat-icon-button (click)="onEdit()" matTooltip="Edit review">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="onDelete()" matTooltip="Delete review" color="warn">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        }
+
     </div>
   </mat-card-header>
 
@@ -45,16 +73,24 @@
     <div class="review-footer">
       <div class="date-info">
         <mat-icon>schedule</mat-icon>
+
         <span>{{ t('posted', { date: formatDate(review().createdAt) }) }}</span>
+
         @if (review().isEdited) {
           <span class="edited-date">{{ t('updated', { date: formatDate(review().updatedAt) }) }}</span>
         }
       </div>
-      <button mat-button (click)="toggleComments()" class="comments-toggle">
-        <mat-icon>comment</mat-icon>
-        <span>{{ review().commentsCount }} {{ review().commentsCount === 1 ? t('comment') : t('comments') }}</span>
-        <mat-icon class="expand-icon" [class.expanded]="isExpanded()">expand_more</mat-icon>
-      </button>
+
+      @if (review().commentsCount !== undefined) {
+        <button mat-button (click)="toggleComments()" class="comments-toggle">
+          <mat-icon>comment</mat-icon>
+          <span>
+        {{ review().commentsCount }}
+            {{ review().commentsCount === 1 ? t('comment') : t('comments') }}
+      </span>
+          <mat-icon class="expand-icon" [class.expanded]="isExpanded()">expand_more</mat-icon>
+        </button>
+      }
     </div>
   </mat-card-content>
 

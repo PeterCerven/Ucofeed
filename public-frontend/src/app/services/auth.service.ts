@@ -5,6 +5,7 @@ import { environment } from '@env/environment.production';
 
 export interface SignUpRequest {
   email: string;
+  fullName: string;
   password: string;
 }
 
@@ -30,8 +31,8 @@ export class AuthService {
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
 
-  register(email: string, password: string): Observable<AuthResponse> {
-    const request: SignUpRequest = { email, password };
+  register(email: string, fullName: string, password: string): Observable<AuthResponse> {
+    const request: SignUpRequest = { email, fullName, password };
     return this.http.post<AuthResponse>(
       `${this.baseUrl}/public/auth/register`,
       request,

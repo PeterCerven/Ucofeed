@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, delay, catchError } from 'rxjs';
-import { ReviewModel, ReviewFilterOptions, CreateReviewDto } from '@models/review.model';
+import { ReviewModel, ReviewFilterOptions, CreateReviewDto, UpdateReviewDto } from '@models/review.model';
 import { CommentModel } from '@models/comment.model';
 import { ProgramDetailsModel } from '@models/program-details.model';
 import { environment } from '@env/environment.production';
@@ -208,19 +208,62 @@ export class ReviewService {
           console.warn('Returning empty array');
           return of([]);
         }
+        // For other errors, fallback to mock data
         console.error('Error fetching reviews:', error);
+        // return of(this.getMockReviews(programId, filters));
         return of([]);
       })
     );
   }
 
+  /**
+   * Get mock reviews (fallback for development)
+   */
+  // private getMockReviews(
+  //   programId: number,
+  //   filters?: ReviewFilterOptions
+  // ): ReviewModel[] {
+  //   let reviews = [...this.mockReviews];
+  //
+  //   // Apply sorting
+  //   if (filters) {
+  //     switch (filters.sortBy) {
+  //       case 'newest':
+  //         reviews.sort(
+  //           (a, b) =>
+  //             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  //         );
+  //         break;
+  //       case 'oldest':
+  //         reviews.sort(
+  //           (a, b) =>
+  //             new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+  //         );
+  //         break;
+  //       case 'highest':
+  //         reviews.sort((a, b) => b.rating - a.rating);
+  //         break;
+  //       case 'lowest':
+  //         reviews.sort((a, b) => a.rating - b.rating);
+  //         break;
+  //       case 'edited':
+  //         reviews.sort(
+  //           (a, b) =>
+  //             new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+  //         );
+  //         break;
+  //     }
+  //   }
+  //
+  //   return reviews;
+  // }
 
   /**
    * Get comments for a specific review
    */
   getComments(reviewId: number): Observable<CommentModel[]> {
-    const comments = this.mockComments[reviewId] || [];
-    return of(comments).pipe(delay(300)); // Simulate network delay
+    const comments = [];
+    return of().pipe(delay(300)); // Simulate network delay
   }
 
   /**
@@ -230,6 +273,37 @@ export class ReviewService {
     return this.http.post<ReviewModel>(
       `${this.baseUrl}/public/review`,
       reviewDto,
+      { withCredentials: true }
+    );
+  }
+
+  /**
+   * Update an existing review (requires authentication and ownership)
+   */
+  updateReview(reviewId: number, reviewDto: UpdateReviewDto): Observable<ReviewModel> {
+    return this.http.put<ReviewModel>(
+      `${this.baseUrl}/public/review/${reviewId}`,
+      reviewDto,
+      { withCredentials: true }
+    );
+  }
+
+  /**
+   * Delete a review (requires authentication and ownership)
+   */
+  deleteReview(reviewId: number): Observable<void> {
+    return this.http.delete<void>(
+      `${this.baseUrl}/public/review/${reviewId}`,
+      { withCredentials: true }
+    );
+  }
+
+  /**
+   * Check if current user can create a review for a study program
+   */
+  canCreateReview(studyProgramId: number): Observable<boolean> {
+    return this.http.get<boolean>(
+      `${this.baseUrl}/public/review/can-review/${studyProgramId}`,
       { withCredentials: true }
     );
   }

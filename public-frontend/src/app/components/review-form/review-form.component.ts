@@ -1,4 +1,4 @@
-import { Component, output, input, signal } from '@angular/core';
+import { Component, output, input, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,7 +9,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { CreateReviewDto } from '@models/review.model';
+import { CreateReviewDto, ReviewModel } from '@models/review.model';
 
 @Component({
   selector: 'app-review-form',
@@ -32,7 +32,7 @@ import { CreateReviewDto } from '@models/review.model';
 export class ReviewFormComponent {
   // Inputs
   studyProgramId = input.required<number>();
-  studyProgramVariantId = input.required<number>(); // Auto-assigned from backend response
+  editingReview = input<ReviewModel | null>(null); // For edit mode
 
   // Outputs
   submitReview = output<CreateReviewDto>();
@@ -56,6 +56,27 @@ export class ReviewFormComponent {
       this.updateStars(rating);
     });
 
+    // Watch editingReview changes to populate form
+    effect(() => {
+      const review = this.editingReview();
+      if (review) {
+        this.reviewForm.patchValue({
+          comment: review.comment,
+          rating: review.rating,
+          anonymous: review.anonymous,
+        });
+        this.updateStars(review.rating);
+      } else {
+        // Reset to default values when not editing
+        this.reviewForm.patchValue({
+          comment: '',
+          rating: 5,
+          anonymous: false,
+        });
+        this.updateStars(5);
+      }
+    });
+
     // Initialize stars
     this.updateStars(5);
   }
@@ -74,7 +95,6 @@ export class ReviewFormComponent {
 
       const reviewData: CreateReviewDto = {
         studyProgramId: this.studyProgramId(),
-        studyProgramVariantId: this.studyProgramVariantId(),
         comment: this.reviewForm.value.comment,
         rating: this.reviewForm.value.rating,
         anonymous: this.reviewForm.value.anonymous || false,

@@ -26,7 +26,7 @@ export class CommentsSectionComponent {
     effect(() => {
       const id = this.reviewId();
       if (id) {
-        this.loadComments(id);
+        // this.loadComments(id);
       }
     });
   }
