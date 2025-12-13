@@ -57,6 +57,8 @@
       "emailInvalid": "Please enter a valid email address",
       "invalidEmailFormat": "Invalid email format for {{domain}}",
       "invalidUniversityDomain": "Must be one of: {{domains}}",
+      "max": "Must be at most {{max}}",
+      "min": "Must be at least {{min}}",
       "minLength": "Must be at least {{length}} characters",
       "passwordMinLength": "Password must be at least {{length}} characters",
       "passwordMismatch": "Passwords do not match",

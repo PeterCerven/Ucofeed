@@ -57,6 +57,8 @@
       "emailInvalid": "Zadajte prosím platnú e-mailovú adresu",
       "invalidEmailFormat": "Neplatný formát e-mailu pre {{domain}}",
       "invalidUniversityDomain": "Musí byť jeden z: {{domains}}",
+      "max": "Musí byť najviac {{max}}",
+      "min": "Musí byť aspoň {{min}}",
       "minLength": "Musí mať aspoň {{length}} znakov",
       "passwordMinLength": "Heslo musí mať aspoň {{length}} znakov",
       "passwordMismatch": "Heslá sa nezhodujú",

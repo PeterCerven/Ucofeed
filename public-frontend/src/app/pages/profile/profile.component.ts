@@ -134,7 +134,7 @@ export class ProfileComponent implements OnInit {
           localStorage.setItem('authUser', JSON.stringify({ id: response.id, email: response.email, role: response.role }));
 
           this.snackBar.open(
-            this.translocoService.translate('app.snackbar.verificationSuccess'),
+            this.translocoService.translate('app.snackbar.accountVerifiedSuccess'),
             this.translocoService.translate('app.snackbar.close'),
             {
               duration: 5000,
@@ -153,7 +153,7 @@ export class ProfileComponent implements OnInit {
         },
         error: (error) => {
           this.isVerifying.set(false);
-          const errorMessage = error.error || this.translocoService.translate('app.snackbar.verificationError');
+          const errorMessage = error.error || this.translocoService.translate('app.snackbar.verificationFailed');
           this.snackBar.open(
             errorMessage,
             this.translocoService.translate('app.snackbar.close'),
@@ -174,7 +174,7 @@ export class ProfileComponent implements OnInit {
     const control = this.verificationForm.get(field);
 
     if (control?.hasError('required')) {
-      return this.translocoService.translate('auth.validation.fieldRequired');
+      return this.translocoService.translate('auth.validation.required');
     }
 
     if (control?.hasError('email')) {
@@ -319,7 +319,7 @@ export class ProfileComponent implements OnInit {
     const control = this.profileForm.get(field);
 
     if (control?.hasError('required')) {
-      return this.translocoService.translate('auth.validation.fieldRequired');
+      return this.translocoService.translate('auth.validation.required');
     }
 
     if (control?.hasError('min')) {
