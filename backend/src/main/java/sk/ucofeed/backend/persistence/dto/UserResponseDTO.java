@@ -15,12 +15,14 @@ import java.util.List;
 public class UserResponseDTO {
     private String id;
     private String email;
+    private String fullName;
     private List<UserEducationResponseDTO> educations;
 
     public static UserResponseDTO from(User user) {
         return UserResponseDTO.builder()
                 .id(user.getId().toString())
                 .email(user.getEmail())
+                .fullName(user.getFullName())
                 .educations(user.getEducations().stream()
                         .map(UserEducationResponseDTO::from)
                         .toList())

@@ -35,8 +35,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public User registerUser(String email, String password) {
-        LOG.info("Registering user with email: {}", email);
+    public User registerUser(String email, String fullName, String password) {
+        LOG.info("Registering user with email: {} and name: {}", email, fullName);
 
         // Check if user already exists
         if (userRepository.findByEmail(email).isPresent()) {
@@ -44,7 +44,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         // Create new user with encoded password
-        User user = new User(email, passwordEncoder.encode(password), User.Role.USER);
+        User user = new User(email, fullName, passwordEncoder.encode(password), User.Role.USER);
         user.setEnabled(false); // User is disabled until email is verified
 
         // Generate and set verification code

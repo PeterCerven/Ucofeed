@@ -28,8 +28,9 @@ public class ReviewResponse {
     String title;      // Academic degree title
 
     // User info (conditionally included based on anonymous flag)
-    String userId;     // UUID as string, null if anonymous
-    String userEmail;  // null if anonymous
+    String userId;       // UUID as string, null if anonymous
+    String userEmail;    // null if anonymous
+    String userFullName; // null if anonymous
 
     public static ReviewResponse from(Review review) {
         return ReviewResponse.builder()
@@ -47,6 +48,7 @@ public class ReviewResponse {
                 .title(review.getStudyProgramVariant().getTitle())
                 .userId(review.isAnonymous() ? null : review.getUser().getId().toString())
                 .userEmail(review.isAnonymous() ? null : review.getUser().getEmail())
+                .userFullName(review.isAnonymous() ? null : review.getUser().getFullName())
                 .build();
     }
 }

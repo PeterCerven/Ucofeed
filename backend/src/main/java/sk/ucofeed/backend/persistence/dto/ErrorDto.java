@@ -20,6 +20,8 @@ public class ErrorDto {
         USER_ALREADY_EXISTS,
         USER_NOT_ENROLLED,
         REVIEW_ALREADY_EXISTS,
+        REVIEW_NOT_FOUND,
+        UNAUTHORIZED_REVIEW_ACTION,
         STUDY_PROGRAM_NOT_FOUND,
         UNKNOWN
     }

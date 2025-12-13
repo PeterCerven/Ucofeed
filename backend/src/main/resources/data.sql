@@ -94,6 +94,7 @@ CREATE TABLE IF NOT EXISTS public.app_user (
                                  created_at timestamp(6) without time zone NOT NULL,
                                  email character varying(255) NOT NULL,
                                  enabled boolean NOT NULL,
+                                 full_name character varying(100) NOT NULL,
                                  last_login timestamp(6) without time zone,
                                  password character varying(255) NOT NULL,
                                  role character varying(255) NOT NULL,
@@ -296,11 +297,11 @@ ALTER TABLE IF EXISTS ONLY public.user_education ALTER COLUMN id ADD GENERATED B
 -- Data for Name: app_user; Type: TABLE DATA; Schema: public; Owner: user
 --
 
-INSERT INTO public.app_user VALUES ('ff129217-d4d3-4e53-b8ef-12fe9bad1657', '2025-12-12 17:41:37.499091', 'peter@stuba.sk', true, NULL, '$2a$10$H9bHbFcgnPV9hW2GPMfwWupYNnC6N4HA5t6yDzZY.Uvp24vv.Izzi', 'USER', NULL, NULL);
-INSERT INTO public.app_user VALUES ('4f509766-2f3e-49f5-a088-a7a1b6ae5f06', '2025-12-12 17:45:24.598787', 'artur@student.euba.sk', true, NULL, '$2a$10$FbDdY0YaPHpz46qQS3aQwe1RdwuB3dp2x5Z5lgUsFsqjr1R29x9ia', 'USER', NULL, NULL);
-INSERT INTO public.app_user VALUES ('c4f36c3f-96e1-4f8a-a5d3-a2c4a39db7b1', '2025-12-12 17:48:19.594848', 'andrej@student.upjs.sk', true, NULL, '$2a$10$bcnOQf2PxC6jdlqEVgvmHuJxkmikZXCFhy7n3J.4MvioRfcDXf6JG', 'USER', NULL, NULL);
-INSERT INTO public.app_user VALUES ('9fd495f3-6d6e-4255-bee4-8f287ca59ba2', '2025-12-12 17:51:46.813288', 'antonio1@stud.uniza.sk', true, NULL, '$2a$10$tYvwFnfN2Ifs.u8ZIZhqauS1G5haf3tNcrHzF76yvsgyFVu54qwpu', 'USER', NULL, NULL);
-INSERT INTO public.app_user VALUES ('d8d146f8-aeff-4963-b173-5463ce99b914', '2025-12-12 17:53:42.087844', 'martin1@student.tuke.sk', true, NULL, '$2a$10$auC4XOIwWOdsaaKptWQIMui1X3DPyxmyJfnZ39dmgSxDse11wyquK', 'USER', NULL, NULL);
+INSERT INTO public.app_user VALUES ('ff129217-d4d3-4e53-b8ef-12fe9bad1657', '2025-12-12 17:41:37.499091', 'peter@stuba.sk', true, 'Peter', NULL, '$2a$10$H9bHbFcgnPV9hW2GPMfwWupYNnC6N4HA5t6yDzZY.Uvp24vv.Izzi', 'USER', NULL, NULL);
+INSERT INTO public.app_user VALUES ('4f509766-2f3e-49f5-a088-a7a1b6ae5f06', '2025-12-12 17:45:24.598787', 'artur@student.euba.sk', true, 'Artur', NULL, '$2a$10$FbDdY0YaPHpz46qQS3aQwe1RdwuB3dp2x5Z5lgUsFsqjr1R29x9ia', 'USER', NULL, NULL);
+INSERT INTO public.app_user VALUES ('c4f36c3f-96e1-4f8a-a5d3-a2c4a39db7b1', '2025-12-12 17:48:19.594848', 'andrej@student.upjs.sk', true, 'Andrej', NULL, '$2a$10$bcnOQf2PxC6jdlqEVgvmHuJxkmikZXCFhy7n3J.4MvioRfcDXf6JG', 'USER', NULL, NULL);
+INSERT INTO public.app_user VALUES ('9fd495f3-6d6e-4255-bee4-8f287ca59ba2', '2025-12-12 17:51:46.813288', 'antonio1@stud.uniza.sk', true, 'Antonio', NULL, '$2a$10$tYvwFnfN2Ifs.u8ZIZhqauS1G5haf3tNcrHzF76yvsgyFVu54qwpu', 'USER', NULL, NULL);
+INSERT INTO public.app_user VALUES ('d8d146f8-aeff-4963-b173-5463ce99b914', '2025-12-12 17:53:42.087844', 'martin1@student.tuke.sk', true, 'Martin', NULL, '$2a$10$auC4XOIwWOdsaaKptWQIMui1X3DPyxmyJfnZ39dmgSxDse11wyquK', 'USER', NULL, NULL);
 
 
 --
