@@ -17,6 +17,7 @@ public class StudyProgramDetailsDTO {
     private String facultyName;
     private Long universityId;
     private String universityName;
+    private Double rating;
 
     public static StudyProgramDetailsDTO from(StudyProgram studyProgram) {
         return StudyProgramDetailsDTO.builder()
@@ -29,6 +30,21 @@ public class StudyProgramDetailsDTO {
                         ? studyProgram.getFaculty().getUniversity().getId() : null)
                 .universityName(studyProgram.getFaculty() != null && studyProgram.getFaculty().getUniversity() != null
                         ? studyProgram.getFaculty().getUniversity().getName() : null)
+                .build();
+    }
+
+    public static StudyProgramDetailsDTO from(StudyProgram studyProgram, Double rating) {
+        return StudyProgramDetailsDTO.builder()
+                .id(studyProgram.getId())
+                .name(studyProgram.getName())
+                .studyField(studyProgram.getStudyField())
+                .facultyId(studyProgram.getFaculty() != null ? studyProgram.getFaculty().getId() : null)
+                .facultyName(studyProgram.getFaculty() != null ? studyProgram.getFaculty().getName() : null)
+                .universityId(studyProgram.getFaculty() != null && studyProgram.getFaculty().getUniversity() != null
+                        ? studyProgram.getFaculty().getUniversity().getId() : null)
+                .universityName(studyProgram.getFaculty() != null && studyProgram.getFaculty().getUniversity() != null
+                        ? studyProgram.getFaculty().getUniversity().getName() : null)
+                .rating(rating)
                 .build();
     }
 }

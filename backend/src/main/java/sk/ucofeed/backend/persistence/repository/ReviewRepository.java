@@ -35,4 +35,16 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
      */
     @Query("SELECT AVG(r.rating) FROM Review r WHERE r.studyProgram = :studyProgram")
     Double findAverageRatingByStudyProgram(@Param("studyProgram") StudyProgram studyProgram);
+
+    /**
+     * Calculate average rating for all study programs in a faculty.
+     */
+    @Query("SELECT AVG(r.rating) FROM Review r WHERE r.studyProgram.faculty.id = :facultyId")
+    Double findAverageRatingByFacultyId(@Param("facultyId") Long facultyId);
+
+    /**
+     * Calculate average rating for all study programs in a university.
+     */
+    @Query("SELECT AVG(r.rating) FROM Review r WHERE r.studyProgram.faculty.university.id = :universityId")
+    Double findAverageRatingByUniversityId(@Param("universityId") Long universityId);
 }

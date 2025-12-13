@@ -14,6 +14,7 @@ public class FacultyDTO {
     private String name;
     private Long universityId;
     private String universityName;
+    private Double rating;
 
     public static FacultyDTO from(Faculty faculty) {
         return FacultyDTO.builder()
@@ -21,6 +22,16 @@ public class FacultyDTO {
                 .name(faculty.getName())
                 .universityId(faculty.getUniversity() != null ? faculty.getUniversity().getId() : null)
                 .universityName(faculty.getUniversity() != null ? faculty.getUniversity().getName() : null)
+                .build();
+    }
+
+    public static FacultyDTO from(Faculty faculty, Double rating) {
+        return FacultyDTO.builder()
+                .id(faculty.getId())
+                .name(faculty.getName())
+                .universityId(faculty.getUniversity() != null ? faculty.getUniversity().getId() : null)
+                .universityName(faculty.getUniversity() != null ? faculty.getUniversity().getName() : null)
+                .rating(rating)
                 .build();
     }
 }

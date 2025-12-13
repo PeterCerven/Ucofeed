@@ -15,7 +15,7 @@
         [id]="program.id"
         [name]="program.name"
         [entityType]="'program'"
-        [review]="program.review ?? 0"
+        [rating]="program.rating ?? 0"
         [description]="program.description ?? ''"
         (cardClick)="onProgramClick($event)">
       </entity-card>

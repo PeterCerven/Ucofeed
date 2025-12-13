@@ -12,11 +12,20 @@ import sk.ucofeed.backend.persistence.model.StudyProgram;
 public class StudyProgramDTO {
     private Long id;
     private String name;
+    private Double rating;
 
     public static StudyProgramDTO from(StudyProgram studyProgram) {
         return StudyProgramDTO.builder()
                 .id(studyProgram.getId())
                 .name(studyProgram.getName())
+                .build();
+    }
+
+    public static StudyProgramDTO from(StudyProgram studyProgram, Double rating) {
+        return StudyProgramDTO.builder()
+                .id(studyProgram.getId())
+                .name(studyProgram.getName())
+                .rating(rating)
                 .build();
     }
 }
