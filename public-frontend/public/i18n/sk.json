@@ -121,7 +121,15 @@
       "studyProgramsOf": "Študijné programy {{name}}"
     },
     "reviews": {
+      "actions": {
+        "cancel": "Zrušiť recenziu",
+        "writeReview": "Napísať recenziu"
+      },
       "cancel": "Zrušiť",
+      "empty": {
+        "description": "V súčasnosti nie sú k dispozícii žiadne recenzie pre tento program.",
+        "title": "Žiadne recenzie"
+      },
       "loadingDetails": "Načítavam detaily programu...",
       "loadingReviews": "Načítavam recenzie...",
       "noReviews": {

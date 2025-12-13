@@ -121,7 +121,15 @@
       "studyProgramsOf": "Study Programs of {{name}}"
     },
     "reviews": {
+      "actions": {
+        "cancel": "Cancel Review",
+        "writeReview": "Write Review"
+      },
       "cancel": "Cancel",
+      "empty": {
+        "description": "There currently are no reviews for this program.",
+        "title": "No Reviews Available"
+      },
       "loadingDetails": "Loading program details...",
       "loadingReviews": "Loading reviews...",
       "noReviews": {
