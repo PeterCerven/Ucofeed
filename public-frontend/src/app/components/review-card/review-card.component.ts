@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { CommentsSectionComponent } from '@components/comments-section/comments-section.component';
 
 @Component({
@@ -16,6 +17,7 @@ import { CommentsSectionComponent } from '@components/comments-section/comments-
     MatIconModule,
     MatButtonModule,
     MatChipsModule,
+    TranslocoDirective,
     CommentsSectionComponent,
   ],
   templateUrl: './review-card.component.html',

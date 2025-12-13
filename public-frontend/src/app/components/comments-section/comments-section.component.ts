@@ -5,11 +5,12 @@ import { ReviewService } from '@services/review.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-comments-section',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule, MatChipsModule],
+  imports: [CommonModule, MatIconModule, MatButtonModule, MatChipsModule, TranslocoDirective],
   templateUrl: './comments-section.component.html',
   styleUrl: './comments-section.component.scss',
 })

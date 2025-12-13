@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
+import { TranslocoService, TranslocoDirective } from '@jsverse/transloco';
 
 export interface LoginData {
   email: string;
@@ -22,7 +23,8 @@ export interface LoginData {
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    TranslocoDirective
   ],
   templateUrl: './login-dialog.component.html',
   styleUrl: './login-dialog.component.scss'
@@ -30,6 +32,7 @@ export interface LoginData {
 export class LoginDialogComponent {
   private readonly fb = inject(FormBuilder);
   private readonly dialogRef = inject(MatDialogRef<LoginDialogComponent>);
+  private readonly translocoService = inject(TranslocoService);
 
   readonly loginForm: FormGroup;
   hidePassword = true;
@@ -58,16 +61,16 @@ export class LoginDialogComponent {
     const control = this.loginForm.get(field);
 
     if (control?.hasError('required')) {
-      return 'This field is required';
+      return this.translocoService.translate('auth.validation.required');
     }
 
     if (control?.hasError('email')) {
-      return 'Please enter a valid email address';
+      return this.translocoService.translate('auth.validation.emailInvalid');
     }
 
     if (control?.hasError('minlength')) {
       const minLength = control.errors?.['minlength'].requiredLength;
-      return `Password must be at least ${minLength} characters`;
+      return this.translocoService.translate('auth.validation.passwordMinLength', { length: minLength });
     }
 
     return '';

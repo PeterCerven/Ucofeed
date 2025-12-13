@@ -1,12 +1,12 @@
-<div class="faculties-container">
+<div class="faculties-container" *transloco="let t; prefix 'pages.faculties'">
   <app-back-navigation
     backRoute="/universities"
-    backLabel="Back to Universities" />
+    [backLabel]="t('backToUniversities')" />
 
-  <h1>Faculties of {{ universityName() }}</h1>
+  <h1>{{ t('facultiesOf', { name: universityName() }) }}</h1>
 
   @if (isLoading()) {
-    <p>Loading faculties...</p>
+    <p>{{ t('loading') }}</p>
   }
 
   <div class="cards-grid">
@@ -21,7 +21,7 @@
         (cardClick)="onFacultyClick($event)"
       ></entity-card>
     } @empty {
-      <p>No faculties found.</p>
+      <p>{{ t('noFaculties') }}</p>
     }
 
   </div>

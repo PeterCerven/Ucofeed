@@ -4,13 +4,14 @@ import { EntityCardComponent } from '@components/entity-card/entity-card.compone
 import { BackNavigationComponent } from '@components/back-navigation/back-navigation.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
+import { TranslocoDirective } from '@jsverse/transloco';
 import {FacultyModel} from '@models/faculty.model';
 import { UniversityService } from '@services/university.service';
 
 @Component({
   selector: 'app-faculties',
   standalone: true,
-  imports: [EntityCardComponent, BackNavigationComponent],
+  imports: [EntityCardComponent, BackNavigationComponent, TranslocoDirective],
   templateUrl: './faculties.component.html',
   styleUrl: './faculties.component.scss'
 })

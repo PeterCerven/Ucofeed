@@ -10,8 +10,8 @@ export interface SelectOption {
 }
 
 export const STATUSES: SelectOption[] = [
-  { value: 'ENROLLED', label: 'Enrolled' },
-  { value: 'ON_HOLD', label: 'On Hold' },
-  { value: 'COMPLETED', label: 'Completed' },
-  { value: 'DROPPED_OUT', label: 'Dropped Out' }
+  { value: 'ENROLLED', label: 'profileModel.statuses.enrolled' },
+  { value: 'ON_HOLD', label: 'profileModel.statuses.onHold' },
+  { value: 'COMPLETED', label: 'profileModel.statuses.completed' },
+  { value: 'DROPPED_OUT', label: 'profileModel.statuses.droppedOut' }
 ];

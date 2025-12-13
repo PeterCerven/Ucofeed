@@ -1,14 +1,14 @@
-<div class="dialog-container">
+<div class="dialog-container" *transloco="let t; prefix 'auth'">
   <div class="dialog-header">
     <h2 mat-dialog-title class="dialog-title">
       <mat-icon class="title-icon">login</mat-icon>
-      <span>Login to UcoFeed</span>
+      <span>{{ t('login.title') }}</span>
     </h2>
     <button
       mat-icon-button
       class="close-button"
       (click)="onCancel()"
-      aria-label="Close dialog"
+      [attr.aria-label]="t('aria.closeDialog')"
     >
       <mat-icon>close</mat-icon>
     </button>
@@ -18,13 +18,13 @@
     <form [formGroup]="loginForm" class="login-form">
       <!-- Email Field -->
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Personal Email</mat-label>
+        <mat-label>{{ t('login.email') }}</mat-label>
         <mat-icon matPrefix>email</mat-icon>
         <input
           matInput
           type="email"
           formControlName="email"
-          placeholder="your.email@example.com"
+          [placeholder]="t('login.emailPlaceholder')"
           autocomplete="email"
         />
         @if (loginForm.get('email')?.touched) {
@@ -36,13 +36,13 @@
 
       <!-- Password Field -->
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Password</mat-label>
+        <mat-label>{{ t('login.password') }}</mat-label>
         <mat-icon matPrefix>lock</mat-icon>
         <input
           matInput
           [type]="hidePassword ? 'password' : 'text'"
           formControlName="password"
-          placeholder="Enter your password"
+          [placeholder]="t('login.passwordPlaceholder')"
           autocomplete="current-password"
         />
         <button
@@ -50,7 +50,7 @@
           matSuffix
           type="button"
           (click)="togglePasswordVisibility()"
-          [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
+          [attr.aria-label]="hidePassword ? t('aria.showPassword') : t('aria.hidePassword')"
         >
           <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
@@ -63,7 +63,7 @@
 
       <!-- Forgot Password Link -->
       <div class="form-footer">
-        <a href="#" class="forgot-password-link">Forgot password?</a>
+        <a href="#" class="forgot-password-link">{{ t('login.forgotPassword') }}</a>
       </div>
     </form>
   </mat-dialog-content>
@@ -75,7 +75,7 @@
       (click)="onCancel()"
       class="cancel-button"
     >
-      Cancel
+      {{ t('login.cancel') }}
     </button>
     <button
       mat-flat-button
@@ -86,7 +86,7 @@
       [disabled]="loginForm.invalid"
     >
       <mat-icon>login</mat-icon>
-      <span>Login</span>
+      <span>{{ t('login.login') }}</span>
     </button>
   </mat-dialog-actions>
 </div>

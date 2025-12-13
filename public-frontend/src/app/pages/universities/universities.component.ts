@@ -2,13 +2,14 @@ import {Component, inject, OnInit, signal} from '@angular/core';
 import { Router } from '@angular/router';
 import { EntityCardComponent } from '@components/entity-card/entity-card.component';
 import { CommonModule } from '@angular/common';
+import { TranslocoDirective } from '@jsverse/transloco';
 import {UniversityService} from '@services/university.service';
 import {UniversityModel} from '@models/university.model';
 
 @Component({
   selector: 'app-universities',
   standalone: true,
-  imports: [CommonModule, EntityCardComponent],
+  imports: [CommonModule, EntityCardComponent, TranslocoDirective],
   templateUrl: './universities.component.html',
   styleUrls: ['./universities.component.scss']
 })

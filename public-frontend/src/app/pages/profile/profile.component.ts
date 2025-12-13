@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslocoService, TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { UniversityService } from '@services/university.service';
 import { AuthService } from '@services/auth.service';
 import { UserService, UpdateUserRequest } from '@services/user.service';
@@ -32,7 +33,9 @@ import {
     MatButtonModule,
     MatIconModule,
     MatSelectModule,
-    MatCardModule
+    MatCardModule,
+    TranslocoDirective,
+    TranslocoPipe
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
@@ -45,6 +48,7 @@ export class ProfileComponent implements OnInit {
   private readonly snackBar = inject(MatSnackBar);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly translocoService = inject(TranslocoService);
 
   readonly profileForm: FormGroup;
   readonly verificationForm: FormGroup;
@@ -129,11 +133,15 @@ export class ProfileComponent implements OnInit {
           // Set auth state (user is now logged in after verification)
           localStorage.setItem('authUser', JSON.stringify({ id: response.id, email: response.email, role: response.role }));
 
-          this.snackBar.open('Account verified successfully! You can now complete your profile.', 'Close', {
-            duration: 5000,
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-          });
+          this.snackBar.open(
+            this.translocoService.translate('app.snackbar.verificationSuccess'),
+            this.translocoService.translate('app.snackbar.close'),
+            {
+              duration: 5000,
+              horizontalPosition: 'end',
+              verticalPosition: 'top'
+            }
+          );
           // Clear query params and reload to update auth state
           this.router.navigate([], {
             relativeTo: this.route,
@@ -145,12 +153,16 @@ export class ProfileComponent implements OnInit {
         },
         error: (error) => {
           this.isVerifying.set(false);
-          const errorMessage = error.error || 'Verification failed. Please check your code and try again.';
-          this.snackBar.open(errorMessage, 'Close', {
-            duration: 5000,
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-          });
+          const errorMessage = error.error || this.translocoService.translate('app.snackbar.verificationError');
+          this.snackBar.open(
+            errorMessage,
+            this.translocoService.translate('app.snackbar.close'),
+            {
+              duration: 5000,
+              horizontalPosition: 'end',
+              verticalPosition: 'top'
+            }
+          );
         }
       });
     } else {
@@ -162,11 +174,11 @@ export class ProfileComponent implements OnInit {
     const control = this.verificationForm.get(field);
 
     if (control?.hasError('required')) {
-      return 'This field is required';
+      return this.translocoService.translate('auth.validation.fieldRequired');
     }
 
     if (control?.hasError('email')) {
-      return 'Please enter a valid email address';
+      return this.translocoService.translate('auth.validation.emailInvalid');
     }
 
     return '';
@@ -229,11 +241,15 @@ export class ProfileComponent implements OnInit {
       // Get user ID from localStorage
       const authUser = localStorage.getItem('authUser');
       if (!authUser) {
-        this.snackBar.open('Please log in to save your profile', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'end',
-          verticalPosition: 'top'
-        });
+        this.snackBar.open(
+          this.translocoService.translate('app.snackbar.profileRequireLogin'),
+          this.translocoService.translate('app.snackbar.close'),
+          {
+            duration: 3000,
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          }
+        );
         return;
       }
 
@@ -255,28 +271,40 @@ export class ProfileComponent implements OnInit {
           // Also save to localStorage for offline access
           localStorage.setItem('userProfile', JSON.stringify(profileData));
 
-          this.snackBar.open('Profile saved successfully!', 'Close', {
-            duration: 3000,
-            horizontalPosition: 'end',
-            verticalPosition: 'top',
-          });
+          this.snackBar.open(
+            this.translocoService.translate('app.snackbar.profileSaveSuccess'),
+            this.translocoService.translate('app.snackbar.close'),
+            {
+              duration: 3000,
+              horizontalPosition: 'end',
+              verticalPosition: 'top',
+            }
+          );
         },
         error: (error) => {
-          const errorMessage = error.error || 'Failed to save profile. Please try again.';
-          this.snackBar.open(errorMessage, 'Close', {
-            duration: 5000,
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-          });
+          const errorMessage = error.error || this.translocoService.translate('app.snackbar.profileSaveError');
+          this.snackBar.open(
+            errorMessage,
+            this.translocoService.translate('app.snackbar.close'),
+            {
+              duration: 5000,
+              horizontalPosition: 'end',
+              verticalPosition: 'top'
+            }
+          );
         }
       });
     } else {
       this.profileForm.markAllAsTouched();
-      this.snackBar.open('Please fill in all required fields', 'Close', {
-        duration: 3000,
-        horizontalPosition: 'end',
-        verticalPosition: 'top'
-      });
+      this.snackBar.open(
+        this.translocoService.translate('app.snackbar.profileValidationError'),
+        this.translocoService.translate('app.snackbar.close'),
+        {
+          duration: 3000,
+          horizontalPosition: 'end',
+          verticalPosition: 'top'
+        }
+      );
     }
   }
 
@@ -291,17 +319,17 @@ export class ProfileComponent implements OnInit {
     const control = this.profileForm.get(field);
 
     if (control?.hasError('required')) {
-      return 'This field is required';
+      return this.translocoService.translate('auth.validation.fieldRequired');
     }
 
     if (control?.hasError('min')) {
       const min = control.errors?.['min'].min;
-      return `Must be at least ${min}`;
+      return this.translocoService.translate('auth.validation.min', { min });
     }
 
     if (control?.hasError('max')) {
       const max = control.errors?.['max'].max;
-      return `Must be at most ${max}`;
+      return this.translocoService.translate('auth.validation.max', { max });
     }
 
     return '';

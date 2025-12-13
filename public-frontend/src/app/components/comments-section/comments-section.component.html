@@ -1,18 +1,18 @@
-<div class="comments-section">
+<div class="comments-section" *transloco="let t; prefix 'comments'">
   <h4 class="comments-header">
     <mat-icon>comment</mat-icon>
-    <span>Comments</span>
+    <span>{{ t('comments') }}</span>
   </h4>
 
   @if (isLoading()) {
     <div class="loading">
-      <p>Loading comments...</p>
+      <p>{{ t('loading') }}</p>
     </div>
   } @else {
     @if (comments().length === 0) {
       <div class="no-comments">
         <mat-icon>chat_bubble_outline</mat-icon>
-        <p>No comments yet. Be the first to comment!</p>
+        <p>{{ t('noComments') }}</p>
       </div>
     } @else {
       <div class="comments-list">
@@ -28,7 +28,7 @@
                 @if (comment.isEdited) {
                   <mat-chip class="edited-badge">
                     <mat-icon>edit</mat-icon>
-                    Edited
+                    {{ t('edited') }}
                   </mat-chip>
                 }
               </div>
@@ -44,7 +44,7 @@
     <!-- Add comment section (disabled for now - requires auth) -->
     <div class="add-comment">
       <mat-icon>info</mat-icon>
-      <p>Login required to add comments</p>
+      <p>{{ t('loginRequired') }}</p>
     </div>
   }
 </div>

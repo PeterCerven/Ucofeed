@@ -6,6 +6,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { catchError, of } from 'rxjs';
+import { TranslocoService, TranslocoDirective } from '@jsverse/transloco';
 import { ReviewService } from '@services/review.service';
 import { UniversityService } from '@services/university.service';
 import { AuthStateService } from '@services/auth-state.service';
@@ -25,6 +26,7 @@ import { ReviewFormComponent } from '@components/review-form/review-form.compone
     MatSnackBarModule,
     MatButtonModule,
     MatIconModule,
+    TranslocoDirective,
     ProgramDetailsHeaderComponent,
     ReviewFilterComponent,
     ReviewCardComponent,
@@ -39,6 +41,7 @@ export class ReviewsComponent {
   private universityService = inject(UniversityService);
   private authState = inject(AuthStateService);
   private snackBar = inject(MatSnackBar);
+  private translocoService = inject(TranslocoService);
 
   @ViewChild(ReviewFormComponent) reviewFormComponent?: ReviewFormComponent;
 
@@ -156,12 +159,16 @@ export class ReviewsComponent {
     // Verify auth state
     if (!this.authState.isLoggedIn()) {
       console.error('User must be logged in to create review');
-      this.snackBar.open('Please log in to create a review', 'Close', {
-        duration: 3000,
-        horizontalPosition: 'center',
-        verticalPosition: 'top',
-        panelClass: ['error-snackbar'],
-      });
+      this.snackBar.open(
+        this.translocoService.translate('app.snackbar.reviewSubmitErrorRequireLogin'),
+        this.translocoService.translate('app.snackbar.close'),
+        {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['error-snackbar'],
+        }
+      );
       return;
     }
 
@@ -178,12 +185,16 @@ export class ReviewsComponent {
         this.reviews.update(reviews => [newReview, ...reviews]);
 
         // Show success message
-        this.snackBar.open('Review submitted successfully!', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          panelClass: ['success-snackbar'],
-        });
+        this.snackBar.open(
+          this.translocoService.translate('app.snackbar.reviewSubmitSuccess'),
+          this.translocoService.translate('app.snackbar.close'),
+          {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['success-snackbar'],
+          }
+        );
 
         // Hide form and reset
         this.showReviewForm.set(false);
@@ -198,21 +209,25 @@ export class ReviewsComponent {
       error: (error) => {
         console.error('Error submitting review:', error);
 
-        let errorMessage = 'Failed to submit review';
+        let errorMessage = this.translocoService.translate('app.snackbar.reviewSubmitError');
         if (error.status === 403) {
-          errorMessage = 'You are not enrolled in this program';
+          errorMessage = this.translocoService.translate('app.snackbar.reviewSubmitErrorNotEnrolled');
         } else if (error.status === 401) {
-          errorMessage = 'Please verify your account first';
+          errorMessage = this.translocoService.translate('app.snackbar.reviewSubmitErrorNotVerified');
         } else if (error.status === 404) {
-          errorMessage = 'Review endpoint not implemented yet';
+          errorMessage = this.translocoService.translate('app.snackbar.reviewSubmitErrorNotImplemented');
         }
 
-        this.snackBar.open(errorMessage, 'Close', {
-          duration: 5000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          panelClass: ['error-snackbar'],
-        });
+        this.snackBar.open(
+          errorMessage,
+          this.translocoService.translate('app.snackbar.close'),
+          {
+            duration: 5000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['error-snackbar'],
+          }
+        );
         this.reviewFormComponent?.resetForm();
       },
     });

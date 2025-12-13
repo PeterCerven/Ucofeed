@@ -1,1 +1,169 @@
-{}
+{
+  "app": {
+    "snackbar": {
+      "accountVerifiedSuccess": "Účet úspešne overený! Teraz môžete dokončiť svoj profil.",
+      "close": "Zavrieť",
+      "loginFailed": "Prihlásenie zlyhalo. Skúste to prosím znova.",
+      "loginSuccess": "Prihlásenie úspešné!",
+      "logoutSuccess": "Úspešne odhlásený",
+      "pleaseLogin": "Pre uloženie profilu sa prosím prihláste",
+      "profileFillRequired": "Vyplňte prosím všetky povinné polia",
+      "profileSaveFailed": "Uloženie profilu zlyhalo. Skúste to prosím znova.",
+      "profileSaveSuccess": "Profil úspešne uložený!",
+      "registerSuccess": "Registrácia úspešná! Skontrolujte si e-mail pre overovací kód.",
+      "registrationFailed": "Registrácia zlyhala. Skúste to prosím znova.",
+      "verificationFailed": "Overenie zlyhalo. Skontrolujte prosím kód a skúste to znova."
+    },
+    "toolbar": {
+      "darkMode": "Tmavý režim",
+      "lightMode": "Svetlý režim",
+      "login": "Prihlásiť sa",
+      "logout": "Odhlásiť sa",
+      "myProfile": "Môj profil",
+      "register": "Registrovať sa",
+      "switchLanguage": "Prepnúť jazyk"
+    }
+  },
+  "auth": {
+    "aria": {
+      "closeDialog": "Zavrieť dialóg",
+      "hidePassword": "Skryť heslo",
+      "showPassword": "Zobraziť heslo"
+    },
+    "login": {
+      "cancel": "Zrušiť",
+      "email": "Osobný e-mail",
+      "emailPlaceholder": "vas.email@priklad.com",
+      "forgotPassword": "Zabudli ste heslo?",
+      "login": "Prihlásiť sa",
+      "password": "Heslo",
+      "passwordPlaceholder": "Zadajte svoje heslo",
+      "title": "Prihlásiť sa do UcoFeed"
+    },
+    "register": {
+      "cancel": "Zrušiť",
+      "confirmPassword": "Potvrdiť heslo",
+      "confirmPasswordPlaceholder": "Zadajte heslo znova",
+      "createAccount": "Vytvoriť účet",
+      "email": "Univerzitný e-mail",
+      "emailHint": "Iba pre študentské e-mailové domény",
+      "emailPlaceholder": "student@stuba.sk",
+      "password": "Heslo",
+      "passwordHint": "Min 8 znakov, s veľkým, malým, číslom a špeciálnym znakom",
+      "passwordPlaceholder": "Vytvorte silné heslo",
+      "title": "Vytvoriť účet"
+    },
+    "validation": {
+      "emailInvalid": "Zadajte prosím platnú e-mailovú adresu",
+      "invalidEmailFormat": "Neplatný formát e-mailu pre {{domain}}",
+      "invalidUniversityDomain": "Musí byť jeden z: {{domains}}",
+      "minLength": "Musí mať aspoň {{length}} znakov",
+      "passwordMinLength": "Heslo musí mať aspoň {{length}} znakov",
+      "passwordMismatch": "Heslá sa nezhodujú",
+      "passwordPattern": "Musí obsahovať veľké, malé písmeno, číslo a špeciálny znak",
+      "required": "Toto pole je povinné"
+    }
+  },
+  "comments": {
+    "comments": "Komentáre",
+    "edited": "Upravené",
+    "loading": "Načítavam komentáre...",
+    "loginRequired": "Na pridanie komentárov je potrebné prihlásenie",
+    "noComments": "Zatiaľ žiadne komentáre. Buďte prvý, kto pridá komentár!"
+  },
+  "pages": {
+    "faculties": {
+      "backToUniversities": "Späť na univerzity",
+      "facultiesOf": "Fakulty {{name}}",
+      "loading": "Načítavam fakulty...",
+      "noFaculties": "Neboli nájdené žiadne fakulty."
+    },
+    "profile": {
+      "autoDetected": "Automaticky zistené z vašej e-mailovej domény",
+      "email": "E-mail",
+      "emailPlaceholder": "vas.email@univerzita.sk",
+      "faculty": "Fakulta",
+      "facultyHint": "Vyberte svoju fakultu",
+      "facultyPlaceholder": "Vyberte svoju fakultu",
+      "loading": "Načítavam...",
+      "reset": "Resetovať",
+      "saveProfile": "Uložiť profil",
+      "status": "Stav",
+      "statusPlaceholder": "Vyberte svoj stav",
+      "statuses": {
+        "completed": "Ukončené",
+        "droppedOut": "Prerušené",
+        "enrolled": "Zapísaný",
+        "onHold": "Pozastavené"
+      },
+      "studyProgram": "Študijný program",
+      "studyProgramHint": "Vyberte svoj študijný program (najprv vyberte fakultu)",
+      "studyProgramPlaceholder": "Vyberte svoj študijný program",
+      "studyVariant": "Variant štúdia",
+      "studyVariantHint": "Vyberte svoj variant štúdia (najprv vyberte program)",
+      "studyVariantPlaceholder": "Vyberte variant štúdia",
+      "subtitle": "Spravujte svoje akademické informácie",
+      "title": "Môj profil",
+      "university": "Univerzita",
+      "verificationCode": "Overovací kód",
+      "verificationCodeHint": "Zadajte 6-miestny kód zaslaný na váš e-mail",
+      "verificationCodePlaceholder": "Zadajte kód z e-mailu",
+      "verificationSubtitle": "Zadajte overovací kód zaslaný na váš e-mail pre dokončenie registrácie",
+      "verificationTitle": "Overiť účet",
+      "verify": "Overiť účet",
+      "verifying": "Overujem..."
+    },
+    "programs": {
+      "loading": "Načítavam programy...",
+      "noPrograms": "Neboli nájdené žiadne programy.",
+      "studyProgramsOf": "Študijné programy {{name}}"
+    },
+    "reviews": {
+      "cancel": "Zrušiť",
+      "loadingDetails": "Načítavam detaily programu...",
+      "loadingReviews": "Načítavam recenzie...",
+      "noReviews": {
+        "message": "Buďte prvý, kto napíše recenziu na tento program!",
+        "title": "Žiadne recenzie"
+      },
+      "writeReview": "Napísať recenziu"
+    },
+    "universities": {
+      "title": "Univerzity"
+    }
+  },
+  "reviewCard": {
+    "anonymous": "Anonymný",
+    "comment": "Komentár",
+    "comments": "Komentáre",
+    "edited": "Upravené",
+    "posted": "Zverejnené {{date}}",
+    "rating": "Hodnotenie",
+    "updated": "(Aktualizované {{date}})"
+  },
+  "reviewFilter": {
+    "sortBy": "Zoradiť podľa",
+    "sortOptions": {
+      "edited": "Nedávno upravené",
+      "highest": "Najvyššie hodnotené",
+      "lowest": "Najnižšie hodnotené",
+      "newest": "Najnovšie",
+      "oldest": "Najstaršie"
+    },
+    "sortReviews": "Zoradiť recenzie"
+  },
+  "reviewForm": {
+    "anonymousCheckbox": "Zverejniť anonymne",
+    "anonymousHint": "Vaše meno nebude viditeľné pre ostatných",
+    "cancel": "Zrušiť",
+    "charactersMinimum": "znakov (minimum 20)",
+    "commentMinLength": "Komentár musí mať aspoň 20 znakov",
+    "commentPlaceholder": "Zdieľajte svoju skúsenosť s týmto programom...",
+    "commentRequired": "Komentár recenzie je povinný",
+    "overallRating": "Celkové hodnotenie:",
+    "submit": "Odoslať recenziu",
+    "submitting": "Odosielam...",
+    "title": "Napísať recenziu",
+    "yourReview": "Vaša recenzia"
+  }
+}

@@ -1,14 +1,14 @@
-<div class="dialog-container">
+<div class="dialog-container" *transloco="let t; prefix 'auth'">
   <div class="dialog-header">
     <h2 mat-dialog-title class="dialog-title">
       <mat-icon class="title-icon">person_add</mat-icon>
-      <span>Create Account</span>
+      <span>{{ t('register.title') }}</span>
     </h2>
     <button
       mat-icon-button
       class="close-button"
       (click)="onCancel()"
-      aria-label="Close dialog"
+      [attr.aria-label]="t('aria.closeDialog')"
     >
       <mat-icon>close</mat-icon>
     </button>
@@ -18,16 +18,16 @@
     <form [formGroup]="registerForm" class="register-form">
       <!-- University Email Field -->
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>University Email</mat-label>
+        <mat-label>{{ t('register.email') }}</mat-label>
         <mat-icon matPrefix>school</mat-icon>
         <input
           matInput
           type="email"
           formControlName="email"
-          placeholder="student@stuba.sk"
+          [placeholder]="t('register.emailPlaceholder')"
           autocomplete="email"
         />
-        <mat-hint>For student domain emails only</mat-hint>
+        <mat-hint>{{ t('register.emailHint') }}</mat-hint>
         @if (registerForm.get('email')?.touched) {
           <mat-error>
             {{ getErrorMessage('email') }}
@@ -37,13 +37,13 @@
 
       <!-- Password Field -->
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Password</mat-label>
+        <mat-label>{{ t('register.password') }}</mat-label>
         <mat-icon matPrefix>lock</mat-icon>
         <input
           matInput
           [type]="hidePassword ? 'password' : 'text'"
           formControlName="password"
-          placeholder="Create a strong password"
+          [placeholder]="t('register.passwordPlaceholder')"
           autocomplete="new-password"
         />
         <button
@@ -51,11 +51,11 @@
           matSuffix
           type="button"
           (click)="togglePasswordVisibility('password')"
-          [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
+          [attr.aria-label]="hidePassword ? t('aria.showPassword') : t('aria.hidePassword')"
         >
           <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
-        <mat-hint>Min 8 characters, with upper, lower, number & special char</mat-hint>
+        <mat-hint>{{ t('register.passwordHint') }}</mat-hint>
         @if (registerForm.get('password')?.touched) {
           <mat-error>
             {{ getErrorMessage('password') }}
@@ -65,13 +65,13 @@
 
       <!-- Confirm Password Field -->
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Confirm Password</mat-label>
+        <mat-label>{{ t('register.confirmPassword') }}</mat-label>
         <mat-icon matPrefix>lock_check</mat-icon>
         <input
           matInput
           [type]="hideConfirmPassword ? 'password' : 'text'"
           formControlName="confirmPassword"
-          placeholder="Re-enter your password"
+          [placeholder]="t('register.confirmPasswordPlaceholder')"
           autocomplete="new-password"
         />
         <button
@@ -79,7 +79,7 @@
           matSuffix
           type="button"
           (click)="togglePasswordVisibility('confirmPassword')"
-          [attr.aria-label]="hideConfirmPassword ? 'Show password' : 'Hide password'"
+          [attr.aria-label]="hideConfirmPassword ? t('aria.showPassword') : t('aria.hidePassword')"
         >
           <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
@@ -99,7 +99,7 @@
       (click)="onCancel()"
       class="cancel-button"
     >
-      Cancel
+      {{ t('register.cancel') }}
     </button>
     <button
       mat-flat-button
@@ -110,7 +110,7 @@
       [disabled]="registerForm.invalid"
     >
       <mat-icon>person_add</mat-icon>
-      <span>Create Account</span>
+      <span>{{ t('register.createAccount') }}</span>
     </button>
   </mat-dialog-actions>
 </div>
