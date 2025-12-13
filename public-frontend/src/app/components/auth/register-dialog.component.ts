@@ -193,8 +193,19 @@ export class RegisterDialogComponent implements OnInit {
     }
 
     // Prehodenie emailu a patternu sem, sú to špecifické chyby
+    // Spojenie minlength do jedného bloku (ak je definovaný)
+    if (control?.hasError('minlength')) {
+      const minLength = control.errors?.['minlength'].requiredLength;
+      return `Must be at least ${minLength} characters`;
+    }
+
+    // Prehodenie emailu a patternu sem, sú to špecifické chyby
     if (control?.hasError('email')) {
       return this.translocoService.translate('auth.validation.emailInvalid');
+    }
+
+    if (control?.hasError('pattern')) {
+      return 'Must contain uppercase, lowercase, number and special character';
     }
 
     if (control?.hasError('pattern')) {

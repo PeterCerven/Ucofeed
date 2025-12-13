@@ -5,9 +5,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
-import { TranslocoDirective } from '@jsverse/transloco';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CommentsSectionComponent } from '@components/comments-section/comments-section.component';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-review-card',
@@ -18,8 +18,8 @@ import { CommentsSectionComponent } from '@components/comments-section/comments-
     MatIconModule,
     MatButtonModule,
     MatChipsModule,
-    TranslocoDirective,
     MatTooltipModule,
+    TranslocoDirective,
     CommentsSectionComponent,
   ],
   templateUrl: './review-card.component.html',

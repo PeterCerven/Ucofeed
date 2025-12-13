@@ -208,7 +208,7 @@ export class ReviewService {
           console.warn('Returning empty array');
           return of([]);
         }
-        // For other errors, fallback to mock data
+        // // For other errors, fallback to mock data
         console.error('Error fetching reviews:', error);
         // return of(this.getMockReviews(programId, filters));
         return of([]);

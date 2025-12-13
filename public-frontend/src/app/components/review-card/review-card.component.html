@@ -47,7 +47,7 @@
             </button>
           </div>
         }
-
+      </div>
     </div>
   </mat-card-header>
 
@@ -71,13 +71,12 @@
     <div class="review-footer">
       <div class="date-info">
         <mat-icon>schedule</mat-icon>
-        <span>{{ t('posted', { date: formatDate(review().createdAt) }) }}</span>
-
-        @if (review().isEdited) {
-          <span class="edited-date">{{ t('updated', { date: formatDate(review().updatedAt) }) }}</span>
+        @if (isEdited()) {
+          <span>Edited {{ formatDate(review().updated_at) }}</span>
+        } @else {
+          <span>Posted {{ formatDate(review().created_at) }}</span>
         }
       </div>
-
       @if (review().commentsCount !== undefined) {
         <button mat-button (click)="toggleComments()" class="comments-toggle">
           <mat-icon>comment</mat-icon>
