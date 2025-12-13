@@ -1,8 +1,8 @@
 spring:
   datasource:
-    username: user
-    password: password
-    url: jdbc:postgresql://postgresql_db:5432/ucf
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: ${DB_URL}
     driver-class-name: org.postgresql.Driver
     hikari:
       connection-timeout: 20000

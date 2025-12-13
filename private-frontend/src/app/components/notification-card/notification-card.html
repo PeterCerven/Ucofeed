@@ -1,0 +1,49 @@
+<mat-card
+  (click)="onCardClick()"
+  [attr.aria-label]="'Review notification from user ' + notification.userId">
+
+  <mat-card-content>
+    <div class="card-header">
+      <div class="user-info">
+        <mat-icon class="user-icon">account_circle</mat-icon>
+        <span class="user-id">{{ notification.userId }}</span>
+        <span class="timestamp">{{ getTimeAgo() }}</span>
+      </div>
+    </div>
+
+    <div class="action-info">
+      <div class="action-type-badge review">
+        <mat-icon>{{ getActionIcon() }}</mat-icon>
+        <span>{{ getActionText() }}</span>
+      </div>
+    </div>
+
+    <div class="study-program-info">
+      <div class="program-name">{{ notification.studyProgram.programName }}</div>
+      <div class="faculty-name">{{ notification.studyProgram.facultyName }}</div>
+      <div class="university-name">{{ notification.studyProgram.universityName }}</div>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-button color="primary" (click)="onCardClick()">
+      <mat-icon>visibility</mat-icon>
+      View
+    </button>
+
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="moreMenu"
+      (click)="$event.stopPropagation()"
+      aria-label="More options">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+
+    <mat-menu #moreMenu="matMenu">
+      <button mat-menu-item (click)="onDelete($event)">
+        <mat-icon>delete</mat-icon>
+        <span>Delete</span>
+      </button>
+    </mat-menu>
+  </mat-card-actions>
+</mat-card>
