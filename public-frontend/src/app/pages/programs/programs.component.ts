@@ -3,13 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EntityCardComponent } from '@components/entity-card/entity-card.component';
 import { BreadcrumbNavigationComponent, BreadcrumbItem } from '@components/breadcrumb-navigation/breadcrumb-navigation.component';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslocoDirective } from '@jsverse/transloco';
 import {ProgramModel} from '@models/program.model';
 import { UniversityService } from '@services/university.service';
 
 @Component({
   selector: 'app-programs',
   standalone: true,
-  imports: [EntityCardComponent, BreadcrumbNavigationComponent],
+  imports: [EntityCardComponent, BreadcrumbNavigationComponent, TranslocoDirective],
   templateUrl: './programs.component.html',
   styleUrl: './programs.component.scss'
 })

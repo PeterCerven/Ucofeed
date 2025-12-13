@@ -60,11 +60,15 @@
           [disabled]="verificationForm.invalid || isVerifying()"
         >
           @if (isVerifying()) {
-            <mat-icon>hourglass_empty</mat-icon>
-            <span>{{ t('verifying') }}</span>
+            <ng-container>
+              <mat-icon>hourglass_empty</mat-icon>
+              <span>{{ t('verifying') }}</span>
+            </ng-container>
           } @else {
-            <mat-icon>check_circle</mat-icon>
-            <span>{{ t('actions.verifyAccount') }}</span>
+            <ng-container>
+              <mat-icon>check_circle</mat-icon>
+              <span>{{ t('actions.verifyAccount') }}</span>
+            </ng-container>
           }
         </button>
       </mat-card-actions>
