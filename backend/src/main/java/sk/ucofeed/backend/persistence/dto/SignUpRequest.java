@@ -9,6 +9,10 @@ public record SignUpRequest(
     @Email(message = "Email should be valid")
     String email,
 
+    @NotBlank(message = "Full name is required")
+    @Size(min = 2, max = 100, message = "Full name must be between 2 and 100 characters")
+    String fullName,
+
     @NotBlank(message = "Password is required")
     @Size(min = 8, message = "Password must be at least 8 characters long")
     String password

@@ -10,6 +10,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import sk.ucofeed.backend.persistence.dto.CreateReviewRequest;
 import sk.ucofeed.backend.persistence.dto.ReviewResponse;
+import sk.ucofeed.backend.persistence.dto.UpdateReviewRequest;
 import sk.ucofeed.backend.persistence.model.User;
 import sk.ucofeed.backend.service.ReviewService;
 
@@ -44,6 +45,54 @@ public class ReviewController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
+    }
+
+    /**
+     * Update an existing review.
+     * Requires authentication and ownership.
+     */
+    @PutMapping("/{reviewId}")
+    public ResponseEntity<ReviewResponse> updateReview(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long reviewId,
+            @Valid @RequestBody @NotNull UpdateReviewRequest request) {
+
+        LOG.info("Review update request from user {} for review {}",
+                user.getId(), reviewId);
+
+        ReviewResponse response = reviewService.updateReview(user, reviewId, request);
+
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Delete a review.
+     * Requires authentication and ownership.
+     */
+    @DeleteMapping("/{reviewId}")
+    public ResponseEntity<Void> deleteReview(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long reviewId) {
+
+        LOG.info("Review deletion request from user {} for review {}",
+                user.getId(), reviewId);
+
+        reviewService.deleteReview(user, reviewId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Check if authenticated user can create a review for a study program.
+     * Requires authentication.
+     */
+    @GetMapping("/can-review/{studyProgramId}")
+    public ResponseEntity<Boolean> canCreateReview(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long studyProgramId) {
+
+        boolean canReview = reviewService.canCreateReview(user, studyProgramId);
+        return ResponseEntity.ok(canReview);
     }
 
     /**
