@@ -10,6 +10,7 @@ import sk.ucofeed.backend.persistence.dto.StudyProgramDetailsDTO;
 import sk.ucofeed.backend.persistence.dto.StudyProgramVariantDTO;
 import sk.ucofeed.backend.persistence.dto.UniversityDTO;
 import sk.ucofeed.backend.persistence.repository.FacultyRepository;
+import sk.ucofeed.backend.persistence.repository.ReviewRepository;
 import sk.ucofeed.backend.persistence.repository.StudyProgramRepository;
 import sk.ucofeed.backend.persistence.repository.UniversityRepository;
 
@@ -24,13 +25,16 @@ public class UniversityController {
     private final UniversityRepository universityRepository;
     private final FacultyRepository facultyRepository;
     private final StudyProgramRepository studyProgramRepository;
+    private final ReviewRepository reviewRepository;
 
     public UniversityController(UniversityRepository universityRepository,
                                FacultyRepository facultyRepository,
-                               StudyProgramRepository studyProgramRepository) {
+                               StudyProgramRepository studyProgramRepository,
+                               ReviewRepository reviewRepository) {
         this.universityRepository = universityRepository;
         this.facultyRepository = facultyRepository;
         this.studyProgramRepository = studyProgramRepository;
+        this.reviewRepository = reviewRepository;
     }
 
     @GetMapping("")
@@ -38,7 +42,10 @@ public class UniversityController {
         LOG.info("Fetching all universities");
         List<UniversityDTO> universities = universityRepository.findAll()
                 .stream()
-                .map(UniversityDTO::from)
+                .map(university -> {
+                    Double rating = reviewRepository.findAverageRatingByUniversityId(university.getId());
+                    return UniversityDTO.from(university, rating);
+                })
                 .toList();
         return ResponseEntity.ok(universities);
     }
@@ -47,7 +54,10 @@ public class UniversityController {
     public ResponseEntity<UniversityDTO> getUniversityById(@PathVariable Long id) {
         LOG.info("Fetching university with ID: {}", id);
         return universityRepository.findById(id)
-                .map(UniversityDTO::from)
+                .map(university -> {
+                    Double rating = reviewRepository.findAverageRatingByUniversityId(university.getId());
+                    return UniversityDTO.from(university, rating);
+                })
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -56,7 +66,10 @@ public class UniversityController {
     public ResponseEntity<UniversityDTO> getUniversityByDomain(@PathVariable String domain) {
         LOG.info("Fetching university with domain: {}", domain);
         return universityRepository.findByUniversityEmailDomain(domain)
-                .map(UniversityDTO::from)
+                .map(university -> {
+                    Double rating = reviewRepository.findAverageRatingByUniversityId(university.getId());
+                    return UniversityDTO.from(university, rating);
+                })
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -66,7 +79,10 @@ public class UniversityController {
         LOG.info("Fetching faculties for university ID: {}", universityId);
         List<FacultyDTO> faculties = facultyRepository.findByUniversityId(universityId)
                 .stream()
-                .map(FacultyDTO::from)
+                .map(faculty -> {
+                    Double rating = reviewRepository.findAverageRatingByFacultyId(faculty.getId());
+                    return FacultyDTO.from(faculty, rating);
+                })
                 .toList();
         return ResponseEntity.ok(faculties);
     }
@@ -75,7 +91,10 @@ public class UniversityController {
     public ResponseEntity<FacultyDTO> getFacultyById(@PathVariable Long id) {
         LOG.info("Fetching faculty with ID: {}", id);
         return facultyRepository.findById(id)
-                .map(FacultyDTO::from)
+                .map(faculty -> {
+                    Double rating = reviewRepository.findAverageRatingByFacultyId(faculty.getId());
+                    return FacultyDTO.from(faculty, rating);
+                })
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -85,7 +104,10 @@ public class UniversityController {
         LOG.info("Fetching programs for faculty ID: {}", facultyId);
         List<StudyProgramDTO> programs = studyProgramRepository.findByFacultyId(facultyId)
                 .stream()
-                .map(StudyProgramDTO::from)
+                .map(program -> {
+                    Double rating = reviewRepository.findAverageRatingByStudyProgram(program);
+                    return StudyProgramDTO.from(program, rating);
+                })
                 .toList();
         return ResponseEntity.ok(programs);
     }
@@ -94,7 +116,10 @@ public class UniversityController {
     public ResponseEntity<StudyProgramDetailsDTO> getStudyProgramById(@PathVariable Long id) {
         LOG.info("Fetching study program with ID: {}", id);
         return studyProgramRepository.findById(id)
-                .map(StudyProgramDetailsDTO::from)
+                .map(program -> {
+                    Double rating = reviewRepository.findAverageRatingByStudyProgram(program);
+                    return StudyProgramDetailsDTO.from(program, rating);
+                })
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

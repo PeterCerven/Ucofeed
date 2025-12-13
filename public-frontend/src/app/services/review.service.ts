@@ -12,84 +12,6 @@ import { environment } from '@env/environment.production';
 export class ReviewService {
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
-  // Mock data for reviews
-  private mockReviews: ReviewModel[] = [
-    {
-      id: 1,
-      userName: 'John Doe',
-      studyProgramId: 1,
-      studyProgramName: 'Computer Science',
-      studyProgramVariantId: 1,
-      rating: 9,
-      comment:
-        'Excellent program with great professors. The curriculum is well-structured and covers both theoretical and practical aspects. The career support is outstanding, and many students get job offers before graduation. The only downside is that some courses can be quite challenging.',
-      anonymous: false,
-      createdAt: '2024-03-15T10:30:00',
-      updatedAt: '2024-03-15T10:30:00',
-      isEdited: false,
-      commentsCount: 3,
-    },
-    {
-      id: 2,
-      userName: 'Jane Smith',
-      studyProgramId: 1,
-      studyProgramName: 'Computer Science',
-      studyProgramVariantId: 1,
-      rating: 7,
-      comment:
-        'Good program overall, but the resources could be better. Some of the labs are outdated and need modernization. Teachers are knowledgeable and helpful. The workload is heavy but manageable if you stay organized.',
-      anonymous: false,
-      createdAt: '2023-06-20T14:15:00',
-      updatedAt: '2023-06-22T09:00:00',
-      isEdited: true,
-      commentsCount: 1,
-    },
-    {
-      id: 3,
-      userName: 'Anonymous',
-      studyProgramId: 1,
-      studyProgramName: 'Computer Science',
-      studyProgramVariantId: 1,
-      rating: 10,
-      comment:
-        'Outstanding program! The faculty is top-notch, and the facilities are state-of-the-art. Great internship opportunities and strong industry connections. Highly recommended for anyone serious about this field.',
-      anonymous: true,
-      createdAt: '2024-08-10T16:45:00',
-      updatedAt: '2024-08-10T16:45:00',
-      isEdited: false,
-      commentsCount: 5,
-    },
-    {
-      id: 4,
-      userName: 'Maria Garcia',
-      studyProgramId: 1,
-      studyProgramName: 'Computer Science',
-      studyProgramVariantId: 2,
-      rating: 6,
-      comment:
-        'The program is very demanding and not for the faint of heart. Some professors are excellent, but others seem disconnected. Resources are limited, especially for research projects. Career prospects are decent but require a lot of self-initiative.',
-      anonymous: false,
-      createdAt: '2022-12-05T11:20:00',
-      updatedAt: '2022-12-05T11:20:00',
-      isEdited: false,
-      commentsCount: 2,
-    },
-    {
-      id: 5,
-      userName: 'Michael Brown',
-      studyProgramId: 1,
-      studyProgramName: 'Computer Science',
-      studyProgramVariantId: 1,
-      rating: 9,
-      comment:
-        'Fantastic experience! The program prepares you well for the industry. Professors are experienced professionals who bring real-world insights. The coursework is challenging but rewarding. Career services are excellent with many recruiting events.',
-      anonymous: false,
-      createdAt: '2024-02-28T13:00:00',
-      updatedAt: '2024-03-01T10:30:00',
-      isEdited: true,
-      commentsCount: 0,
-    },
-  ];
 
   // Mock data for comments
   private mockComments: { [reviewId: number]: CommentModel[] } = {
@@ -200,7 +122,7 @@ export class ReviewService {
         'Comprehensive CS curriculum covering algorithms, data structures, software engineering, artificial intelligence, and more. This program prepares students for careers in software development, research, and technology innovation.',
       faculty_name: 'Faculty of Informatics',
       university_name: 'Slovak University of Technology',
-      averageRating: 7.9,
+      rating: 7.9,
       totalReviews: 5,
       ratingDistribution: {
         6: 1,
@@ -223,7 +145,7 @@ export class ReviewService {
         'Focus on business information systems and enterprise solutions with emphasis on database management, system analysis, and IT project management.',
       faculty_name: 'Faculty of Informatics',
       university_name: 'Slovak University of Technology',
-      averageRating: 8.0,
+      rating: 8.0,
       totalReviews: 3,
       ratingDistribution: {
         7: 1,
@@ -245,7 +167,7 @@ export class ReviewService {
         'Modern software development practices and methodologies including agile development, DevOps, cloud computing, and software architecture.',
       faculty_name: 'Faculty of Informatics',
       university_name: 'Slovak University of Technology',
-      averageRating: 8.5,
+      rating: 8.5,
       totalReviews: 4,
       ratingDistribution: {
         8: 2,
@@ -282,59 +204,16 @@ export class ReviewService {
       { withCredentials: true }
     ).pipe(
       catchError(error => {
-        // Backend not implemented yet - return empty array for now
         if (error.status === 404) {
-          console.warn('Review endpoints not implemented yet, returning empty array');
+          console.warn('Returning empty array');
           return of([]);
         }
-        // For other errors, fallback to mock data
         console.error('Error fetching reviews:', error);
-        return of(this.getMockReviews(programId, filters));
+        return of([]);
       })
     );
   }
 
-  /**
-   * Get mock reviews (fallback for development)
-   */
-  private getMockReviews(
-    programId: number,
-    filters?: ReviewFilterOptions
-  ): ReviewModel[] {
-    let reviews = [...this.mockReviews];
-
-    // Apply sorting
-    if (filters) {
-      switch (filters.sortBy) {
-        case 'newest':
-          reviews.sort(
-            (a, b) =>
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          );
-          break;
-        case 'oldest':
-          reviews.sort(
-            (a, b) =>
-              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-          );
-          break;
-        case 'highest':
-          reviews.sort((a, b) => b.rating - a.rating);
-          break;
-        case 'lowest':
-          reviews.sort((a, b) => a.rating - b.rating);
-          break;
-        case 'edited':
-          reviews.sort(
-            (a, b) =>
-              new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-          );
-          break;
-      }
-    }
-
-    return reviews;
-  }
 
   /**
    * Get comments for a specific review

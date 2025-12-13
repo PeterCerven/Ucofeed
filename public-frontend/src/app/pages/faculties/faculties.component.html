@@ -16,7 +16,7 @@
         [name]="faculty.name"
         [image]="faculty.image ?? ''"
         [entityType]="'faculty'"
-        [review]="faculty.review ?? 0"
+        [rating]="faculty.rating ?? 0"
         [description]="faculty.description ?? ''"
         (cardClick)="onFacultyClick($event)"
       ></entity-card>

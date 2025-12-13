@@ -44,7 +44,7 @@
     <div class="rating-summary">
       <!-- Average rating -->
       <div class="average-rating">
-        <div class="rating-number">{{ programDetails().averageRating.toFixed(1) }}</div>
+        <div class="rating-number">{{ programDetails().rating.toFixed(1) }}</div>
         <div class="stars">
           @for (star of starsArray; track star) {
             <mat-icon [class.filled]="isStarFilled(star)">

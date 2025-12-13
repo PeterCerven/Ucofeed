@@ -101,7 +101,7 @@ export class ReviewsComponent {
               faculty_name: program.faculty_name || '',
               university_id: program.university_id,
               university_name: program.university_name || '',
-              averageRating: 0, // Will be calculated from reviews
+              rating: 0, // Will be calculated from reviews
               totalReviews: 0,  // Will be counted from reviews
               ratingDistribution: {},
               tags: {
@@ -248,7 +248,7 @@ export class ReviewsComponent {
 
     this.programDetails.update(details => details ? {
       ...details,
-      averageRating: avgRating,
+      rating: avgRating,
       totalReviews: reviews.length,
       ratingDistribution: distribution
     } : details);

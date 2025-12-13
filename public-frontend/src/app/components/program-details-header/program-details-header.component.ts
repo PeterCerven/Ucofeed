@@ -54,7 +54,7 @@ export class ProgramDetailsHeaderComponent {
 
   /** Check if star should be filled */
   isStarFilled(index: number): boolean {
-    return index < Math.round(this.programDetails().averageRating);
+    return index < Math.round(this.programDetails().rating);
   }
 
   /** Get degree label from degree number */

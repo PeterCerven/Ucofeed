@@ -2,7 +2,7 @@ export interface FacultyModel {
   id: number;
   name: string;
   image?: string;
-  review?: number;
+  rating?: number;
   description?: string;
   entityType?: 'faculty';
   university_id?: number;

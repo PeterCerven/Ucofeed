@@ -4,6 +4,6 @@ export interface UniversityModel {
   image?: string;
   domain?: string;
   entityType?: 'university';
-  review?: number;     // 0-10
+  rating?: number;     // 0-10
   description?: string;
 }

@@ -18,7 +18,7 @@ export interface ProgramDetailsModel {
   faculty_name: string;
   university_id?: number;
   university_name: string;
-  averageRating: number;
+  rating: number;
   totalReviews: number;
   ratingDistribution: { [key: number]: number }; // rating (1-10) -> count
 

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, output, input } from '@angular/core';
+import { Component, output, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,7 +14,7 @@ export class EntityCardComponent {
   // Modern signal inputs
   name = input<string>('Unknown');
   image = input<string>('');
-  review = input<number>(0);
+  rating = input<number>(0);
   description = input<string>('');
   entityType = input<'university' | 'faculty' | 'program'>('university');
   id = input<number>();
@@ -43,7 +43,7 @@ export class EntityCardComponent {
 
   /** Helper to check star fill */
   isFilled(index: number) {
-    return index < this.review();
+    return index < this.rating();
   }
 
   /** Get the appropriate placeholder based on entity type */
