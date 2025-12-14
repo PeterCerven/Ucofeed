@@ -104,13 +104,19 @@ export class ReviewsComponent {
               ratingDistribution: {},
               tags: {
                 // Extract from variants
-                languageGroup: this.extractLanguages(variants),
-                studyFormat: this.extractFormats(variants),
-                title: this.extractTitles(variants),
+                languages: this.extractLanguages(variants),
+                studyFormats: this.extractFormats(variants),
+                titles: this.extractTitles(variants),
               }
             };
             this.programDetails.set(programDetails);
             this.isLoadingDetails.set(false);
+
+            // Update stats if reviews already loaded
+            const currentReviews = this.reviews();
+            if (currentReviews.length > 0) {
+              this.updateReviewStats(currentReviews);
+            }
           },
           error: (error) => {
             console.error('Error loading variants:', error);
@@ -362,35 +368,42 @@ export class ReviewsComponent {
     });
   }
 
-  private extractLanguages(variants: VariantModel[]): string {
-    const languages = [...new Set(variants.map(v => v.language))];
-    return languages.join(' / ');
+  private extractLanguages(variants: VariantModel[]): string[] {
+    return [...new Set(variants.map(v => v.language).filter(Boolean))];
   }
 
-  private extractFormats(variants: VariantModel[]): string {
-    const formats = [...new Set(variants.map(v => v.study_form))];
-    return formats.join(' / ');
+  private extractFormats(variants: VariantModel[]): string[] {
+    return [...new Set(variants.map(v => v.study_form).filter(Boolean))];
   }
 
-  private extractTitles(variants: VariantModel[]): string {
-    const titles = [...new Set(variants.map(v => v.title))];
-    return titles.join(', ');
+  private extractTitles(variants: VariantModel[]): string[] {
+    return [...new Set(variants.map(v => v.title).filter(Boolean))];
   }
 
   private updateReviewStats(reviews: ReviewModel[]): void {
-    if (reviews.length === 0) return;
+    // Ensure programDetails exists before updating
+    const currentDetails = this.programDetails();
+    if (!currentDetails) {
+      console.warn('Cannot update review stats: programDetails not loaded yet');
+      return;
+    }
 
-    const avgRating = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+    // Calculate stats even with no reviews
+    const avgRating = reviews.length > 0
+      ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+      : 0;
+
+    // Count reviews by rating (only ratings that exist)
     const distribution: { [key: number]: number } = {};
     reviews.forEach(r => {
       distribution[r.rating] = (distribution[r.rating] || 0) + 1;
     });
 
-    this.programDetails.update(details => details ? {
-      ...details,
+    this.programDetails.set({
+      ...currentDetails,
       rating: avgRating,
       totalReviews: reviews.length,
       ratingDistribution: distribution
-    } : details);
+    });
   }
 }

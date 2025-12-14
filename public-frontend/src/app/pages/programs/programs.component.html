@@ -1,28 +1,30 @@
 <div class="programs-container" *transloco="let t; prefix 'pages.programs'">
-  @if (breadcrumbItems().length > 0) {
-    <app-breadcrumb-navigation [items]="breadcrumbItems()" />
-  }
-
-  <h1>{{ t('studyProgramsOf', { name: facultyName() }) }}</h1>
-
-  @if (isLoading()) {
-    <p>{{ t('loading') }}</p>
-  }
-
-  <div class="cards-grid">
-    @for (program of programs(); track program.id) {
-      <entity-card
-        [id]="program.id"
-        [name]="program.name"
-        [entityType]="'program'"
-        [rating]="program.rating ?? 0"
-        [description]="program.description ?? ''"
-        (cardClick)="onProgramClick($event)">
-      </entity-card>
-    } @empty {
-      <p>{{ t('noPrograms') }}</p>
+  <div class="content">
+    @if (breadcrumbItems().length > 0) {
+      <app-breadcrumb-navigation [items]="breadcrumbItems()" />
     }
 
-    <!-- More program cards -->
+    <h1>{{ t('studyProgramsOf', { name: facultyName() }) }}</h1>
+
+    @if (isLoading()) {
+      <p>{{ t('loading') }}</p>
+    }
+
+    <div class="cards-grid">
+      @for (program of programs(); track program.id) {
+        <entity-card
+          [id]="program.id"
+          [name]="program.name"
+          [entityType]="'program'"
+          [rating]="program.rating ?? 0"
+          [description]="program.description ?? ''"
+          (cardClick)="onProgramClick($event)">
+        </entity-card>
+      } @empty {
+        <p>{{ t('noPrograms') }}</p>
+      }
+
+      <!-- More program cards -->
+    </div>
   </div>
 </div>

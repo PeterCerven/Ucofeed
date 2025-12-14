@@ -1,22 +1,11 @@
 <mat-card class="entity-card" (click)="onCardClick()">
-  <!-- Image or Placeholder Section (hidden for programs) -->
+  <!-- Icon Section (hidden for programs) -->
   @if (entityType() !== 'program') {
     <mat-card-header class="card-header">
-      <!-- Main Image (for university/faculty with images) -->
-      @if (getImageUrl()) {
-        <img
-          mat-card-image
-          [src]="getImageUrl()"
-          [alt]="name()"
-          class="card-image"
-        />
-      }
-      @else {
-        <!-- Placeholder Icon (when no image) -->
-        <div class="placeholder-container">
-          <mat-icon class="placeholder-icon">{{ getPlaceholderIcon() }}</mat-icon>
-        </div>
-      }
+      <!-- Graduation Hat Icon -->
+      <div class="placeholder-container">
+        <mat-icon class="placeholder-icon">school</mat-icon>
+      </div>
     </mat-card-header>
   }
 

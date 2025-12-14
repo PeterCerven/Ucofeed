@@ -8,20 +8,23 @@
   .breadcrumb-item {
     color: #666;
     transition: color 0.2s ease;
+    text-transform: capitalize;
 
     &.clickable {
       cursor: pointer;
-      color: var(--mat-sys-primary);
+      color: #1976D2;
+      font-weight: 600;
 
       &:hover {
         text-decoration: underline;
-        color: var(--mat-sys-primary-container);
+        color: #1565C0;
       }
     }
 
     &.current {
       color: #333;
-      font-weight: 500;
+      font-weight: 600;
+      text-transform: capitalize;
     }
   }
 
@@ -39,10 +42,10 @@
     color: #aaa;
 
     &.clickable {
-      color: var(--mat-sys-primary-container);
+      color: #90CAF9;
 
       &:hover {
-        color: var(--mat-sys-primary);
+        color: #BBDEFB;
       }
     }
 

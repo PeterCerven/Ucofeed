@@ -24,9 +24,9 @@ export interface ProgramDetailsModel {
 
   // Study program variant tags (from backend StudyProgramVariant)
   tags: {
-    title?: string; // e.g., "Bc", "Mgr", "Ing", "MUDr", "PhD"
-    languageGroup?: string; // e.g., "Slovak", "English", "Slovak/English"
-    studyFormat?: string; // e.g., "Full-time", "Part-time", "External"
+    titles?: string[]; // e.g., ["Bc", "Mgr", "Ing", "MUDr", "PhD"]
+    languages?: string[]; // e.g., ["Slovak", "English"]
+    studyFormats?: string[]; // e.g., ["Full-time", "Part-time", "External"]
     studyDegree?: number; // e.g., 1 (Bachelor), 2 (Master), 3 (Doctoral)
     studyDuration?: number; // Duration in years (e.g., 3, 2, 4)
   };

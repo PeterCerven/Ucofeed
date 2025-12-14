@@ -16,16 +16,16 @@
             }
           </div>
           <!-- Variant tags -->
-          @if (review().language || review().studyForm || review().title) {
+          @if (getLanguageTags().length > 0 || getStudyFormTags().length > 0 || getTitleTags().length > 0) {
             <div class="variant-tags">
-              @if (review().language) {
-                <mat-chip class="variant-tag">{{ review().language }}</mat-chip>
+              @for (language of getLanguageTags(); track language) {
+                <mat-chip class="variant-tag">{{ language }}</mat-chip>
               }
-              @if (review().studyForm) {
-                <mat-chip class="variant-tag">{{ review().studyForm }}</mat-chip>
+              @for (studyForm of getStudyFormTags(); track studyForm) {
+                <mat-chip class="variant-tag">{{ studyForm }}</mat-chip>
               }
-              @if (review().title) {
-                <mat-chip class="variant-tag">{{ review().title }}</mat-chip>
+              @for (title of getTitleTags(); track title) {
+                <mat-chip class="variant-tag">{{ title }}</mat-chip>
               }
             </div>
           }

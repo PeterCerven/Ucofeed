@@ -20,15 +20,13 @@
   }
 
   .card-header {
-    padding: 0;
-    margin: 0;
-    height: 240px;
+    padding-top: 20px;
+    margin: auto;
+    height: 200px;
   }
 
   .card-image {
-    width: 100%;
-    height: 240px;
-    object-fit: cover;
+    object-fit: fill;
     border-radius: 4px 4px 0 0;
     display: block;
   }
@@ -38,15 +36,22 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 240px;
-    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    height: 200px;
+    background: #f5f5f5;
     border-radius: 4px 4px 0 0;
+    overflow: hidden;
 
     .placeholder-icon {
       font-size: 80px;
-      width: 80px;
-      height: 80px;
-      color: rgba(0, 0, 0, 0.3);
+      width: 160px;
+      height: 160px;
+      color: white;
+      flex-shrink: 0;
+      background: #1a237e;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 
@@ -63,6 +68,7 @@
     font-size: 24px;
     font-weight: 600;
     color: rgba(0, 0, 0, 0.87);
+    text-transform: capitalize;
   }
 
   .card-description {
@@ -70,8 +76,13 @@
     font-size: 14px;
     line-height: 1.6;
     color: rgba(0, 0, 0, 0.6);
-    min-height: 40px;
-    flex-grow: 1;
+    min-height: 20px;
+    max-height: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
   }
 
   .rating-container {
@@ -131,11 +142,12 @@
   }
 
   .placeholder-container {
-    background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+    background: transparent;
   }
 
   .placeholder-icon {
-    color: rgba(255, 255, 255, 0.3);
+    color: white;
+    background: #1a237e;
   }
 
   .rating-container {

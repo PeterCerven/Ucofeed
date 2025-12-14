@@ -87,6 +87,27 @@ export class ReviewCardComponent {
     return Array.from({ length: 10 }, (_, i) => i < rating);
   }
 
+  /** Split language tags (handles comma or slash separated values) */
+  getLanguageTags = computed(() => {
+    const language = this.review().language;
+    if (!language) return [];
+    return language.split(/[,\/]/).map(l => l.trim()).filter(Boolean);
+  });
+
+  /** Split study form tags (handles comma or slash separated values) */
+  getStudyFormTags = computed(() => {
+    const studyForm = this.review().studyForm;
+    if (!studyForm) return [];
+    return studyForm.split(/[,\/]/).map(s => s.trim()).filter(Boolean);
+  });
+
+  /** Split title tags (handles comma or slash separated values) */
+  getTitleTags = computed(() => {
+    const title = this.review().title;
+    if (!title) return [];
+    return title.split(/[,\/]/).map(t => t.trim()).filter(Boolean);
+  });
+
   /** Handle edit button click */
   onEdit(): void {
     this.editReview.emit(this.review());
