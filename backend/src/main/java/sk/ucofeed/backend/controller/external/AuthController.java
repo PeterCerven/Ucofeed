@@ -17,6 +17,7 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.web.bind.annotation.*;
 import sk.ucofeed.backend.persistence.dto.LoginRequest;
 import sk.ucofeed.backend.persistence.dto.VerifyCodeRequest;
+import sk.ucofeed.backend.persistence.dto.RefreshVerificationCodeRequest;
 import sk.ucofeed.backend.persistence.dto.SignUpRequest;
 import sk.ucofeed.backend.persistence.model.User;
 import sk.ucofeed.backend.service.AuthService;
@@ -91,6 +92,24 @@ public class AuthController {
             LOG.error("Error during verification for email: {}", request.email(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An error occurred during verification");
+        }
+    }
+
+    @PutMapping("/verify")
+    public ResponseEntity<?> verify(
+            @Valid @RequestBody @NotNull RefreshVerificationCodeRequest request
+    ) {
+        LOG.info("Refreshing verification code for email: {}", request.email());
+        try {
+            authService.refreshVerificationCode(request.email());
+            return ResponseEntity.ok("Verification code successfully refreshed");
+        } catch (IllegalArgumentException e) {
+            LOG.warn("Verification code refreshing failed for email: {} - {}", request.email(), e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            LOG.error("Error during refreshing verification code for email: {}", request.email(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred during verification code refreshing");
         }
     }
 
