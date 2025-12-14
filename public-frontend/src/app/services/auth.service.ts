@@ -24,6 +24,7 @@ export interface AuthResponse {
   id: string;
   email: string;
   role: string;
+  enabled: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -68,8 +69,8 @@ export class AuthService {
     });
   }
 
-  validateSession(): Observable<{ valid: boolean; id?: string; email?: string; role?: string }> {
-    return this.http.get<{ valid: boolean; id?: string; email?: string; role?: string }>(
+  validateSession(): Observable<{ valid: boolean; id?: string; email?: string; role?: string, enabled?: boolean }> {
+    return this.http.get<{ valid: boolean; id?: string; email?: string; role?: string, enabled?: boolean }>(
       `${this.baseUrl}/public/auth/validate`,
       { withCredentials: true }
     );

@@ -45,6 +45,7 @@ public class UserController {
             @Valid @RequestBody @NotNull UpdateUserDTO updateUserDto) {
         LOG.info("Updating User ID {} with data {}", id, updateUserDto);
         LOG.info("Current authentication: {}", org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication());
+
         UserResponseDTO updatedUser = userService.updateUser(UUID.fromString(id), updateUserDto);
         return ResponseEntity.ok(updatedUser);
     }

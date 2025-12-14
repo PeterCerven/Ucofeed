@@ -118,6 +118,19 @@ public class GenericExceptionHandler extends ResponseEntityExceptionHandler {
                 );
     }
 
+    @ExceptionHandler({UserNotVerifiedException.class})
+    protected ResponseEntity<ErrorDto> handleUserNotVerifiedException(UserNotVerifiedException ex) {
+        LOG.error(ex.toString());
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(
+                        ErrorDto.builder()
+                                .type(ErrorDto.ErrorType.USER_NOT_VERIFIED)
+                                .error(List.of(ex.getMessage()))
+                                .build()
+                );
+    }
+
     @ExceptionHandler({ReviewNotFoundException.class})
     protected ResponseEntity<ErrorDto> handleReviewNotFoundException(ReviewNotFoundException ex) {
         LOG.error(ex.toString());

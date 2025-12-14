@@ -2,7 +2,6 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of, switchMap, tap, map } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,6 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslocoService, TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { UniversityService } from '@services/university.service';
 import { AuthService } from '@services/auth.service';
+import { AuthStateService } from '@services/auth-state.service';
 import { UserService, UpdateUserRequest } from '@services/user.service';
 import { UniversityModel } from '@models/university.model';
 import { FacultyModel } from '@models/faculty.model';
@@ -45,6 +45,7 @@ export class ProfileComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly universityService = inject(UniversityService);
   private readonly authService = inject(AuthService);
+  private readonly authState = inject(AuthStateService);
   private readonly userService = inject(UserService);
   private readonly snackBar = inject(MatSnackBar);
   private readonly route = inject(ActivatedRoute);
@@ -109,16 +110,15 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Check if we need to show verification (e.g., from query params)
-    this.route.queryParams.subscribe(params => {
-      if (params['verify'] === 'true' && params['email']) {
-        this.showVerification.set(true);
-        this.verificationForm.patchValue({ email: params['email'] });
-      }
-    });
+    // Show verification dialog if needed
+    if (this.authState.isLoggedIn() && !this.authState.isVerified()) {
+      this.showVerification.set(true);
+      this.verificationForm.patchValue({ email: this.authState.userEmail() });
+    } else {
+      this.showVerification.set(false);
+    }
 
-    this.loadStudentsUniversity();
-    this.loadSavedProfile();
+    this.loadStudentUniversity();
   }
 
   onVerify(): void {
@@ -132,7 +132,7 @@ export class ProfileComponent implements OnInit {
           this.showVerification.set(false);
 
           // Set auth state (user is now logged in after verification)
-          localStorage.setItem('authUser', JSON.stringify({ id: response.id, email: response.email, role: response.role }));
+          localStorage.setItem('authUser', JSON.stringify({ id: response.id, email: response.email, role: response.role, verified: response.enabled }));
 
           this.snackBar.open(
             this.translocoService.translate('app.snackbar.accountVerifiedSuccess'),
@@ -185,7 +185,7 @@ export class ProfileComponent implements OnInit {
     return '';
   }
 
-  private loadStudentsUniversity(): void {
+  private loadStudentUniversity(): void {
     const savedAuth = localStorage.getItem('authUser');
     if (!savedAuth) {
       console.log('No auth data found in localStorage');
@@ -197,7 +197,9 @@ export class ProfileComponent implements OnInit {
       next: (university) => {
         this.university.set(university);
         if (university && university.id) {
-          this.profileForm.patchValue({ universityId: university.id }, { emitEvent: false });
+          this.profileForm.patchValue({ universityId: university.id });
+
+          this.loadSavedProfile();
         }
       },
       error: (error) => console.error('Failed to load university:', error)
@@ -225,61 +227,53 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  private loadCascadingOptions(
-    universityId: number | null,
-    facultyId: number | null,
-    studyProgramId: number | null
-  ): Observable<void> {
-    if (!universityId) {
-      return of(undefined);
-    }
-
-    return this.universityService.getFacultiesByUniversity(universityId).pipe(
-      tap(faculties => this.faculties.set(faculties)),
-      switchMap(() => {
-        if (!facultyId) {
-          return of(undefined);
-        }
-        return this.universityService.getProgramsByFaculty(facultyId).pipe(
-          tap(programs => this.programs.set(programs))
-        );
-      }),
-      switchMap(() => {
-        if (!studyProgramId) {
-          return of(undefined);
-        }
-        return this.universityService.getVariantsByProgram(studyProgramId).pipe(
-          tap(variants => this.variants.set(variants))
-        );
-      }),
-      map(() => undefined)
-    );
-  }
-
   private loadSavedProfile(): void {
     const savedProfile = localStorage.getItem('userProfile');
     if (savedProfile) {
       try {
-        const profileData: ProfileData = JSON.parse(savedProfile);
-        const { universityId, facultyId, studyProgramId, studyProgramVariantId, status } = profileData;
-
-        // Load options in cascade without triggering valueChanges
-        this.loadCascadingOptions(universityId || null, facultyId || null, studyProgramId).subscribe({
-          next: () => {
-            // Set form values with emitEvent: false to prevent valueChanges triggers
-            this.profileForm.patchValue({
-              universityId,
-              facultyId,
-              studyProgramId,
-              studyProgramVariantId,
-              status
-            }, { emitEvent: false });
-          },
-          error: (error) => console.error('Failed to load cascading options:', error)
-        });
+        const profileData = JSON.parse(savedProfile);
+        this.profileForm.patchValue(profileData);
       } catch (error) {
         console.error('Failed to load saved profile:', error);
       }
+    } else {
+      // Retrieve latest user education
+      // TODO: Support multiple user educations
+
+      const authUser = localStorage.getItem('authUser');
+      if (!authUser) {
+        return;
+      }
+
+      const { id: userId } = JSON.parse(authUser);
+      this.userService.getUserById(userId).subscribe({
+        next: (response) => {
+          if (response.educations && response.educations.length > 0) {
+            // Get the last education
+            const lastEducation = response.educations[response.educations.length - 1];
+
+            this.profileForm.patchValue({
+              universityId: lastEducation.university_id,
+              facultyId: lastEducation.faculty_id,
+              studyProgramId: lastEducation.study_program_id,
+              studyProgramVariantId: lastEducation.study_program_variant_id,
+              status: lastEducation.status
+            });
+
+            localStorage.setItem('userProfile', JSON.stringify(this.profileForm.value));
+          }
+        },
+        error: (error) => {
+          const backendError = error.error;
+
+          const errorMessage = backendError?.error?.[0] ?? 'Failed to retrieve a profile. Please try again.';
+          this.snackBar.open(errorMessage, 'Close', {
+            duration: 5000,
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          });
+        }
+      });
     }
   }
 
@@ -315,15 +309,8 @@ export class ProfileComponent implements OnInit {
       // Call backend to update user
       this.userService.updateUser(userId, updateRequest).subscribe({
         next: (response) => {
-          // Save complete profile data including parent IDs for proper reload
-          const completeProfileData: ProfileData = {
-            universityId: this.profileForm.value.universityId,
-            facultyId: this.profileForm.value.facultyId,
-            studyProgramId: profileData.studyProgramId,
-            studyProgramVariantId: profileData.studyProgramVariantId,
-            status: profileData.status
-          };
-          localStorage.setItem('userProfile', JSON.stringify(completeProfileData));
+          // Also save to localStorage for offline access
+          localStorage.setItem('userProfile', JSON.stringify(profileData));
 
           this.snackBar.open(
             this.translocoService.translate('app.snackbar.profileSaveSuccess'),
@@ -336,7 +323,9 @@ export class ProfileComponent implements OnInit {
           );
         },
         error: (error) => {
-          const errorMessage = error.error || this.translocoService.translate('app.snackbar.profileSaveError');
+          const backendError = error.error;
+
+          const errorMessage = backendError?.error?.[0] ?? this.translocoService.translate('app.snackbar.profileSaveError');
           this.snackBar.open(
             errorMessage,
             this.translocoService.translate('app.snackbar.close'),
@@ -363,10 +352,13 @@ export class ProfileComponent implements OnInit {
   }
 
   onReset(): void {
-    this.profileForm.reset();
-    this.faculties.set([]);
-    this.programs.set([]);
-    this.variants.set([]);
+    this.profileForm.reset({
+      universityId: this.university() ? this.university()!.id : null,
+      facultyId: null,
+      studyProgramId: null,
+      studyProgramVariantId: null,
+      status: ''
+    }, { emitEvent: false });
   }
 
   getErrorMessage(field: string): string {

@@ -23,6 +23,7 @@ public class ErrorDto {
         REVIEW_NOT_FOUND,
         UNAUTHORIZED_REVIEW_ACTION,
         STUDY_PROGRAM_NOT_FOUND,
+        USER_NOT_VERIFIED,
         UNKNOWN
     }
 }

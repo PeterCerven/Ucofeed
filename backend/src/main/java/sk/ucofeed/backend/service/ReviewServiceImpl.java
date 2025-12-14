@@ -56,10 +56,10 @@ public class ReviewServiceImpl implements ReviewService {
                         .message("Study program not found with ID: " + request.studyProgramId())
                         .build());
 
-        // Step 3: Validate user enrollment and get StudyProgramVariant
+        // Step 2: Validate user enrollment and get StudyProgramVariant
         StudyProgramVariant variant = validateEnrollmentAndGetVariant(user, studyProgram);
 
-        // Step 4: Create and save review
+        // Step 3: Create and save review
         Review review = Review.builder()
                 .studyProgram(studyProgram)
                 .studyProgramVariant(variant)
