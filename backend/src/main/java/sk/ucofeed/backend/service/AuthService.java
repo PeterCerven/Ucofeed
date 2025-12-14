@@ -7,5 +7,7 @@ public interface AuthService {
 
     User verifyCode(String email, String verificationCode);
 
+    void refreshVerificationCode(String email);
+
     User login(String email, String password);
 }

@@ -47,16 +47,9 @@ public class AuthServiceImpl implements AuthService {
         User user = new User(email, fullName, passwordEncoder.encode(password), User.Role.USER);
         user.setEnabled(false); // User is disabled until email is verified
 
-        // Generate and set verification code
-        String verificationCode = generateVerificationCode();
-        user.setVerificationCode(verificationCode);
-        user.setVerificationCodeExpiresAt(LocalDateTime.now().plusMinutes(CODE_EXPIRATION_MINUTES));
+        generateAndSendVerificationCode(user);
 
-        userRepository.save(user);
-
-        // Send verification email
-        emailService.sendVerificationCode(email, verificationCode);
-        LOG.info("User registered and verification code sent successfully to: {}", email);
+        LOG.info("User registered successfully: {}", email);
         return user;
     }
 
@@ -89,6 +82,27 @@ public class AuthServiceImpl implements AuthService {
         LOG.info("User verified successfully: {}", email);
 
         return user;
+    }
+
+    @Override
+    @Transactional
+    public void refreshVerificationCode(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        generateAndSendVerificationCode(user);
+    }
+
+    private void generateAndSendVerificationCode(User user) {
+        // Generate and set verification code
+        String verificationCode = generateVerificationCode();
+        user.setVerificationCode(verificationCode);
+        user.setVerificationCodeExpiresAt(LocalDateTime.now().plusMinutes(CODE_EXPIRATION_MINUTES));
+
+        userRepository.save(user);
+
+        // Send verification email
+        emailService.sendVerificationCode(user.getEmail(), verificationCode);
+        LOG.info("Verification code is generated and sent successfully to: {}", user.getEmail());
     }
 
     @Override
