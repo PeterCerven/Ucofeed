@@ -99,10 +99,6 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new BadCredentialsException("Invalid email or password"));
 
-        if (!user.isEnabled()) {
-            throw new BadCredentialsException("Account not verified. Please verify your email first.");
-        }
-
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new BadCredentialsException("Invalid email or password");
         }

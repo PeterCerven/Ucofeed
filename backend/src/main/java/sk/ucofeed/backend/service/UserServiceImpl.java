@@ -2,6 +2,7 @@ package sk.ucofeed.backend.service;
 
 import sk.ucofeed.backend.persistence.dto.UpdateUserDTO;
 import sk.ucofeed.backend.persistence.dto.UserResponseDTO;
+import sk.ucofeed.backend.persistence.dto.ErrorDto;
 import sk.ucofeed.backend.persistence.model.StudyProgram;
 import sk.ucofeed.backend.persistence.model.StudyProgramVariant;
 import sk.ucofeed.backend.persistence.model.User;
@@ -9,6 +10,7 @@ import sk.ucofeed.backend.persistence.model.UserEducation;
 import sk.ucofeed.backend.persistence.repository.StudyProgramRepository;
 import sk.ucofeed.backend.persistence.repository.StudyProgramVariantRepository;
 import sk.ucofeed.backend.persistence.repository.UserRepository;
+import sk.ucofeed.backend.exception.UserNotVerifiedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -55,6 +57,14 @@ public class UserServiceImpl implements UserService {
         // Find user
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+
+        // Check if user is verified
+        if (!user.isEnabled()) {
+            throw UserNotVerifiedException.builder()
+                .errorType(ErrorDto.ErrorType.USER_NOT_VERIFIED)
+                .message("Account not verified. Please verify your email first.")
+                .build();
+        }
 
         // Find study program and variant
         StudyProgram studyProgram = studyProgramRepository.findById(updateUserDto.getStudyProgramId())

@@ -13,6 +13,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslocoService, TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { UniversityService } from '@services/university.service';
 import { AuthService } from '@services/auth.service';
+import { AuthStateService } from '@services/auth-state.service';
 import { UserService, UpdateUserRequest } from '@services/user.service';
 import { UniversityModel } from '@models/university.model';
 import { FacultyModel } from '@models/faculty.model';
@@ -45,6 +46,7 @@ export class ProfileComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly universityService = inject(UniversityService);
   private readonly authService = inject(AuthService);
+  private readonly authState = inject(AuthStateService);
   private readonly userService = inject(UserService);
   private readonly snackBar = inject(MatSnackBar);
   private readonly route = inject(ActivatedRoute);
@@ -109,13 +111,13 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Check if we need to show verification (e.g., from query params)
-    this.route.queryParams.subscribe(params => {
-      if (params['verify'] === 'true' && params['email']) {
-        this.showVerification.set(true);
-        this.verificationForm.patchValue({ email: params['email'] });
-      }
-    });
+    // Show verification dialog if needed
+    if (this.authState.isLoggedIn() && !this.authState.isVerified()) {
+      this.showVerification.set(true);
+      this.verificationForm.patchValue({ email: this.authState.userEmail() });
+    } else {
+      this.showVerification.set(false);
+    }
 
     this.loadStudentsUniversity();
     this.loadSavedProfile();
@@ -132,7 +134,7 @@ export class ProfileComponent implements OnInit {
           this.showVerification.set(false);
 
           // Set auth state (user is now logged in after verification)
-          localStorage.setItem('authUser', JSON.stringify({ id: response.id, email: response.email, role: response.role }));
+          localStorage.setItem('authUser', JSON.stringify({ id: response.id, email: response.email, role: response.role, verified: response.enabled }));
 
           this.snackBar.open(
             this.translocoService.translate('app.snackbar.accountVerifiedSuccess'),
@@ -336,7 +338,9 @@ export class ProfileComponent implements OnInit {
           );
         },
         error: (error) => {
-          const errorMessage = error.error || this.translocoService.translate('app.snackbar.profileSaveError');
+          const backendError = error.error;
+
+          const errorMessage = backendError?.error?.[0] ?? this.translocoService.translate('app.snackbar.profileSaveError');
           this.snackBar.open(
             errorMessage,
             this.translocoService.translate('app.snackbar.close'),

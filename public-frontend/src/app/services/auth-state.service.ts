@@ -9,6 +9,7 @@ export class AuthStateService {
   readonly userEmail = signal<string | null>(null);
   readonly userId = signal<string | null>(null);
   readonly userRole = signal<string | null>(null);
+  readonly isUserVerified = signal<boolean | null>(null);
 
   constructor() {
     this.loadAuthState();
@@ -22,12 +23,14 @@ export class AuthStateService {
         // Validate session with backend
         this.authService.validateSession().subscribe({
           next: (response) => {
-            if (response.valid && response.id && response.email && response.role) {
+            if (response.valid && response.id && response.email && response.role
+              && response.enabled != null) {
               // Session is valid, update state
               this.isLoggedIn.set(true);
               this.userEmail.set(response.email);
               this.userId.set(response.id);
               this.userRole.set(response.role);
+              this.isUserVerified.set(response.enabled);
             } else {
               // Session invalid, clear state
               this.clearAuthState();
@@ -46,12 +49,13 @@ export class AuthStateService {
     }
   }
 
-  setAuthState(authData: { id: string; email: string; role: string }) {
+  setAuthState(authData: { id: string; email: string; role: string, verified: boolean }) {
     localStorage.setItem('authUser', JSON.stringify(authData));
     this.isLoggedIn.set(true);
     this.userEmail.set(authData.email);
     this.userId.set(authData.id);
     this.userRole.set(authData.role);
+    this.isUserVerified.set(authData.verified);
   }
 
   clearAuthState() {
@@ -60,11 +64,10 @@ export class AuthStateService {
     this.userEmail.set(null);
     this.userId.set(null);
     this.userRole.set(null);
+    this.isUserVerified.set(null);
   }
 
   isVerified(): boolean {
-    // For now, if logged in = verified
-    // Later: check separate verified flag
-    return this.isLoggedIn();
+    return this.isUserVerified() ?? false;
   }
 }

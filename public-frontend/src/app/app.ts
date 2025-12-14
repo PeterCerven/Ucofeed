@@ -42,6 +42,7 @@ export class App {
   // Delegate to auth state service
   readonly isLoggedIn = this.authState.isLoggedIn;
   readonly userEmail = this.authState.userEmail;
+  readonly isUserVerified = this.authState.isUserVerified;
 
   toggleDarkMode(): void {
     this.isDarkMode.update(v => !v);
@@ -75,7 +76,8 @@ export class App {
             this.authState.setAuthState({
               id: response.id,
               email: response.email,
-              role: response.role
+              role: response.role,
+              verified: response.enabled
             });
 
             this.snackBar.open(
@@ -122,7 +124,8 @@ export class App {
             // Set auth state immediately after registration (pending verification)
             this.isLoggedIn.set(true);
             this.userEmail.set(result.email);
-            localStorage.setItem('authUser', JSON.stringify({ id: response.id, email: response.email, role: response.role }));
+            this.isUserVerified.set(false);
+            localStorage.setItem('authUser', JSON.stringify({ id: response.id, email: response.email, role: response.role, verified: response.enabled }));
 
             this.snackBar.open(
               this.translocoService.translate('app.snackbar.registerSuccess'),
@@ -133,13 +136,7 @@ export class App {
                 verticalPosition: 'top'
               }
             );
-            // Redirect to profile page with verification query params
-            this.router.navigate(['/profile'], {
-              queryParams: {
-                verify: 'true',
-                email: result.email
-              }
-            });
+            this.router.navigate(['/profile']);
           },
           error: (error) => {
             const errorMessage = error.error || this.translocoService.translate('app.snackbar.registrationFailed');

@@ -37,16 +37,21 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(
-            @Valid @RequestBody @NotNull SignUpRequest request
+            @Valid @RequestBody @NotNull SignUpRequest request,
+            HttpServletRequest httpRequest
     ) {
         LOG.info("Registering user with email: {}", request.email());
         try {
             User user = authService.registerUser(request.email(), request.fullName(), request.password());
+
+            authenticateUser(user, httpRequest);
+
             return ResponseEntity.ok(Map.of(
                     "message", "Account verified successfully",
                     "id", user.getId().toString(),
                     "email", user.getEmail(),
-                    "role", user.getRole().toString()
+                    "role", user.getRole().toString(),
+                    "enabled", user.isEnabled()
             ));
         } catch (IllegalArgumentException e) {
             LOG.warn("Registration failed for email: {} - {}", request.email(), e.getMessage());
@@ -76,7 +81,8 @@ public class AuthController {
                     "message", "Account verified successfully",
                     "id", user.getId().toString(),
                     "email", user.getEmail(),
-                    "role", user.getRole().toString()
+                    "role", user.getRole().toString(),
+                    "enabled", user.isEnabled()
             ));
         } catch (IllegalArgumentException e) {
             LOG.warn("Verification failed for email: {} - {}", request.email(), e.getMessage());
@@ -103,7 +109,8 @@ public class AuthController {
                     "message", "Login successful",
                     "id", user.getId().toString(),
                     "email", user.getEmail(),
-                    "role", user.getRole().toString()
+                    "role", user.getRole().toString(),
+                    "enabled", user.isEnabled()
             ));
         } catch (BadCredentialsException e) {
             LOG.warn("Login failed for email: {} - {}", request.email(), e.getMessage());
@@ -124,7 +131,8 @@ public class AuthController {
                     "valid", true,
                     "id", user.getId().toString(),
                     "email", user.getEmail(),
-                    "role", user.getRole().toString()
+                    "role", user.getRole().toString(),
+                    "enabled", user.isEnabled()
             ));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("valid", false));
