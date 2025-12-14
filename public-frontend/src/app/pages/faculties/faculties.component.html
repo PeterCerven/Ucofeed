@@ -1,29 +1,30 @@
 <div class="faculties-container" *transloco="let t; prefix 'pages.faculties'">
-  <app-back-navigation
-    backRoute="/universities"
-    [backLabel]="t('backToUniversities')" />
+  <div class="content">
+    <app-back-navigation
+      backRoute="/universities"
+      [backLabel]="t('backToUniversities')" />
 
-  <h1>{{ t('facultiesOf', { name: universityName() }) }}</h1>
+    <h1>{{ t('facultiesOf', { name: universityName() }) }}</h1>
 
-  @if (isLoading()) {
-    <p>{{ t('loading') }}</p>
-  }
-
-  <div class="cards-grid">
-    @for (faculty of faculties(); track faculty.id) {
-      <entity-card
-        [id]="faculty.id"
-        [name]="faculty.name"
-        [image]="faculty.image ?? ''"
-        [entityType]="'faculty'"
-        [rating]="faculty.rating ?? 0"
-        [description]="faculty.description ?? ''"
-        (cardClick)="onFacultyClick($event)"
-      ></entity-card>
-    } @empty {
-      <p>{{ t('noFaculties') }}</p>
+    @if (isLoading()) {
+      <p>{{ t('loading') }}</p>
     }
 
-  </div>
+    <div class="cards-grid">
+      @for (faculty of faculties(); track faculty.id) {
+        <entity-card
+          [id]="faculty.id"
+          [name]="faculty.name"
+          [image]="faculty.image ?? ''"
+          [entityType]="'faculty'"
+          [rating]="faculty.rating ?? 0"
+          [description]="faculty.description ?? ''"
+          (cardClick)="onFacultyClick($event)"
+        ></entity-card>
+      } @empty {
+        <p>{{ t('noFaculties') }}</p>
+      }
 
+    </div>
+  </div>
 </div>

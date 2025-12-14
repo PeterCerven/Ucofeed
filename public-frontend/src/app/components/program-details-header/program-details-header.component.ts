@@ -33,11 +33,12 @@ export class ProgramDetailsHeaderComponent {
     }
   }
 
-  /** Get array of rating keys for distribution display */
+  /** Get array of rating keys for distribution display (top 3) */
   get ratingKeys(): number[] {
     return Object.keys(this.programDetails().ratingDistribution)
       .map(Number)
-      .sort((a, b) => b - a);
+      .sort((a, b) => b - a)
+      .slice(0, 3);
   }
 
   /** Calculate percentage for rating distribution bar */

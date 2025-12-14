@@ -1,5 +1,6 @@
 .program-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #2A7B9B;
+  background: linear-gradient(90deg, rgba(42, 123, 155, 1) 0%, rgba(87, 199, 133, 1) 50%, rgba(237, 221, 83, 1) 100%);
   color: white;
   padding: 2rem;
   border-radius: 12px;
@@ -12,6 +13,7 @@
     font-size: 0.875rem;
     margin-bottom: 1.5rem;
     opacity: 0.9;
+    text-transform: capitalize;
 
     mat-icon {
       font-size: 1rem;
@@ -50,6 +52,7 @@
       font-size: 2.5rem;
       font-weight: 700;
       margin: 0 0 1rem 0;
+      text-transform: capitalize;
 
       @media (max-width: 768px) {
         font-size: 2rem;

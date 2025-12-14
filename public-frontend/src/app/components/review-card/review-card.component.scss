@@ -28,7 +28,7 @@
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: #35b36e;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -68,6 +68,21 @@
             margin-right: 0.25rem;
           }
         }
+      }
+    }
+  }
+
+  .variant-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+
+    .variant-tag {
+      height: auto;
+      font-size: 0.75rem;
+
+      ::ng-deep .mdc-evolution-chip__action--primary {
+        padding: 6px 10px !important;
       }
     }
   }
@@ -180,7 +195,7 @@
     .review-text {
       padding: 1rem;
       background: #fafafa;
-      border-left: 4px solid #667eea;
+      border-left: 4px solid #35b36e;
       border-radius: 4px;
       margin-bottom: 1rem;
 

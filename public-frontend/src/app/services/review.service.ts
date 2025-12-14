@@ -131,11 +131,11 @@ export class ReviewService {
         9: 2,
       },
       tags: {
-        title: 'Bc.',
+        titles: ['Bc.'],
         studyDegree: 1, // Bachelor
-        studyFormat: 'Full-time / Part-time',
+        studyFormats: ['Full-time', 'Part-time'],
         studyDuration: 3,
-        languageGroup: 'Slovak / English',
+        languages: ['Slovak', 'English'],
       },
     },
     2: {
@@ -153,11 +153,11 @@ export class ReviewService {
         9: 1,
       },
       tags: {
-        title: 'Bc.',
+        titles: ['Bc.'],
         studyDegree: 1, // Bachelor
-        studyFormat: 'Full-time',
+        studyFormats: ['Full-time'],
         studyDuration: 3,
-        languageGroup: 'Slovak',
+        languages: ['Slovak'],
       },
     },
     3: {
@@ -174,11 +174,11 @@ export class ReviewService {
         9: 2,
       },
       tags: {
-        title: 'Ing.',
+        titles: ['Ing.'],
         studyDegree: 2, // Master
-        studyFormat: 'Full-time',
+        studyFormats: ['Full-time'],
         studyDuration: 2,
-        languageGroup: 'Slovak / English',
+        languages: ['Slovak', 'English'],
       },
     },
   };
