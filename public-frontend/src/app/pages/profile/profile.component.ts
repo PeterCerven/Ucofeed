@@ -119,8 +119,7 @@ export class ProfileComponent implements OnInit {
       this.showVerification.set(false);
     }
 
-    this.loadStudentsUniversity();
-    this.loadSavedProfile();
+    this.loadStudentUniversity();
   }
 
   onVerify(): void {
@@ -187,7 +186,7 @@ export class ProfileComponent implements OnInit {
     return '';
   }
 
-  private loadStudentsUniversity(): void {
+  private loadStudentUniversity(): void {
     const savedAuth = localStorage.getItem('authUser');
     if (!savedAuth) {
       console.log('No auth data found in localStorage');
@@ -199,7 +198,9 @@ export class ProfileComponent implements OnInit {
       next: (university) => {
         this.university.set(university);
         if (university && university.id) {
-          this.profileForm.patchValue({ universityId: university.id }, { emitEvent: false });
+          this.profileForm.patchValue({ universityId: university.id });
+
+          this.loadSavedProfile();
         }
       },
       error: (error) => console.error('Failed to load university:', error)
@@ -282,6 +283,44 @@ export class ProfileComponent implements OnInit {
       } catch (error) {
         console.error('Failed to load saved profile:', error);
       }
+    } else {
+      // Retrieve latest user education
+      // TODO: Support multiple user educations
+
+      const authUser = localStorage.getItem('authUser');
+      if (!authUser) {
+        return;
+      }
+
+      const { id: userId } = JSON.parse(authUser);
+      this.userService.getUserById(userId).subscribe({
+        next: (response) => {
+          if (response.educations && response.educations.length > 0) {
+            // Get the last education
+            const lastEducation = response.educations[response.educations.length - 1];
+
+            this.profileForm.patchValue({
+              universityId: lastEducation.university_id,
+              facultyId: lastEducation.faculty_id,
+              studyProgramId: lastEducation.study_program_id,
+              studyProgramVariantId: lastEducation.study_program_variant_id,
+              status: lastEducation.status
+            });
+
+            localStorage.setItem('userProfile', JSON.stringify(this.profileForm.value));
+          }
+        },
+        error: (error) => {
+          const backendError = error.error;
+
+          const errorMessage = backendError?.error?.[0] ?? 'Failed to retrieve a profile. Please try again.';
+          this.snackBar.open(errorMessage, 'Close', {
+            duration: 5000,
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          });
+        }
+      });
     }
   }
 
@@ -367,10 +406,13 @@ export class ProfileComponent implements OnInit {
   }
 
   onReset(): void {
-    this.profileForm.reset();
-    this.faculties.set([]);
-    this.programs.set([]);
-    this.variants.set([]);
+    this.profileForm.reset({
+      universityId: this.university() ? this.university()!.id : null,
+      facultyId: null,
+      studyProgramId: null,
+      studyProgramVariantId: null,
+      status: ''
+    }, { emitEvent: false });
   }
 
   getErrorMessage(field: string): string {

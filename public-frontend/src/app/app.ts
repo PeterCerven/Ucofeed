@@ -169,6 +169,8 @@ export class App {
         // Clear shared auth state
         this.authState.clearAuthState();
 
+        localStorage.removeItem('userProfile');
+
         this.snackBar.open(
           this.translocoService.translate('app.snackbar.logoutSuccess'),
           this.translocoService.translate('app.snackbar.close'),
