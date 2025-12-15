@@ -7,7 +7,7 @@
         </div>
         <div class="user-details">
           <div class="user-name-row">
-            <h3 class="user-name">{{ review().anonymous ? 'Anonymous' : review().user_full_name }}</h3>
+            <h3 class="user-name">{{ review().anonymous ? t('anonymous') : review().user_full_name }}</h3>
             @if (isEdited()) {
               <mat-chip class="edited-badge">
                 <mat-icon>edit</mat-icon>
@@ -39,10 +39,10 @@
         <!-- Action buttons for owner -->
         @if (canShowActions()) {
           <div class="action-buttons">
-            <button mat-icon-button (click)="onEdit()" matTooltip="Edit review">
+            <button mat-icon-button (click)="onEdit()" [matTooltip]="t('actions.edit')">
               <mat-icon>edit</mat-icon>
             </button>
-            <button mat-icon-button (click)="onDelete()" matTooltip="Delete review" color="warn">
+            <button mat-icon-button (click)="onDelete()" [matTooltip]="t('actions.delete')" color="warn">
               <mat-icon>delete</mat-icon>
             </button>
           </div>
@@ -72,9 +72,9 @@
       <div class="date-info">
         <mat-icon>schedule</mat-icon>
         @if (isEdited()) {
-          <span>Edited {{ formatDate(review().updated_at) }}</span>
+          <span>{{ t('editedDate', { date: formatDate(review().updated_at) }) }}</span>
         } @else {
-          <span>Posted {{ formatDate(review().created_at) }}</span>
+          <span>{{ t('postedDate', { date: formatDate(review().created_at) }) }}</span>
         }
       </div>
       @if (review().commentsCount !== undefined) {

@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { catchError, of } from 'rxjs';
 import { TranslocoService, TranslocoDirective } from '@jsverse/transloco';
 import { ReviewService } from '@services/review.service';
@@ -26,6 +27,7 @@ import { ReviewFormComponent } from '@components/review-form/review-form.compone
     MatSnackBarModule,
     MatButtonModule,
     MatIconModule,
+    MatDialogModule,
     TranslocoDirective,
     ProgramDetailsHeaderComponent,
     ReviewFilterComponent,
@@ -41,6 +43,7 @@ export class ReviewsComponent {
   private universityService = inject(UniversityService);
   public authState = inject(AuthStateService);
   private snackBar = inject(MatSnackBar);
+  private dialog = inject(MatDialog);
   private translocoService = inject(TranslocoService);
 
   @ViewChild(ReviewFormComponent) reviewFormComponent?: ReviewFormComponent;
@@ -320,15 +323,24 @@ export class ReviewsComponent {
   }
 
   onDeleteReview(reviewId: number): void {
-    // Show confirmation dialog
-    const confirmed = window.confirm(
-      'Are you sure you want to delete this review? This action cannot be undone.'
+    // Show confirmation dialog using snackbar with action
+    const snackBarRef = this.snackBar.open(
+      this.translocoService.translate('app.snackbar.confirmDeleteReview'),
+      this.translocoService.translate('app.snackbar.delete'),
+      {
+        duration: 10000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['warning-snackbar'],
+      }
     );
 
-    if (!confirmed) {
-      return;
-    }
+    snackBarRef.onAction().subscribe(() => {
+      this.executeDeleteReview(reviewId);
+    });
+  }
 
+  private executeDeleteReview(reviewId: number): void {
     this.reviewService.deleteReview(reviewId).subscribe({
       next: () => {
         // Remove review from the list

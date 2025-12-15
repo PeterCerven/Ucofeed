@@ -3,6 +3,9 @@
     "snackbar": {
       "accountVerifiedSuccess": "Account verified successfully! You can now complete your profile.",
       "close": "Close",
+      "confirmDeleteReview": "Are you sure you want to delete this review? This action cannot be undone.",
+      "delete": "Delete",
+      "invalidCredentials": "Invalid email or password",
       "loginFailed": "Login failed. Please try again.",
       "loginSuccess": "Login successful!",
       "logoutSuccess": "Logged out successfully",
@@ -12,6 +15,12 @@
       "profileSaveSuccess": "Profile saved successfully!",
       "registerSuccess": "Registration successful! Please check your email for verification code.",
       "registrationFailed": "Registration failed. Please try again.",
+      "reviewDeleteFailed": "Failed to delete review. Please try again.",
+      "reviewDeleteSuccess": "Review deleted successfully!",
+      "reviewSubmitFailed": "Failed to submit review. Please try again.",
+      "reviewSubmitSuccess": "Review submitted successfully!",
+      "reviewUpdateFailed": "Failed to update review. Please try again.",
+      "reviewUpdateSuccess": "Review updated successfully!",
       "verificationCodeResendFailed": "Failed to resend verification code. Please try again.",
       "verificationCodeResent": "Verification code has been sent to your email. Please check your inbox.",
       "verificationFailed": "Verification failed. Please check your code and try again."
@@ -50,6 +59,8 @@
       "email": "University Email",
       "emailHint": "For student domain emails only",
       "emailPlaceholder": "student@stuba.sk",
+      "fullName": "Name",
+      "fullNamePlaceholder": "Your name",
       "password": "Password",
       "passwordHint": "Min 8 characters, with upper, lower, number & special char",
       "passwordPlaceholder": "Create a strong password",
@@ -75,6 +86,11 @@
     "loginRequired": "Login required to add comments",
     "noComments": "No comments yet. Be the first to comment!"
   },
+  "programDetails": {
+    "reviews": "reviews",
+    "ratingDistribution": "Rating Distribution",
+    "stars": "stars"
+  },
   "pages": {
     "faculties": {
       "backToUniversities": "Back to Universities",
@@ -83,42 +99,52 @@
       "noFaculties": "No faculties found."
     },
     "profile": {
-      "autoDetected": "Automatically detected from your email domain",
-      "email": "Email",
-      "emailPlaceholder": "your.email@university.sk",
-      "faculty": "Faculty",
-      "facultyHint": "Select your faculty",
-      "facultyPlaceholder": "Select your faculty",
+      "fields": {
+        "email": "Email",
+        "faculty": "Faculty",
+        "status": "Status",
+        "studyProgramme": "Study Programme",
+        "studyVariant": "Study Variant",
+        "university": "University",
+        "verificationCode": "Verification Code"
+      },
+      "hints": {
+        "emailAutoDetected": "Automatically detected from your email domain",
+        "facultySelect": "Select your faculty",
+        "programmeSelectFacultyFirst": "Select your study programme (choose faculty first)",
+        "variantSelectProgrammeFirst": "Select your study variant (choose programme first)",
+        "verificationCodeDigits": "Enter the 6-digit code sent to your email"
+      },
       "loading": "Loading...",
+      "placeholders": {
+        "emailUniversity": "your.email@university.sk",
+        "faculty": "Select your faculty",
+        "programmeSelect": "Select your study programme",
+        "status": "Select your status",
+        "variantSelect": "Select study variant",
+        "verificationCode": "Enter the code from your email"
+      },
       "resendCode": "Resend Code",
       "resending": "Resending...",
       "reset": "Reset",
       "saveProfile": "Save Profile",
-      "status": "Status",
-      "viewReviews": "View Study Program",
-      "statusPlaceholder": "Select your status",
       "statuses": {
         "completed": "Completed",
         "droppedOut": "Dropped Out",
         "enrolled": "Enrolled",
         "onHold": "On Hold"
       },
-      "studyProgram": "Study Programme",
-      "studyProgramHint": "Select your study programme (choose faculty first)",
-      "studyProgramPlaceholder": "Select your study programme",
-      "studyVariant": "Study Variant",
-      "studyVariantHint": "Select your study variant (choose programme first)",
-      "studyVariantPlaceholder": "Select study variant",
-      "subtitle": "Manage your academic information",
-      "title": "My Profile",
-      "university": "University",
-      "verificationCode": "Verification Code",
-      "verificationCodeHint": "Enter the 6-digit code sent to your email",
-      "verificationCodePlaceholder": "Enter the code from your email",
-      "verificationSubtitle": "Enter the verification code sent to your email to complete registration",
-      "verificationTitle": "Verify Your Account",
+      "subtitles": {
+        "manageInfo": "Manage your academic information",
+        "verifyRegistration": "Enter the verification code sent to your email to complete registration"
+      },
+      "titles": {
+        "myProfile": "My Profile",
+        "verifyAccount": "Verify Your Account"
+      },
       "verify": "Verify Account",
-      "verifying": "Verifying..."
+      "verifying": "Verifying...",
+      "viewReviews": "View Study Program"
     },
     "programs": {
       "loading": "Loading programs...",
@@ -148,11 +174,17 @@
     }
   },
   "reviewCard": {
+    "actions": {
+      "delete": "Delete review",
+      "edit": "Edit review"
+    },
     "anonymous": "Anonymous",
     "comment": "Comment",
     "comments": "Comments",
     "edited": "Edited",
+    "editedDate": "Edited {{date}}",
     "posted": "Posted {{date}}",
+    "postedDate": "Posted {{date}}",
     "rating": "Rating",
     "updated": "(Updated {{date}})"
   },
@@ -168,6 +200,10 @@
     "sortReviews": "Sort Reviews"
   },
   "reviewForm": {
+    "actions": {
+      "submit": "Submit Review",
+      "update": "Save Changes"
+    },
     "anonymousCheckbox": "Post anonymously",
     "anonymousHint": "Your name won't be visible to others",
     "cancel": "Cancel",
@@ -176,9 +212,11 @@
     "commentPlaceholder": "Share your experience with this program...",
     "commentRequired": "Review comment is required",
     "overallRating": "Overall Rating:",
-    "submit": "Submit Review",
     "submitting": "Submitting...",
-    "title": "Write a Review",
+    "title": {
+      "create": "Write a Review",
+      "edit": "Edit Review"
+    },
     "yourReview": "Your Review"
   }
 }

@@ -3,6 +3,9 @@
     "snackbar": {
       "accountVerifiedSuccess": "Účet úspešne overený! Teraz môžete dokončiť svoj profil.",
       "close": "Zavrieť",
+      "confirmDeleteReview": "Naozaj chcete vymazať túto recenziu? Túto akciu nemožno vrátiť späť.",
+      "delete": "Vymazať",
+      "invalidCredentials": "Neplatný email alebo heslo",
       "loginFailed": "Prihlásenie zlyhalo. Skúste to prosím znova.",
       "loginSuccess": "Prihlásenie úspešné!",
       "logoutSuccess": "Úspešne odhlásený",
@@ -12,6 +15,12 @@
       "profileSaveSuccess": "Profil úspešne uložený!",
       "registerSuccess": "Registrácia úspešná! Skontrolujte si e-mail pre overovací kód.",
       "registrationFailed": "Registrácia zlyhala. Skúste to prosím znova.",
+      "reviewDeleteFailed": "Nepodarilo sa vymazať recenziu. Skúste to prosím znova.",
+      "reviewDeleteSuccess": "Recenzia úspešne vymazaná!",
+      "reviewSubmitFailed": "Nepodarilo sa odoslať recenziu. Skúste to prosím znova.",
+      "reviewSubmitSuccess": "Recenzia úspešne odoslaná!",
+      "reviewUpdateFailed": "Nepodarilo sa aktualizovať recenziu. Skúste to prosím znova.",
+      "reviewUpdateSuccess": "Recenzia úspešne aktualizovaná!",
       "verificationCodeResendFailed": "Nepodarilo sa odoslať overovací kód. Skúste to prosím znova.",
       "verificationCodeResent": "Overovací kód bol odoslaný na váš e-mail. Skontrolujte si schránku.",
       "verificationFailed": "Overenie zlyhalo. Skontrolujte prosím kód a skúste to znova."
@@ -50,6 +59,8 @@
       "email": "Univerzitný e-mail",
       "emailHint": "Iba pre študentské e-mailové domény",
       "emailPlaceholder": "student@stuba.sk",
+      "fullName": "Meno",
+      "fullNamePlaceholder": "Vaše meno",
       "password": "Heslo",
       "passwordHint": "Min 8 znakov, s veľkým, malým, číslom a špeciálnym znakom",
       "passwordPlaceholder": "Vytvorte silné heslo",
@@ -75,6 +86,11 @@
     "loginRequired": "Na pridanie komentárov je potrebné prihlásenie",
     "noComments": "Zatiaľ žiadne komentáre. Buďte prvý, kto pridá komentár!"
   },
+  "programDetails": {
+    "reviews": "recenzií",
+    "ratingDistribution": "Rozdelenie hodnotení",
+    "stars": "hviezdičiek"
+  },
   "pages": {
     "faculties": {
       "backToUniversities": "Späť na univerzity",
@@ -83,42 +99,52 @@
       "noFaculties": "Neboli nájdené žiadne fakulty."
     },
     "profile": {
-      "autoDetected": "Automaticky zistené z vašej e-mailovej domény",
-      "email": "E-mail",
-      "emailPlaceholder": "vas.email@univerzita.sk",
-      "faculty": "Fakulta",
-      "facultyHint": "Vyberte svoju fakultu",
-      "facultyPlaceholder": "Vyberte svoju fakultu",
+      "fields": {
+        "email": "E-mail",
+        "faculty": "Fakulta",
+        "status": "Stav",
+        "studyProgramme": "Študijný program",
+        "studyVariant": "Variant štúdia",
+        "university": "Univerzita",
+        "verificationCode": "Overovací kód"
+      },
+      "hints": {
+        "emailAutoDetected": "Automaticky zistené z vašej e-mailovej domény",
+        "facultySelect": "Vyberte svoju fakultu",
+        "programmeSelectFacultyFirst": "Vyberte svoj študijný program (najprv vyberte fakultu)",
+        "variantSelectProgrammeFirst": "Vyberte svoj variant štúdia (najprv vyberte program)",
+        "verificationCodeDigits": "Zadajte 6-miestny kód zaslaný na váš e-mail"
+      },
       "loading": "Načítavam...",
+      "placeholders": {
+        "emailUniversity": "vas.email@univerzita.sk",
+        "faculty": "Vyberte svoju fakultu",
+        "programmeSelect": "Vyberte svoj študijný program",
+        "status": "Vyberte svoj stav",
+        "variantSelect": "Vyberte variant štúdia",
+        "verificationCode": "Zadajte kód z e-mailu"
+      },
       "resendCode": "Opätovne poslať kód",
       "resending": "Posielam...",
       "reset": "Resetovať",
       "saveProfile": "Uložiť profil",
-      "status": "Stav",
-      "viewReviews": "Zobraziť študijný program",
-      "statusPlaceholder": "Vyberte svoj stav",
       "statuses": {
         "completed": "Ukončené",
         "droppedOut": "Prerušené",
         "enrolled": "Zapísaný",
         "onHold": "Pozastavené"
       },
-      "studyProgram": "Študijný program",
-      "studyProgramHint": "Vyberte svoj študijný program (najprv vyberte fakultu)",
-      "studyProgramPlaceholder": "Vyberte svoj študijný program",
-      "studyVariant": "Variant štúdia",
-      "studyVariantHint": "Vyberte svoj variant štúdia (najprv vyberte program)",
-      "studyVariantPlaceholder": "Vyberte variant štúdia",
-      "subtitle": "Spravujte svoje akademické informácie",
-      "title": "Môj profil",
-      "university": "Univerzita",
-      "verificationCode": "Overovací kód",
-      "verificationCodeHint": "Zadajte 6-miestny kód zaslaný na váš e-mail",
-      "verificationCodePlaceholder": "Zadajte kód z e-mailu",
-      "verificationSubtitle": "Zadajte overovací kód zaslaný na váš e-mail pre dokončenie registrácie",
-      "verificationTitle": "Overiť účet",
+      "subtitles": {
+        "manageInfo": "Spravujte svoje akademické informácie",
+        "verifyRegistration": "Zadajte overovací kód zaslaný na váš e-mail pre dokončenie registrácie"
+      },
+      "titles": {
+        "myProfile": "Môj profil",
+        "verifyAccount": "Overiť účet"
+      },
       "verify": "Overiť účet",
-      "verifying": "Overujem..."
+      "verifying": "Overujem...",
+      "viewReviews": "Zobraziť študijný program"
     },
     "programs": {
       "loading": "Načítavam programy...",
@@ -148,11 +174,17 @@
     }
   },
   "reviewCard": {
+    "actions": {
+      "delete": "Vymazať recenziu",
+      "edit": "Upraviť recenziu"
+    },
     "anonymous": "Anonymný",
     "comment": "Komentár",
     "comments": "Komentáre",
     "edited": "Upravené",
+    "editedDate": "Upravené {{date}}",
     "posted": "Zverejnené {{date}}",
+    "postedDate": "Zverejnené {{date}}",
     "rating": "Hodnotenie",
     "updated": "(Aktualizované {{date}})"
   },
@@ -168,6 +200,10 @@
     "sortReviews": "Zoradiť recenzie"
   },
   "reviewForm": {
+    "actions": {
+      "submit": "Odoslať recenziu",
+      "update": "Uložiť zmeny"
+    },
     "anonymousCheckbox": "Zverejniť anonymne",
     "anonymousHint": "Vaše meno nebude viditeľné pre ostatných",
     "cancel": "Zrušiť",
@@ -176,9 +212,11 @@
     "commentPlaceholder": "Zdieľajte svoju skúsenosť s týmto programom...",
     "commentRequired": "Komentár recenzie je povinný",
     "overallRating": "Celkové hodnotenie:",
-    "submit": "Odoslať recenziu",
     "submitting": "Odosielam...",
-    "title": "Napísať recenziu",
+    "title": {
+      "create": "Napísať recenziu",
+      "edit": "Upraviť recenziu"
+    },
     "yourReview": "Vaša recenzia"
   }
 }
