@@ -67,7 +67,26 @@
           } @else {
             <ng-container>
               <mat-icon>check_circle</mat-icon>
-              <span>{{ t('actions.verifyAccount') }}</span>
+              <span>{{ t('verify') }}</span>
+            </ng-container>
+          }
+        </button>
+        <button
+          mat-stroked-button
+          type="button"
+          (click)="onResendVerificationCode()"
+          class="resend-button"
+          [disabled]="isResendingCode()"
+        >
+          @if (isResendingCode()) {
+            <ng-container>
+              <mat-icon>hourglass_empty</mat-icon>
+              <span>{{ t('resending') }}</span>
+            </ng-container>
+          } @else {
+            <ng-container>
+              <mat-icon>mail</mat-icon>
+              <span>{{ t('resendCode') }}</span>
             </ng-container>
           }
         </button>
@@ -181,7 +200,17 @@
         class="reset-button"
       >
         <mat-icon>refresh</mat-icon>
-        <span>{{ t('actions.reset') }}</span>
+        <span>{{ t('reset') }}</span>
+      </button>
+      <button
+        mat-stroked-button
+        type="button"
+        (click)="onNavigateToReviews()"
+        class="navigate-button"
+        [disabled]="!profileForm.get('studyProgramId')?.value"
+      >
+        <mat-icon>open_in_new</mat-icon>
+        <span>{{ t('viewReviews') }}</span>
       </button>
       <button
         mat-flat-button
@@ -192,7 +221,7 @@
         [disabled]="profileForm.invalid"
       >
         <mat-icon>save</mat-icon>
-        <span>{{ t('actions.saveProfile') }}</span>
+        <span>{{ t('saveProfile') }}</span>
       </button>
     </mat-card-actions>
   </mat-card>

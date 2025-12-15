@@ -12,6 +12,8 @@
       "profileSaveSuccess": "Profile saved successfully!",
       "registerSuccess": "Registration successful! Please check your email for verification code.",
       "registrationFailed": "Registration failed. Please try again.",
+      "verificationCodeResendFailed": "Failed to resend verification code. Please try again.",
+      "verificationCodeResent": "Verification code has been sent to your email. Please check your inbox.",
       "verificationFailed": "Verification failed. Please check your code and try again."
     },
     "toolbar": {
@@ -88,9 +90,12 @@
       "facultyHint": "Select your faculty",
       "facultyPlaceholder": "Select your faculty",
       "loading": "Loading...",
+      "resendCode": "Resend Code",
+      "resending": "Resending...",
       "reset": "Reset",
       "saveProfile": "Save Profile",
       "status": "Status",
+      "viewReviews": "View Study Program",
       "statusPlaceholder": "Select your status",
       "statuses": {
         "completed": "Completed",

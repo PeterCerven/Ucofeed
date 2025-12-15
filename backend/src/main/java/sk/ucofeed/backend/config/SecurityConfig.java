@@ -49,10 +49,15 @@ public class SecurityConfig {
                                 "/api/public/auth/verify", "/api/public/auth/validate",
                                 "/api/public/auth/logout").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/public/university/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/public/review/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/public/review/program/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/public/review/can-review/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/public/review/my-reviews").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/public/review").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/public/review/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/public/review/**").authenticated()
                         .requestMatchers("/api/public/user/**").authenticated()
-                        .requestMatchers("/actuator/**").permitAll()
+                        .requestMatchers("/api/private/**").permitAll()
+                        .requestMatchers("/health", "/actuator/health/**", "/actuator/**").permitAll()
                         .anyRequest().authenticated()
                 );
 

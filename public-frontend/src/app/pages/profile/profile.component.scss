@@ -68,11 +68,15 @@
 .verification-actions {
   display: flex;
   justify-content: center;
+  gap: 1rem;
   padding: 1rem 1.5rem;
   border-top: 1px solid rgba(0, 0, 0, 0.12);
 
-  .verify-button {
-    min-width: 200px;
+  button {
+    min-width: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     mat-icon {
       margin-right: 0.5rem;
