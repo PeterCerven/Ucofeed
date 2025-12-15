@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(
     uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"user_id", "study_program_id, study_program_variant_id"})
+        @UniqueConstraint(columnNames = {"user_id", "study_program_id", "study_program_variant_id"})
     }
 )
 public class UserEducation {
