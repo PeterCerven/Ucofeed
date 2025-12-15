@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { CustomSidenav } from './custom-sidenav';
+import { globalTestProviders } from '../../../test-setup';
 
 describe('CustomSidenav', () => {
   let component: CustomSidenav;
@@ -8,7 +8,8 @@ describe('CustomSidenav', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CustomSidenav]
+      imports: [CustomSidenav],
+      providers: [...globalTestProviders]
     })
     .compileComponents();
 
