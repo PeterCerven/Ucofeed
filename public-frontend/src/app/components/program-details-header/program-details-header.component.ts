@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { ProgramDetailsModel } from '@models/program-details.model';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-program-details-header',
   standalone: true,
-  imports: [CommonModule, MatChipsModule, MatIconModule],
+  imports: [CommonModule, MatChipsModule, MatIconModule, TranslocoDirective],
   templateUrl: './program-details-header.component.html',
   styleUrl: './program-details-header.component.scss'
 })

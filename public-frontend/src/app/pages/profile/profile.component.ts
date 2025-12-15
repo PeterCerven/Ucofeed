@@ -140,7 +140,7 @@ export class ProfileComponent implements OnInit {
             this.translocoService.translate('app.snackbar.close'),
             {
               duration: 5000,
-              horizontalPosition: 'end',
+              horizontalPosition: 'center',
               verticalPosition: 'top'
             }
           );
@@ -161,7 +161,7 @@ export class ProfileComponent implements OnInit {
             this.translocoService.translate('app.snackbar.close'),
             {
               duration: 5000,
-              horizontalPosition: 'end',
+              horizontalPosition: 'center',
               verticalPosition: 'top'
             }
           );
@@ -178,7 +178,7 @@ export class ProfileComponent implements OnInit {
       this.snackBar.open(
         this.translocoService.translate('app.snackbar.pleaseLogin'),
         this.translocoService.translate('app.snackbar.close'),
-        { duration: 5000, horizontalPosition: 'end', verticalPosition: 'top' }
+        { duration: 5000, horizontalPosition: 'center', verticalPosition: 'top' }
       );
       return;
     }
@@ -191,7 +191,7 @@ export class ProfileComponent implements OnInit {
         this.snackBar.open(
           this.translocoService.translate('app.snackbar.verificationCodeResent'),
           this.translocoService.translate('app.snackbar.close'),
-          { duration: 5000, horizontalPosition: 'end', verticalPosition: 'top' }
+          { duration: 5000, horizontalPosition: 'center', verticalPosition: 'top' }
         );
       },
       error: (error) => {
@@ -201,7 +201,7 @@ export class ProfileComponent implements OnInit {
         this.snackBar.open(
           errorMessage,
           this.translocoService.translate('app.snackbar.close'),
-          { duration: 5000, horizontalPosition: 'end', verticalPosition: 'top' }
+          { duration: 5000, horizontalPosition: 'center', verticalPosition: 'top' }
         );
       }
     });
@@ -312,7 +312,7 @@ export class ProfileComponent implements OnInit {
           const errorMessage = backendError?.error?.[0] ?? 'Failed to retrieve a profile. Please try again.';
           this.snackBar.open(errorMessage, 'Close', {
             duration: 5000,
-            horizontalPosition: 'end',
+            horizontalPosition: 'center',
             verticalPosition: 'top'
           });
         }
@@ -330,7 +330,7 @@ export class ProfileComponent implements OnInit {
           this.translocoService.translate('app.snackbar.close'),
           {
             duration: 3000,
-            horizontalPosition: 'end',
+            horizontalPosition: 'center',
             verticalPosition: 'top'
           }
         );
@@ -360,7 +360,7 @@ export class ProfileComponent implements OnInit {
             this.translocoService.translate('app.snackbar.close'),
             {
               duration: 3000,
-              horizontalPosition: 'end',
+              horizontalPosition: 'center',
               verticalPosition: 'top',
             }
           );
@@ -374,7 +374,7 @@ export class ProfileComponent implements OnInit {
             this.translocoService.translate('app.snackbar.close'),
             {
               duration: 5000,
-              horizontalPosition: 'end',
+              horizontalPosition: 'center',
               verticalPosition: 'top'
             }
           );
@@ -387,7 +387,7 @@ export class ProfileComponent implements OnInit {
         this.translocoService.translate('app.snackbar.close'),
         {
           duration: 3000,
-          horizontalPosition: 'end',
+          horizontalPosition: 'center',
           verticalPosition: 'top'
         }
       );

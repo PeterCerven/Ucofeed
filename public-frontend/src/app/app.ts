@@ -1,4 +1,4 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, OnInit } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -28,7 +28,7 @@ import { AuthStateService } from '@services/auth-state.service';
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
-export class App {
+export class App implements OnInit {
   private readonly translocoService = inject(TranslocoService);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
@@ -37,12 +37,22 @@ export class App {
   private readonly authState = inject(AuthStateService);
 
   readonly isDarkMode = signal(false);
-  readonly currentLanguage = signal('sk');
+  readonly currentLanguage = signal(this.getInitialLanguage());
 
   // Delegate to auth state service
   readonly isLoggedIn = this.authState.isLoggedIn;
   readonly userEmail = this.authState.userEmail;
   readonly isUserVerified = this.authState.isUserVerified;
+
+  private getInitialLanguage(): 'en' | 'sk' {
+    const savedLang = localStorage.getItem('language');
+    return (savedLang === 'en' || savedLang === 'sk') ? savedLang : 'sk';
+  }
+
+  ngOnInit(): void {
+    // Set the active language from localStorage on app initialization
+    this.translocoService.setActiveLang(this.currentLanguage());
+  }
 
   toggleDarkMode(): void {
     this.isDarkMode.update(v => !v);
@@ -55,8 +65,10 @@ export class App {
   }
 
   switchLanguage(): void {
-    this.currentLanguage.set(this.currentLanguage() === 'sk' ? 'en' : 'sk');
-    this.translocoService.setActiveLang(this.currentLanguage());
+    const newLang = this.currentLanguage() === 'sk' ? 'en' : 'sk';
+    this.currentLanguage.set(newLang);
+    this.translocoService.setActiveLang(newLang);
+    localStorage.setItem('language', newLang);
   }
 
   onLogin(): void {
@@ -85,20 +97,31 @@ export class App {
               this.translocoService.translate('app.snackbar.close'),
               {
                 duration: 3000,
-                horizontalPosition: 'end',
+                horizontalPosition: 'center',
                 verticalPosition: 'top'
               }
             );
             this.router.navigate(['/profile']);
           },
           error: (error) => {
-            const errorMessage = error.error || this.translocoService.translate('app.snackbar.loginFailed');
+            // Map backend error messages to translation keys
+            let errorMessage: string;
+            const backendError = error.error;
+
+            if (backendError === 'Invalid password or email' || backendError === 'Invalid email or password') {
+              errorMessage = this.translocoService.translate('app.snackbar.invalidCredentials');
+            } else if (backendError) {
+              errorMessage = backendError;
+            } else {
+              errorMessage = this.translocoService.translate('app.snackbar.loginFailed');
+            }
+
             this.snackBar.open(
               errorMessage,
               this.translocoService.translate('app.snackbar.close'),
               {
                 duration: 5000,
-                horizontalPosition: 'end',
+                horizontalPosition: 'center',
                 verticalPosition: 'top'
               }
             );
@@ -132,7 +155,7 @@ export class App {
               this.translocoService.translate('app.snackbar.close'),
               {
                 duration: 5000,
-                horizontalPosition: 'end',
+                horizontalPosition: 'center',
                 verticalPosition: 'top'
               }
             );
@@ -145,7 +168,7 @@ export class App {
               this.translocoService.translate('app.snackbar.close'),
               {
                 duration: 5000,
-                horizontalPosition: 'end',
+                horizontalPosition: 'center',
                 verticalPosition: 'top'
               }
             );
@@ -176,7 +199,7 @@ export class App {
           this.translocoService.translate('app.snackbar.close'),
           {
             duration: 3000,
-            horizontalPosition: 'end',
+            horizontalPosition: 'center',
             verticalPosition: 'top'
           }
         );

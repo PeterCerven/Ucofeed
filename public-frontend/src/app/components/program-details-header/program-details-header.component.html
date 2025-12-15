@@ -1,4 +1,4 @@
-<div class="program-header">
+<div class="program-header" *transloco="let t; prefix 'programDetails'">
   <!-- Breadcrumb navigation -->
   <nav class="breadcrumb">
     <span class="breadcrumb-link" (click)="navigateToUniversities()">
@@ -58,15 +58,15 @@
             </mat-icon>
           }
         </div>
-        <div class="review-count">{{ programDetails().totalReviews }} reviews</div>
+        <div class="review-count">{{ programDetails().totalReviews }} {{ t('reviews') }}</div>
       </div>
 
       <!-- Rating distribution -->
       <div class="rating-distribution">
-        <h3>Rating Distribution</h3>
+        <h3>{{ t('ratingDistribution') }}</h3>
         @for (rating of ratingKeys; track rating) {
           <div class="distribution-row">
-            <span class="rating-label">{{ rating }} stars</span>
+            <span class="rating-label">{{ rating }} {{ t('stars') }}</span>
             <div class="bar-container">
               <div
                 class="bar"
