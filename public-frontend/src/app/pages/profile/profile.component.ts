@@ -62,6 +62,7 @@ export class ProfileComponent implements OnInit {
   readonly statuses = STATUSES;
   readonly showVerification = signal(false);
   readonly isVerifying = signal(false);
+  readonly isResendingCode = signal(false);
 
   constructor() {
     this.verificationForm = this.fb.group({
@@ -168,6 +169,48 @@ export class ProfileComponent implements OnInit {
       });
     } else {
       this.verificationForm.markAllAsTouched();
+    }
+  }
+
+  onResendVerificationCode(): void {
+    const email = this.authState.userEmail();
+    if (!email) {
+      this.snackBar.open(
+        this.translocoService.translate('app.snackbar.pleaseLogin'),
+        this.translocoService.translate('app.snackbar.close'),
+        { duration: 5000, horizontalPosition: 'end', verticalPosition: 'top' }
+      );
+      return;
+    }
+
+    this.isResendingCode.set(true);
+
+    this.authService.refreshVerificationCode(email).subscribe({
+      next: () => {
+        this.isResendingCode.set(false);
+        this.snackBar.open(
+          this.translocoService.translate('app.snackbar.verificationCodeResent'),
+          this.translocoService.translate('app.snackbar.close'),
+          { duration: 5000, horizontalPosition: 'end', verticalPosition: 'top' }
+        );
+      },
+      error: (error) => {
+        this.isResendingCode.set(false);
+        const errorMessage = error.error ||
+          this.translocoService.translate('app.snackbar.verificationCodeResendFailed');
+        this.snackBar.open(
+          errorMessage,
+          this.translocoService.translate('app.snackbar.close'),
+          { duration: 5000, horizontalPosition: 'end', verticalPosition: 'top' }
+        );
+      }
+    });
+  }
+
+  onNavigateToReviews(): void {
+    const programId = this.profileForm.get('studyProgramId')?.value;
+    if (programId) {
+      this.router.navigate(['/programs', programId, 'reviews']);
     }
   }
 

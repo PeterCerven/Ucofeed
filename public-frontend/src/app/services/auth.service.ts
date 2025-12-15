@@ -14,6 +14,10 @@ export interface VerifyCodeRequest {
   verificationCode: string;
 }
 
+export interface RefreshVerificationCodeRequest {
+  email: string;
+}
+
 export interface LoginRequest {
   email: string;
   password: string;
@@ -59,6 +63,15 @@ export class AuthService {
       `${this.baseUrl}/public/auth/login`,
       request,
       { withCredentials: true }
+    );
+  }
+
+  refreshVerificationCode(email: string): Observable<string> {
+    const request: RefreshVerificationCodeRequest = { email };
+    return this.http.put(
+      `${this.baseUrl}/public/auth/verify`,
+      request,
+      { withCredentials: true, responseType: 'text' }
     );
   }
 

@@ -12,6 +12,8 @@
       "profileSaveSuccess": "Profil úspešne uložený!",
       "registerSuccess": "Registrácia úspešná! Skontrolujte si e-mail pre overovací kód.",
       "registrationFailed": "Registrácia zlyhala. Skúste to prosím znova.",
+      "verificationCodeResendFailed": "Nepodarilo sa odoslať overovací kód. Skúste to prosím znova.",
+      "verificationCodeResent": "Overovací kód bol odoslaný na váš e-mail. Skontrolujte si schránku.",
       "verificationFailed": "Overenie zlyhalo. Skontrolujte prosím kód a skúste to znova."
     },
     "toolbar": {
@@ -88,9 +90,12 @@
       "facultyHint": "Vyberte svoju fakultu",
       "facultyPlaceholder": "Vyberte svoju fakultu",
       "loading": "Načítavam...",
+      "resendCode": "Opätovne poslať kód",
+      "resending": "Posielam...",
       "reset": "Resetovať",
       "saveProfile": "Uložiť profil",
       "status": "Stav",
+      "viewReviews": "Zobraziť študijný program",
       "statusPlaceholder": "Vyberte svoj stav",
       "statuses": {
         "completed": "Ukončené",
