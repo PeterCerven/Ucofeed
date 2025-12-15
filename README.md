@@ -164,7 +164,7 @@ Ucofeed follows a **three-tier layered architecture** with separate client appli
 
 ### Database Schema
 
-**9 Core Entities:**
+**8 Core Entities:**
 
 ![database-schema.png](database-schema.png)
 
@@ -176,7 +176,6 @@ Ucofeed follows a **three-tier layered architecture** with separate client appli
 - `app_user`: Registered users with BCrypt-hashed passwords (~500 records)
 - `review`: Student reviews with ratings 1-10 (~1,200 records)
 - `user_education`: Enrollment tracking with status (ENROLLED, ON_HOLD, COMPLETED, DROPPED_OUT)
-- `verification_code`: Email verification codes (6 digits, 15-minute expiration)
 - `dashboard_message`: Admin notifications for new reviews
 
 **Key Constraints:**
