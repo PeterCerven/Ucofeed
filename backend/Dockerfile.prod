@@ -1,0 +1,15 @@
+# Build stage
+FROM amazoncorretto:25-alpine-jdk AS build
+WORKDIR /app
+COPY mvnw pom.xml ./
+COPY .mvn .mvn
+RUN ./mvnw dependency:go-offline || true
+COPY . .
+RUN chmod +x mvnw && ./mvnw clean package -DskipTests
+
+# Runtime stage
+FROM amazoncorretto:25-alpine-jdk
+WORKDIR /app
+COPY --from=build /app/target/backend-*-SNAPSHOT.jar ./app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
