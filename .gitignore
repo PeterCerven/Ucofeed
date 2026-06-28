@@ -1,3 +1,7 @@
-/.idea/
+.idea/
 *.iml
-infrastructure/database/.env
+/infrastructure/database/.env.prod
+/infrastructure/data/**
+
+/infrastructure/.env.prod
+/infrastructure/.env
